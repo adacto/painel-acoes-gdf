@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GDF na Sua Porta — Painel de Prestação de Contas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pd:#4a1963;--pm:#7a2380;--pmid:#a93d8e;--pale:#f5edf8;
+  --bl:#0071bb;--gold:#c47a00;--crit:#b91c1c;--aten:#b45309;--adeq:#166534;
+  --bg:#ede7f3;--txt:#1e0a35;--mut:#6b5680;--line:#e5d9ef;
+  --cov-hi:#16a34a;--cov-mid:#d98c00;--cov-lo:#dc2626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Unbounded','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px}
+h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15}
+.hdr{background:linear-gradient(135deg,var(--pd) 0%,#2d0f4e 100%);padding:20px 36px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.hdr p{font-size:.8rem;color:rgba(255,255,255,.85);font-weight:500;margin-top:5px;letter-spacing:.02em}
+.hdr-meta{text-align:right;color:#fff}
+.hdr-status{display:flex;align-items:center;gap:7px;justify-content:flex-end;font-size:.76rem;color:rgba(255,255,255,.9)}
+.dot{width:8px;height:8px;border-radius:50%;background:#c9b6dd;box-shadow:0 0 0 3px rgba(201,182,221,.25)}
+.hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
+.stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
+.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28)}
+.band span{color:#fff;font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.band svg{flex:none}
+.wrap{padding:22px 36px 60px;max-width:1400px;margin:0 auto}
+.sec-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mut);margin:26px 0 10px}
+.sec-label:first-child{margin-top:0}
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.kpi{background:#fff;border-radius:12px;padding:14px 16px;border-left:5px solid var(--pmid);box-shadow:0 2px 8px rgba(74,25,99,.07)}
+.kpi.c-gold{border-left-color:var(--gold)}.kpi.c-blue{border-left-color:var(--bl)}
+.kpi.c-green{border-left-color:var(--adeq)}.kpi.c-red{border-left-color:var(--crit)}
+.kl{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;margin-bottom:6px;line-height:1.3}
+.kv{font-size:clamp(1.15rem,1.8vw,1.7rem);font-weight:800;color:var(--pd);line-height:1}
+.kpi.c-gold .kv{color:var(--gold)}.kpi.c-blue .kv{color:var(--bl)}.kpi.c-green .kv{color:var(--adeq)}.kpi.c-red .kv{color:var(--crit)}
+.ks{font-size:.62rem;color:var(--mut);margin-top:5px;font-weight:600}
+.tl{background:#fff;border-radius:14px;padding:18px 20px 8px;box-shadow:0 2px 8px rgba(74,25,99,.07);overflow-x:auto}
+.tl-track{display:flex;gap:0;min-width:640px;position:relative}
+.tl-track:before{content:"";position:absolute;top:15px;left:26px;right:26px;height:3px;background:linear-gradient(90deg,var(--gold),var(--bl))}
+.tl-node{flex:1;text-align:center;position:relative;padding:0 4px 14px;cursor:pointer}
+.tl-dot{width:32px;height:32px;border-radius:50%;background:var(--pd);color:#fff;border:3px solid var(--pd);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;position:relative;z-index:1;transition:.15s}
+.tl-node:hover .tl-dot{transform:scale(1.12)}
+.tl-ra{font-size:.64rem;font-weight:800;color:var(--txt);line-height:1.2;text-transform:uppercase;letter-spacing:.02em}
+.tl-cov{font-size:.62rem;color:var(--bl);margin-top:3px;font-weight:800}
+.tl-dot.hi{background:var(--cov-hi);border-color:var(--cov-hi)}.tl-dot.mid{background:var(--cov-mid);border-color:var(--cov-mid)}.tl-dot.lo{background:var(--cov-lo);border-color:var(--cov-lo)}
+.tl-cov.hi{color:var(--cov-hi)}.tl-cov.mid{color:var(--cov-mid)}.tl-cov.lo{color:var(--cov-lo)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 4px}
+.quick{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1.5px solid #d0b8e8;background:#fff;font-family:inherit;font-size:.66rem;font-weight:700;cursor:pointer;color:var(--mut);transition:.12s}
+.quick:hover{border-color:var(--pm)}.quick.ativo{background:var(--pd);color:#fff;border-color:var(--pd)}
+select,input[type=search]{font-family:inherit;font-size:.72rem;padding:7px 11px;border:1.5px solid #d0b8e8;border-radius:9px;background:#fff;color:var(--txt);font-weight:600}
+input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a2380' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;padding-left:33px}
+.count{font-size:.66rem;color:var(--mut);font-weight:700;margin-left:auto}
+.legend{font-size:.66rem;color:var(--mut);font-weight:700;display:flex;gap:6px;align-items:center;margin:0 0 2px 2px}
+.legend .lg{font-size:.95rem;line-height:1}.legend .lg.hi{color:var(--cov-hi)}.legend .lg.mid{color:var(--cov-mid)}.legend .lg.lo{color:var(--cov-lo)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:14px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(74,25,99,.08);overflow:hidden;display:flex;flex-direction:column;border-top:4px solid var(--pm);cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(74,25,99,.14)}
+.card.hi{border-top-color:var(--cov-hi)}.card.mid{border-top-color:var(--cov-mid)}.card.lo{border-top-color:var(--cov-lo)}
+.card-h{padding:14px 16px 10px;background:linear-gradient(135deg,#faf6fe,#fff)}
+.ed-badge{display:inline-block;font-size:.58rem;font-weight:800;color:#fff;background:var(--pm);padding:2px 9px;border-radius:20px;letter-spacing:.05em}
+.card-ra{font-size:1.05rem;font-weight:800;color:var(--pd);margin-top:8px;line-height:1.1}
+.card-dt{font-size:.64rem;color:var(--mut);font-weight:600;margin-top:4px}
+.card-dt b{color:var(--bl)}
+.cov-wrap{padding:10px 16px 6px}
+.cov-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.cov-num{font-size:1.4rem;font-weight:800;color:var(--pd)}
+.cov-num small{font-size:.7rem;color:var(--mut);font-weight:700}
+.cov-pct{font-size:.8rem;font-weight:800;color:var(--bl)}
+.bar{height:9px;border-radius:6px;background:var(--pale);overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--pm),var(--bl));transition:width .4s}
+.bar-fill.hi{background:linear-gradient(90deg,#34d399,var(--cov-hi))}
+.bar-fill.mid{background:linear-gradient(90deg,#fbbf24,var(--cov-mid))}
+.bar-fill.lo{background:linear-gradient(90deg,#f87171,var(--cov-lo))}
+.cov-pct.hi{color:var(--cov-hi)}.cov-pct.mid{color:var(--cov-mid)}.cov-pct.lo{color:var(--cov-lo)}
+.card-foot{padding:8px 16px 14px;font-size:.64rem;color:var(--mut);font-weight:600;display:flex;justify-content:space-between}
+.card-foot b{color:var(--pd)}
+.overlay{position:fixed;inset:0;background:rgba(30,10,53,.55);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:50;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.modal-h{background:linear-gradient(135deg,var(--pd),#2d0f4e);color:#fff;padding:20px 26px;position:relative}
+.modal-h h2{font-size:1.3rem;font-weight:800}
+.modal-h .mh-sub{font-size:.74rem;color:rgba(255,255,255,.85);margin-top:5px;font-weight:600}
+.modal-x{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;line-height:1}
+.modal-b{padding:18px 26px 26px;max-height:70vh;overflow-y:auto}
+.mkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px}
+.mkpi div{background:var(--pale);border-radius:10px;padding:11px 13px}
+.mkpi .m-v{font-size:1.2rem;font-weight:800;color:var(--pd)}
+.mkpi .m-l{font-size:.58rem;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-top:3px}
+.blk-lbl{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--pm);margin:6px 0 10px;padding-bottom:5px;border-bottom:2px solid var(--pale)}
+.org{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:.78rem}
+.org .on{font-weight:700;color:var(--txt);flex:1;min-width:0}
+.org .oa{color:var(--mut);font-size:.68rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}
+.org .od{color:var(--bl);font-size:.68rem;font-weight:700;white-space:nowrap}
+.org a.open{text-decoration:none;background:var(--pd);color:#fff;font-size:.62rem;font-weight:800;padding:5px 11px;border-radius:7px;white-space:nowrap}
+.org a.open:hover{background:var(--pm)}
+.footer{margin-top:34px;font-size:.66rem;color:var(--mut);text-align:center;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
+.footer b{color:var(--pd)}
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpi-row{grid-template-columns:repeat(2,1fr)};.wrap{padding:18px 16px 50px};.hdr{padding:16px 18px};.org .oa{display:none}}
+@media print{
+  @page{size:A4 landscape;margin:8mm}
+  body{background:#fff}.card:hover{transform:none}.toolbar,.overlay{display:none!important}
+  .card,.kpi,.tl{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>GDF na Sua Porta — Painel de Prestação de Contas</h1>
+    <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+  </div>
+  <div class="hdr-meta">
+    <div class="hdr-status"><span class="dot"></span><span>Atualizado em <span id="hUp">—</span></span></div>
+    <div class="hdr-big"><span id="hRas">—</span> de <span id="hTot">35</span> RAs&nbsp;·&nbsp;<span id="hEnt">—</span> prestações entregues</div>
+  </div>
+</div>
+<div class="stripe"></div>
+<div class="band"><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>O que cada órgão fez em cada região — com o relatório, a data e a fonte</span></div>
+
+<div class="wrap">
+  <div class="sec-label">Visão geral</div>
+  <div class="kpi-row" id="kpis"></div>
+
+  <div class="sec-label">Edições realizadas — cobertura por região</div>
+  <div class="tl"><div class="tl-track" id="tl"></div></div>
+
+  <div class="sec-label">Regiões — clique numa RA para ver os órgãos e abrir os relatórios</div>
+  <div class="toolbar">
+    <select id="fRA"><option value="">Todas as RAs</option></select>
+    <button class="quick ativo" data-f="all">Todas</button>
+    <button class="quick" data-f="alta">Cobertura alta (≥70%)</button>
+    <button class="quick" data-f="baixa">Cobertura baixa (&lt;50%)</button>
+    <input type="search" id="fQ" placeholder="Buscar RA ou órgão…">
+    <span class="count" id="cnt">—</span>
+  </div>
+  <div class="legend"><span class="lg hi">●</span>≥70%&nbsp;&nbsp;<span class="lg mid">●</span>50–69%&nbsp;&nbsp;<span class="lg lo">●</span>&lt;50% de cobertura</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="footer">
+    <b>Fonte:</b> pasta oficial "Prestação de Contas" no Google Drive, lida automaticamente pelo sistema de monitoramento (abas Painel e Entregues).<br>
+    Entregue = a pasta da edição contém relatório em PDF, Word ou planilha. Números conforme os arquivos depositados pelos órgãos, sem auditoria de conteúdo. Retrato de <b id="snapDate">—</b>.<br>
+    Elaboração: Adacto Artur Dornas de Oliveira · SEGOV.
+  </div>
+</div>
+
+<div class="overlay" id="ov"><div class="modal" id="modal"></div></div>
+
+<script>
+/* ===== SNAPSHOT — gerado das abas Resumo/Painel/Entregues da planilha viva ===== */
+const SNAP = {
+ "totalRAs": 37,
+ "atualizado": "23/07/2026 15:38",
+ "kpis": {
+  "edicoes": 10,
+  "orgaos": 55,
+  "entregas": 259,
+  "pendencias": 242,
+  "novidades": 0,
+  "participantes": 41
+ },
+ "editions": [
+  {
+   "cod": "P001",
+   "ed": 1,
+   "ra": "Itapoã",
+   "entregues": 35,
+   "pendentes": 11,
+   "total": 46,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - Itapoã",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/1KedWTXAkpzcl3pUSe2UEPz5S0fRe562cZ8KQIMMdkLM/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "Relatório GDF na Sua Porta - Itapoã -2 .pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/13V9yuk4ozriAs1EKs4xQvxnGmAsTJ7s1/view"
+    },
+    {
+     "n": "004 - SEDES",
+     "arq": "Relatório GDF na sua porta_SUBSAS_SEDES.xlsx - GDF na sua porta.pdf",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/1UjeE2i4x8LRhK8thDYyKd8C2LmKXzR81/view"
+    },
+    {
+     "n": "005 - SEDET",
+     "arq": "Atendimentos Preliminar - Sedet.docx",
+     "data": "05/04/2026",
+     "url": "https://drive.google.com/file/d/11v-zRK_gaMHfj-Rj5DmUtOCg5Xm5omb2/view"
+    },
+    {
+     "n": "006 - DER/DF",
+     "arq": "GDF NA SUA PORTA - DER-DF (Itapoã).pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1ka18KAAn4i9UF09kQBY2MoEXawvI8DXD/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP Itapoã 16.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1vIGLRap9CfnW0AZy7DgFoIA75-PhILim/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 01",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1y9-dkJfcR60Yauj3h_k3AQ0_IuNFwXe4/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Cópia de Planilha GDF NA SUA PORTA - 2026",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1fLfNinr-a6CWnEQFb0VCcNZnjPT0oPeNTNOrBTGNV3k/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Demandas__Itapoa - GDF Na Sua Porta.pdf",
+     "data": "28/04/2026",
+     "url": "https://drive.google.com/file/d/1nPz2Nswd4UlaQKAOfdvhd8_eNFDE1o6v/view"
+    },
+    {
+     "n": "012 - CEB",
+     "arq": "ADM24h no Itapoã_Protocolo-IP.xlsx",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1eVOEhAd2fsZCe9Gh1x4mr--QNeYXgRpY/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "RELATÓRIO DE PLANO DE AÇÃO - ITAPOÃ.xlsx - Página1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1FXEhgSy2acgzjKPdOcmgZC2v3d59avL-/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "GDF na sua porta - Itapoã.pdf",
+     "data": "01/04/2026",
+     "url": "https://drive.google.com/file/d/1xwRLCn83sL_KaN53Ri4vbmnEDCLZkEmE/view"
+    },
+    {
+     "n": "017 - PROCON",
+     "arq": "Atividades Procon - GDF na sua Porta - Itapoã.docx",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/12QQDqJSQ1ApYWZvvvI03exgU4OVVLeCY/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1KoYiR71GLMPOzc_YPrC3hoLX-ciRj95N/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "SMDF/SUBPROTM - STAND COMITÊS DE PROTEÇÃO",
+     "data": "16/06/2026",
+     "url": "https://drive.google.com/file/d/1yDp5hV67-jVs5c9tadv2OEO5qIkBa8llxJT_6Pa9QT0/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "RELATÓRIO ITAPOÃ.pdf",
+     "data": "05/04/2026",
+     "url": "https://drive.google.com/file/d/1Wd1kbXxAd1qNr-UE88QrIMPntO-q4H6p/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - ITAPOÃ 31.03.26 a 01.04.26.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1MpRqh-3EkpT_kdei953fZt1XDkPLatZJ/view"
+    },
+    {
+     "n": "023 - NEOENERGIA",
+     "arq": "NEONERGIA.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - ITAPOÃ 31.03.26 a 01.04.26.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1dp-n0lBBLNr8hrwN8TaS33OArw0SLsYD/view"
+    },
+    {
+     "n": "026 - CGDF",
+     "arq": "Relatório CGDF - Manifestações de ouvidoria - GDF na sua porta Itapoã.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/13BXySE1pfVTCyPvawOttBW_x1BFBz1eD/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "infografico_itapoa_07_04.pdf",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1bt4Yl8cVh5AdoYp9wI44XcMfcA0pPUL5/view"
+    },
+    {
+     "n": "028 - CACI",
+     "arq": "1º RELATÓRIO_GDF_NA_SUA_PORTA_CACI_ITAPOÃ.pdf",
+     "data": "17/04/2026",
+     "url": "https://drive.google.com/file/d/18rn-EEze6BGHEPPL9-li-mSklQEQIeTP/view"
+    },
+    {
+     "n": "029 - Casa Militar",
+     "arq": "SEI_199152022_Oficio_14.pdf",
+     "data": "31/03/2026",
+     "url": "https://drive.google.com/file/d/1G9f3MysWNG48dB5dreZAZACfttlG21vU/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - ITAPOÃ 30_3 a 1_4.docx",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1cGpnzUS14jVzTvGYzm_4oP0Ki5ZmVsgQ/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Relatório de Atividades_Unidade Móvel SECTI-DF no Itapoã.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1OwCTHEwMj-fFlFeHbXyM64G-PfAMVGqn/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - ITAPOA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1X-OXn8nMb2FbXCrnPCor2wUDcHrrtUOJ/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "CARTEIRAS ITAPOÃ.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1lwppgLDFST981klzZPSZFIteLG2MAhLY/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade do Paranoá - Secretaria da Pessoa com Deficiência.pdf",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1pR5UgNdaDl-CBU5alymM5ap4CPFl_pap/view"
+    },
+    {
+     "n": "039 - SEAGRI",
+     "arq": "Relatorio serviço executado - Itapoã.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ZFz7C1PlmmQ9xKuJq53I-XF8jyAhrIYB/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - Carreta da Regularização.pdf",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/10J4F9EokV3WWbT761dWB1JcdNxjSR4X1/view"
+    },
+    {
+     "n": "041 - TERRACAP",
+     "arq": "AÇÕES TERRACAP - Itapõa.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1n38h71TDZynB8fE_W8ujZth5Ydx-mtd4/view"
+    },
+    {
+     "n": "042 - POLO RURAL",
+     "arq": "Relatório polo rural GDF NA SUA PORTA 02.ITAPOA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ggVT4NfV8HdqJV0r5-3aulnCaK0Oq6b7/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO ITAPOA.pdf",
+     "data": "21/06/2026",
+     "url": "https://drive.google.com/file/d/1cOGHDJ4nAmFyaTHCTUa7dCahX9I0lFyC/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "Prestacao_de_Contas_Itapoa_V2_Formatado",
+     "data": "28/05/2026",
+     "url": "https://drive.google.com/file/d/1RWjFL4dkPGs7AAlq209cNS9eKwptXLiT3mAbLb2yiw0/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1KwOWKKOuFofxM4JU5d7DYlnFnTgaqvI4/view"
+    }
+   ]
+  },
+  {
+   "cod": "P002",
+   "ed": 2,
+   "ra": "Paranoá",
+   "entregues": 34,
+   "pendentes": 12,
+   "total": 46,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - Paranoá",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1F2gwDu-AckK6kPMJcJIcOuO_axDk3q4Zvf-yrDoCzGw/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "Relatório GDF na Sua Porta - Paranoá.pdf",
+     "data": "15/04/2026",
+     "url": "https://drive.google.com/file/d/1eSbnHmZuUEd45-05viGndm7ichP0sq4r/view"
+    },
+    {
+     "n": "004 - SEDES",
+     "arq": "Relatório GDF na sua porta Paranoá SEDES.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1NXG5Xd9iYrO9kqVneUjjgfN3WH8EWtGO/view"
+    },
+    {
+     "n": "005 - SEDET",
+     "arq": "Programa GDF na Sua Porta.pdf",
+     "data": "08/05/2026",
+     "url": "https://drive.google.com/file/d/1e8rBCEPl0voLDzm1z8zHldwC_HJvQf-r/view"
+    },
+    {
+     "n": "006 - DER/DF",
+     "arq": "GDF NA SUA PORTA - PARANOÁ (1).xlsx",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1p1OVdlPeANGC5zCP6WBfJacQCVUg4KVD/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP Parano 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/11_7ckI8FQCYwjdbskGl1gCRI63s5q5vh/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 02",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1R4EcWlji2UWR3klQh11H_p7bsGgnnSOK/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - EDIÇÃO PARANOÁ - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/17fBrC2ZzxPXU6JvA907gD2lLerJ1CkmZ/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - Paranoá.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1s6yph9GsIlPVkdjvj0jBa_QiFl0xfenW/view"
+    },
+    {
+     "n": "012 - CEB",
+     "arq": "Relatório_24h_CEB-IP-Paranoá.pdf",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/1oik7c-SrXDE1Dku8faBHz9b6efpMx8D5/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA RUA_PARANOÁ_2026.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1BlyrpEkG_St51sYaTG84o4a2ZDr2iG3C/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – Paranoá_DF.pdf",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/12RlPKG1i6DxeirZ_ezpTIRO-Tv3f3XO7/view"
+    },
+    {
+     "n": "017 - PROCON",
+     "arq": "GDF na sua Porta - Paranoá - PROCON.docx",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1ETB_8JChh_pdUEQEyucua09ARFGwPmcd/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1aw4VSyNXa7we7we-PG2vNGm0VaPJoB4C/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "GDF PARANOÁ SMDF SUBATPP UNIDADE MOVEL.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1Ps0BcuBWn1BZEc59ogug2IROzT5ICLec/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_200685819_Relatorio_50.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1n3wSR-SyUL-0LS_2xuGFzRoUrQUMWiXi/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - PARANOA 13 A 17 .04.2026 (1).pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1oahVDFpWPElktjQnrPYpk38Lv_J2nzgh/view"
+    },
+    {
+     "n": "023 - NEOENERGIA",
+     "arq": "NEONERGIA.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - PARANOA 13 A 17 .04.2026.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1kJmFliKtee038LQmvTpxdmTSoW3xUDuM/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "relatorio paranoa (1).pdf",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1tmSZhfKi73ptBL8q2OK3yhjMniJKlrEI/view"
+    },
+    {
+     "n": "028 - CACI",
+     "arq": "2º RELATÓRIO_GDF_NA_SUA_PORTA_PARANOÁ_CACI.pdf",
+     "data": "21/04/2026",
+     "url": "https://drive.google.com/file/d/1CqDhAZ_v0RAwE_1HsDEi24kpePXDQZum/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_Detalhado_SEJUVE_Abril2026_Final.docx",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1cRfxCkiHCcdLuzsHf55K1Of5hBy7pa9D/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - PARANOÁ 14 A 17_ABRIL.docx",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1HMR6avFoJU0a2IO_hXewV5DOcBU4QfOS/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - PARANOA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1CMSHdIMrTz1JQ3ogASD75-UtQSv6RNAy/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO PARANOÃ.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1-b4ibH50CcIp7_RZ5y6gu4O4CNwMlBQe/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "ilovepdf_merged-8.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1iAeMCsanP69XDqPH3ox75qR_E59qhW8Q/view"
+    },
+    {
+     "n": "037 - CULTURA",
+     "arq": "Paranoá.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1eRe-vznoD3Uhlg4LF-OwPuNTxcg3yikp/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade do Paranoá - Secretaria da Pessoa com Deficiência",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/17SpM9QgYZREXw1sg6M5kPmaiF96Vxp_p/view"
+    },
+    {
+     "n": "039 - SEAGRI",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - PARANOÁ.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1muXrblFK8RZhxMuM5gIeFq1WE4qvpij6/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Paranoá.pdf",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/1zyo4IyWyBuSDS3XbAd7LGdYbOtxDQSaQ/view"
+    },
+    {
+     "n": "042 - POLO RURAL",
+     "arq": "RELATORIO POLO RURAL GDF NA SUA PORTA PARANOÁ 2.xlsx - Plan1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1xzXvM-4_rVTYqwdsbFHiiUu4T1flRCSA/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO DA AÇÃO NO PARANOÁ-1.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1sfCu_UPyDmOCITxTrZ8jApgKmohUh-3D/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "relatorio_gdf_porta_paranoa.pdf",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/14qb9I41zilAh1VXwS1pPsoI5u8YlaUtu/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1z9usihC46yjrf168lhEXhYgSgWPRZxci/view"
+    }
+   ]
+  },
+  {
+   "cod": "P003",
+   "ed": 3,
+   "ra": "Riacho Fundo II",
+   "entregues": 31,
+   "pendentes": 15,
+   "total": 46,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF- Riacho Fundo II.pdf",
+     "data": "13/05/2026",
+     "url": "https://drive.google.com/file/d/1y3x5Wx7Sqk5z_WQnLjNd1yQNIpWqsQ3x/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - RIACHO FUNDO II.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1VkzwZJEs4uWUGoo-SixL1Gx0p2E-aIZX/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "GDF NA SUA PORTA - Riacho Fundo II.pdf",
+     "data": "13/05/2026",
+     "url": "https://drive.google.com/file/d/1tRwviQedv6_3dqsxUAq1bsfEYDI6TDjP/view"
+    },
+    {
+     "n": "004 - SEDES",
+     "arq": "Relatório GDF na sua porta- Riacho Fundo SEDES.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ukDjHoPPHUks7NsbnmxWVDYMH9tHxXve/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP RF II 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1SnHJDCYa36nIt8gv4VKRS4FdG9ZcXQ2H/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 03.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1UEPDKJ-uSpUk1vtR28v3AkfYTni5UjoG/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - 3ª EDIÇÃO RIACHO FUNDO II - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/13wNQri3uwfH_DhU91f6v1-20OsnqFn7R/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatorio de Plano de Ação Riacho Fundo II - CAESB.xlsx - Planilha.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1k2hw1STCqSrnJYPQA3gDsQI1Hf6G6WbM/view"
+    },
+    {
+     "n": "012 - CEB",
+     "arq": "Riacho_Fundo_II_Portal_24h.pdf",
+     "data": "27/04/2026",
+     "url": "https://drive.google.com/file/d/1e6O15Yd7k9nL3KoBrM-NN6E2hMjz0B57/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026-RIACHO FUNDO II E.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1U1QTTurJzr5hbYOCoVJ3GCrMLX-q78Ot/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – Riacho Fundo II_DF (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/10RmWJaXBvcr7LTKoNmn_x0AnUKWvZK63/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "papa_entulho.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1r3RvgMF1ZhJv5GZ25blkkTs0T_gV8jdm/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "SUBPROTM Relatório GDF na sua porta - Riacho Fundo II (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1artdibFkrLucGOpuGqstUEGyBy_Z-gkh/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_204528810_Relatorio_69.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1L6Xqqu6Oh4sL8TWJUz8zfj3aCMe9wvoD/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - RIACHO FUNDO II 05.05 a 08.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1BYiCyZVNuW59OPVbJd5TEvMcF5G1vfHX/view"
+    },
+    {
+     "n": "023 - NEOENERGIA",
+     "arq": "NEONERGIA RIACHO FUNDO II.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - RIACHO FUNDO II 05.05 a 08.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1qM0czhclfbfKIQYx7Np98QK7vjwjlHEa/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "infografico_RFII_GDF_Sua_Porta (4).pdf",
+     "data": "12/05/2026",
+     "url": "https://drive.google.com/file/d/17UWFG1cnHh_98DXf7ECPgUrSBgJ6c0Sp/view"
+    },
+    {
+     "n": "028 - CACI",
+     "arq": "Relatório_GDF NA SUA PORTA_Risacho Fundo II_CACI (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1VPhhOJghNhMmHrt824sKYpd9DxqlZL8T/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_SEJUVE_RiachoFundoII_GDFnaSuaPorta.pdf",
+     "data": "12/05/2026",
+     "url": "https://drive.google.com/file/d/1c61nmQtnRbVdVx0PydS54rrp0ZMxtek4/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - RIACHO FUNDO (1).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1eIC1yViKJJdEsLAJ5jALpgexcYQh98r_/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Atendimentos do Riacho Fundo II.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/13pbFCddIv04wzpTuAhkh0zN1NkombWLs/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - RIACHO FUNDO II - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1FWL2hMWsLTbMYFStkCFVre0pVVSthbaf/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO RIACHO FUNDO II.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1A90rKbNdIBaTM9iLytHx52Oy3hnmQQaH/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "Relatorio Riacho 2_260512_151234.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/13-6zEw89w1wQPCtJDC06sklhESPDa_E3/view"
+    },
+    {
+     "n": "037 - CULTURA",
+     "arq": "Riacho Fundo II.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1huiJCzZkH_Acyh_bt3-ummsTxUUdJxxX/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade do Riacho Fundo II.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1RjzjnTDoTA14Z5E1OHspLrvpa_CRRycY/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Riacho Fundo II.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/1hYslZmLEVPiUYBaKJmsUULyJslP7NWG5/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO DA AÇÃO NO RIACHO FUNDO II.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1rtxdEc0U625I3NFSylmb-sTheQJxghBP/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "Relatorio_ações_Riacho Fundo II",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1CWF_pARzJ53RXfOJzlzfTcCPXfsOUsgYrMIEWzM8P-g/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1hMp1clw4TogthRkoswq121qO6rbQpWb0/view"
+    }
+   ]
+  },
+  {
+   "cod": "P004",
+   "ed": 4,
+   "ra": "Samambaia",
+   "entregues": 31,
+   "pendentes": 15,
+   "total": 46,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF - Samambaia.pdf",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/1E1ydn4x03yaNLrx3ecCEJewSa1cAE3XQ/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - SAMAMBAIA.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/107CxAhpkMO-ScFar1uDZYxHFRc-hTPVA/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "GDF NA SUA PORTA - Samambaia.pdf",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1HEkzFfZNKpvlGjeKrq9TdVD78MVtXrl5/view"
+    },
+    {
+     "n": "004 - SEDES",
+     "arq": "Relatório GDF na sua porta SAMAMBAIA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1lortlZjs9xxEaVYN3vvRF5ZeQT1_RWRw/view"
+    },
+    {
+     "n": "005 - SEDET",
+     "arq": "GDF na sua porta Samambaia.pdf",
+     "data": "25/05/2026",
+     "url": "https://drive.google.com/file/d/1h-Do0EWE5VorI1nz3jk9x0oDKEyKwXOf/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP SAMAMBAIA 16.07 (2).pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/14tBn6i32kj3GZB7BQe7M2dwkHNLq9RuE/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 04 (2).pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1lHzd6LSwDGOOMqbco6sWiJMDBAcbbbXD/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - 4ª EDIÇÃO SAMAMBAIA - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1QJojnAMyQzE3qkn5l3n959jy2ZTy8BsL/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - Samambaia.pdf",
+     "data": "25/05/2026",
+     "url": "https://drive.google.com/file/d/17erUUqorzK8n4hto4IXI8_SpJ4GJs8d8/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_SAMAMBAIA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1Q30-AwS5upg5KsFIu_JkADYmfqv-ga6k/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – Samambaia_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1U3lQgcjnTZFZYw8ubuc5RMiSvY8HI5Sv/view"
+    },
+    {
+     "n": "017 - PROCON",
+     "arq": "GDF na Sua Porta - Samambaia - PROCON.docx",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1xk7lkQbSkF-UFznxuNWew26sReddP9_W/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1FOB2of2RijP0yojTQvnP759U7Hl2D7_z/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "GDF SAMAMBAIA UNIDADE MÓVEL SMDF.pdf",
+     "data": "28/05/2026",
+     "url": "https://drive.google.com/file/d/1X6KMYDkdue_1ACxp4CBgNxPPVMnsO66S/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_204527950_Relatorio_68.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/11STvj6MmIsBj6NkoxDLOYZ23-eMo1sRI/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - samambaia 22.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1OSsZiER_z9zwhQe90av-JWR3eZhDaClc/view"
+    },
+    {
+     "n": "023 - NEOENERGIA",
+     "arq": "NeoEnergia.pdf",
+     "data": "11/06/2026",
+     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - samambaia 22.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1GABXqz-rb9AIY0GKySY_G2Wbo_8Ni8ks/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "Infografico_GDF_na_Sua_Porta_Samambaia_RA_XII_18a22_mai_2026.pdf",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1rmpHVkuGZ3TjnpkzRsmEHg1HQLZX9X8c/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_Completo_SEJUVE_Samambaia_Sul_V2.pdf",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1ucnmaT0yauAccTS3MNYZ_Pz9Ugmf25Ss/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO SEMA SAMAMBAIA.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1G60ilqAPUUKR5Lm0YtNkyL92G2JzoI9w/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Alunos de Samambaia.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1aJTLOdVmpCLHAAiyxbpwEGo1gpREovW0/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - SAMAMBAIA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1pargpxC3CCg-lyxmdJjLgYtDHtsVpNuz/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO SAMAMBAIA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1AXlhKRWgVh8nu1_3vM9tGIwQnoWAuytQ/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "pdf24_merged-1_compressed.pdf",
+     "data": "26/05/2026",
+     "url": "https://drive.google.com/file/d/1wLzne3_PQL-QxKXiZ1d2LX8Eqy_7hZPk/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade da Região Administrativa da Samambaia.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1_uzQnAJ02mogj9b_u4gj3WsaL5ZEUo7X/view"
+    },
+    {
+     "n": "039 - SEAGRI",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - SAMAMBAIA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1gCzp6Bqrd4hpBT1duk5zvEgnYIOlVBXy/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Samambaia.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/15QlubYgvQQSD9uaYtTdApq0UW92gCye-/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO SAMAMBAIA-2.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1RIML2jVr4hrfIvX-R9IIlCT12kBfDT_s/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "Relatório_Samambaia_GDF_Adote_Praca.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1rM2TQTJm8fZUh_6AczwwiG-7me29KqgK/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/168byU_tQYJWDBkTkLz9b9CiFod-c-7Fj/view"
+    }
+   ]
+  },
+  {
+   "cod": "P005",
+   "ed": 5,
+   "ra": "26 de Setembro",
+   "entregues": 26,
+   "pendentes": 20,
+   "total": 46,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF - 26 de Setembro.pdf",
+     "data": "11/06/2026",
+     "url": "https://drive.google.com/file/d/1t3DwJ85IdRjB_hVb2NlzzGGmswt4wbbH/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - 26 DE SETEMBRO.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1EMeE1Awx04iRoGo71o43wqPirubAU8TW/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "GDF NA SUA PORTA - 26 de Setembro.pdf",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1bHJ9z0vlYtT5OIuAeHrYn2XEXPzAY4ib/view"
+    },
+    {
+     "n": "004 - SEDES",
+     "arq": "Relatório GDF na sua porta (4).xlsx",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/13mj3UPC4eh8pPw74BaR0HCVor6Lj_22s/view"
+    },
+    {
+     "n": "005 - SEDET",
+     "arq": "RelatÃ³rio Programa GDF na Sua Porta 26 de Setembro.pdf",
+     "data": "08/06/2026",
+     "url": "https://drive.google.com/file/d/1Z8-D684QK9FvBX9e2LZufHIQA-ZNRwCs/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP 26 Setembro 16.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1LSsANbUbdQCDyOqy5-mOSpGh5zlyU8dl/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1Pd_uKYQYIgl-jkio09LFjHT5hZOYhYyT/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - 26 de Setembro.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/12ZWsYGuqcw5YBhJhFBxzIV7egj47PZp4/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_26 DE SETEMBRO.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1q9uU7L7kH280ykMZY47XUol6vZ1ahU6l/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – 26 de Setembro_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1whrCXoPEb1bjL0jsJfHZkmnQQewwlzvg/view"
+    },
+    {
+     "n": "017 - PROCON",
+     "arq": "GDF na Sua Porta - 26 de Setembro - PROCON.docx",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1GalcSDJnxBrL6NVTsCogJwhZxxZfrvPX/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "remocao_entulho",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/18Vr2s0Y4AjQ9x8MwOT8RvzSbdxPUdwHIVZoaf78kWT0/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "26 de setmbro UNIDADE MÓVEL SMDF.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1GmFRETnkNGILiKrMYFTj6JGlSj7CYUQ7/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_204527363_Relatorio_67.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1zBCcGuIDCKiEWSStRZyzTPw4dEC8vAQu/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - 26 DE SETEMBRO 29.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1wx6Q7fbW-LEz1THZt-EUx7UoIszU9i-C/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - 26 DE SETEMBRO 29.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/116wAqqORq5bWiSjX4F7ljpvJx6wjJZ6l/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "Relatório 26 de Setembro RA-VP - GDF Na Sua Porta.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1QSFdJlFikKNb4o2W_oXP1Y0vTWLi145V/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_SEJUVE_26Setembro_Maio2026.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1gbplAknm1QzbiMjLzVjtPI0v1m_1gXD5/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO SEMA 26 DE SETEMBRO.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1SJqLDMvE3G690zuBcHQYy6FIKX2ibaYH/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Alunos 26 de Setembro - Página1.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1SPA9eldB2F2UFDREhVpxDAKbJNzuXkyD/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - 26 DE SETEMBRO - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1kIgHbYkx88Djo--g5LntKUuNcieCX8jh/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "Relatorio Completo.pdf",
+     "data": "02/06/2026",
+     "url": "https://drive.google.com/file/d/1qu_rWDfDZfYLSQ5Oigl0bYxYh10dDj_f/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade da Região Administrativa da 26 de Setembro.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/12aVp_Kf-sZXyrIdzY_c5oopxyI5Po6cX/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - 26 de Setembro.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/19tIoo0163Q8R_6AbqweKDYKPZURzgR0k/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO 26 DE SETEMBRO.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/154PKlykYyDyzDIdtcDgneqXCdRTQKMD1/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1jQFeVqeKe59kVIqAdg66lZDDxMAGReyw/view"
+    }
+   ]
+  },
+  {
+   "cod": "P006",
+   "ed": 6,
+   "ra": "Ceilândia",
+   "entregues": 29,
+   "pendentes": 26,
+   "total": 55,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - CEILÂNDIA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1LOGavNNAfsI9hAAUvq0sINRBgTc-DNNq/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - CEILÂNDIA.pdf",
+     "data": "26/06/2026",
+     "url": "https://drive.google.com/file/d/1Ej38gxx3PnAu38fMaP3YwYVpiG3lgedo/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "relatorio GDF NA SUA PORTA - Ceilândia.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1F96akmbC9IaeEcw9A-QwnDocZy6Wqs1f/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP Ceilandia 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1Uv_qtD2U3Uf52YZ3o-Vd7G2yIWdb7mnj/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 06",
+     "data": "17/06/2026",
+     "url": "https://drive.google.com/file/d/1ZWMALsCDX6yvxjk2_MCf9Ai7F9SnKaU5/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - EDIÇÃO CEILÂNDIA - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "15/06/2026",
+     "url": "https://drive.google.com/file/d/1HRlgS-vI_8UALoikm2CUEVxmTauYEK76/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - Ceilândia.pdf",
+     "data": "17/06/2026",
+     "url": "https://drive.google.com/file/d/1wrcItrMFOJJXNEnrbv6u5vQEMgNk9IHT/view"
+    },
+    {
+     "n": "013 - DFLEGAL",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_CEILANDIA.pdf.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1AR0fPaublS-MkBzfqx4F5wanmbi-k4nX/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – Ceilândia_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1gRm9zLVVmfwD4VfCq3XfbDJADP3Wy_si/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1LY01rARp8U9D2aEMPArN65FSiyEGCpTc/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "gdf ceilandia UNIDADE MÓVEL SMDF.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1OF3GwHDVoSIfyXERJ4z1d5hnkvlKyVBi/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_206427493_Relatorio_74.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/13kVmWAqwRSICaE7dmsMuXin45bCvMNg1/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - CEILANDIA 08 A 12 DE JUNHO.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/16UZQlVLaAmGTk-nOqzIFUuuoI2Z7_EK2/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - CEILANDIA 08 A 12 DE JUNHO.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1Tq4kwHfsWKmNBz85I980myujKKFWgteg/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "Infografico_GDF_na_Sua_Porta_IX_1a12_jun_2026_260618_145351.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1d3Zzcoazz8HTMCcU-ZGos2bXSIjZPVmu/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_SEJUVE_Ceilandia_Junho2026.pdf",
+     "data": "16/06/2026",
+     "url": "https://drive.google.com/file/d/1D6yebVC5OnRxKxXiBUyJ95rYTQFAeXjd/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO SEMA CEILÂNDIA (2).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/11kjbFtRrpkyAd3jtZjy7qSpq_5Yu4ngE/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Alunos de Ceilândia.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1EoRsjCMbeChBAkU9Fd6-BByRvO78ATLG/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - CEILANDIA 1 VISITA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1TYvOai-nhW8PIYeqFGoUL7--P3XcrPEf/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO CEILÂNDIA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1YQvQq0kOah9yFWHsCgy9ldhdI_g4p5k-/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "Relatório Matriculados Parque da Vaquejada - 01_06 a 12_06_26-mesclado.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1E35X5OassT1ORcDuiMY4QOdnw64TJLbT/view"
+    },
+    {
+     "n": "037 - CULTURA",
+     "arq": "Ceilândia.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1bCRpEXi8pZWuhDtUdVQzRGpcFY1J8zLe/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade da Região Administrativa da Ceilândia.pdf",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1BM-M74y0-f1k7C6Ll2GwKoCO6Y8yzMTU/view"
+    },
+    {
+     "n": "039 - SEAGRI",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF -CEILÂNDIA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/181bFj8LmK5Iq_L282v16H5e68PA1AnB8/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Ceilândia.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1TjuRypgzyvkUkddL95nMugJvRX-xqr55/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO CEILANDIA.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1B4VVVjf1g1NWBFiIcQuRKMjSCKh_hl2H/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "GDF_NA_SUA_PORTA_CEILANDIA.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/19VmO_Ktu1WIBESL_-YWidCvHSNzTWdzM/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/19f5vf3wDcirIwYcYnx4FSRX8JA9Lcnds/view"
+    },
+    {
+     "n": "052 - JUCIS",
+     "arq": "Ceilândia.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1KydA8vqLoD7D_8KAGmbF2EzPV1m5UwGN/view"
+    }
+   ]
+  },
+  {
+   "cod": "P007",
+   "ed": 7,
+   "ra": "Planaltina",
+   "entregues": 25,
+   "pendentes": 29,
+   "total": 54,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - PLANALTINA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1I-vhr8vHeF-KFkuGOFiMYKPQ1aEPH4Fj/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - PLANALTINA.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1ta7lQWa4LgRtbLaSZhMHZQMq2RAZMi3j/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "relatorio GDF NA SUA PORTA - PLANALTINA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1tWLPMbes9Ggcc8k8wMAZoRPqgturiIzm/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Resumo DEP Arapoanga Atualizado 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1evTJ-2mgmwi67xXBiM98Qc3PvUFehYrz/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 07",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/10M5oxFFfhyRcW4ahLKB0NScOnUMy7cA_/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - 7ª EDIÇÃO - PLANALTINA - 2026 - EDUCAÇÃO DE TRÂNSITO .xlsx",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/1Rmd26FQ_vDP9AoE8PMU5tZuG3fs6gRuo/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - Planaltina.pdf",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/10B6NppLFzvWTJ-qZqdy_6I8lhulzx-1Q/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – Planaltina_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1HkIVj3sFACp_ctJ0VCa1UYUYg8qohj8x/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1QHJxNG255CQuBCQbjlwAF6AG3A6zA8nn/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "gdf PlanaltinaUNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1OGTKPgF-a3jQK3-T4pb0CZMPalc29NNh/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_206929032_Relatorio_81.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1EW5_BgZhBdlS9z2f0jiiIJSrLDs8Jof9/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - PLANALTINA 19.06.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11dbj7dkjC8UxgUNrJTvgK2g7hDZOiDGb/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - PLANALTINA 19.06.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1M674MnG_zYi9rvLECKGY9Nw80ZIJy1zv/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "Infografico_GDF_na_Sua_Porta_VI_15a19_jun_2026 (1).pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1rI6e2PMSMLQixAQpphVyKzSsyBxIWqE2/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_SEJUVE_Planaltina_Junho2026_v2.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1OT6xKIIw5v3AZx6IIqMpxGV12ISJv8EY/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO SEMA PLANALTINA (2).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1A5d5_9GuigoQiijjXg0Qe1bouvjbawgu/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Alunos de Planaltina.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1_5Idbiua-27qGALBnrWasrikeaz6WX1u/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "GDF NA SUA PORTA - PLANALTINA - SEAC.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/19-ZQJykEUG7QzzoxCjrbsb_xpXst0t8G/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO PLANALTINA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1NcOvCxTuRjWCaGjJwcRCARKAS_OPmWnX/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "Inscritos COP Planaltina - 15-06 a 19-06.pdf",
+     "data": "03/07/2026",
+     "url": "https://drive.google.com/file/d/1y4Dj2pffLiKsuqfdi9sEixU6fqIOvdmK/view"
+    },
+    {
+     "n": "037 - CULTURA",
+     "arq": "Planaltina.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1TsPuTUTDQTdX7RD-_BZtBSe_Szu6tTKP/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - PLANALTINA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1fs0EwMxigA8EDbwsCeC0I0GI_QZ_fbmI/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO PLANALTINA DF.pdf",
+     "data": "20/06/2026",
+     "url": "https://drive.google.com/file/d/1HeuyngfBXLunyhMH00EYvqmxCcIPCrf_/view"
+    },
+    {
+     "n": "045 - SEPE",
+     "arq": "RELATORIO_GDF_NA_SUA_PORTA_PLANALTINA (1).docx",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1XzB3_pIzyDNOMoSswOAk7A1kE7BK6wtm/view"
+    },
+    {
+     "n": "052 - JUCIS",
+     "arq": "Planaltina.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1wu9jlWncb9gD_lH7XDV-jgljEzy0QroK/view"
+    }
+   ]
+  },
+  {
+   "cod": "P008",
+   "ed": 8,
+   "ra": "Plano Piloto",
+   "entregues": 3,
+   "pendentes": 51,
+   "total": 54,
+   "ultima": "17/07/2026",
+   "orgaos": [
+    {
+     "n": "008 - NOVACAP",
+     "arq": "NOVACAP Plano de ação 4_DRCS.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/1to39ZZW81R2gsOJYrrdZp8cAUeAPHjLA/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1Cb2DxSnEAzBkOJZ-tWnAuh85xos__htU/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "edição plano piloto gdf na sua porta.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1hPAe4bPBQYtugvNu4_0ksHB6X4Hw1hHz/view"
+    }
+   ]
+  },
+  {
+   "cod": "P009",
+   "ed": 9,
+   "ra": "São Sebastião",
+   "entregues": 27,
+   "pendentes": 27,
+   "total": 54,
+   "ultima": "21/07/2026",
+   "orgaos": [
+    {
+     "n": "001 - SES",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - SÃO SEBASTIÃO.pdf",
+     "data": "13/07/2026",
+     "url": "https://drive.google.com/file/d/1Z4pcSmqmYYe4ByTmnfslHfNdcWFbo2CA/view"
+    },
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - SÃO SEBASTIÃO.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1Dgt_mQFi5yV_caWHOrxu1gy-vH8r0oPB/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "GDF NA SUA PORTA - São Sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1VQTd7v77x3mLBLbuGoPIs-433nq_nZGK/view"
+    },
+    {
+     "n": "008 - NOVACAP",
+     "arq": "Plano de Ação - GDF - São Sebatião.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/1JNv6yhpFE3lNXIXVoNKozp-F6hv9hd9K/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 09",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1phD89Y2LZmG1mgChvLnj22YBJpMkpEeX/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - 9ª EDIÇÃO - SÃO SEBASTIÃO - 2026 - EDUCAÇÃO DE TRÂNSITO .xlsx",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1cuaQfSoLldOL7f0y0CXNOLRRGE87H4--/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "Relatório GDF na Sua Porta - São Sebastião.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1FrUDwvgUZXjj55WkOHfaEazEF3A6inbJ/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Programa GDF Na Sua Porta – São Sebatsião (30_06_2026 - 04_07_2026).pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1tuNZzD9m2OU0KBkYQImSCsgbQuB1bydv/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/12TTGgZRPytlW3q1klSXN7pvlizP_kFxo/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "GDF SÃO SEBASTIÃO UNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/12IHqsKEZayrPiE1TVvzvZgBDC85c1w0N/view"
+    },
+    {
+     "n": "020 - Defensoria",
+     "arq": "SEI_207719495_Relatorio_86.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1DZnl2gmxj5GG6aDj3I4NHd4Qx9HWpkUj/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - SÃO SEBASTIÃO 04.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1t3yC-CO6SAueJuaBgMVjN2AnQ-mPJNBB/view"
+    },
+    {
+     "n": "024 - SEJUS",
+     "arq": "PLANILHA DE ATENDIMENTO - SÃO SEBASTIÃO 04.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1XKy6nmBSeArtPnUr42auEx2T1qjBxz-r/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "Infografico_GDF_na_Sua_Porta_RA_XIV_30_juna4_jul_2026 (1).pdf",
+     "data": "07/07/2026",
+     "url": "https://drive.google.com/file/d/1SCI6kEbBQVa0w32T_JHfBj6pf6wa-6Qr/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio SEJUVE SaoSebastiao Julho2026 v2.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1t-_Ak_WddAJjnbYBUBs7FbvQ7tA8iE5x/view"
+    },
+    {
+     "n": "031 - SEMA",
+     "arq": "RELATÓRIO SEMA SÃO SEBASTIÃO.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1F43NiNNSh8GIcgGfZcO4IaH9wJd4s21c/view"
+    },
+    {
+     "n": "032 - Ciências e Tecnologia",
+     "arq": "Alunos de São Sebastião.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1GHHItMcGGeFaluvI1YQJHw3lXz71JkQL/view"
+    },
+    {
+     "n": "034 - Atendimento a Comunidade",
+     "arq": "Atendimento_em_Movimento_Sao_Sebastiao (1).pdf",
+     "data": "14/07/2026",
+     "url": "https://drive.google.com/file/d/1LH1eCcgDFwTMwBSozmrhZNltvgeOoEWt/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "CARTEIRAS DE SÃO SEBASTIÃO.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/15ZkXL9KlkpkHZLiasTjhSHUyznWrRvmG/view"
+    },
+    {
+     "n": "036 - SEL",
+     "arq": "GDF na sua porta - são sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/17yh6NluxM4fDUt_9S7Jc7D6Jm6lqdzZy/view"
+    },
+    {
+     "n": "037 - CULTURA",
+     "arq": "São Sebastião.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1CEw0c-sYYlkRABtO8gaK77TLXA4Q_nwN/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade da Região Administrativa de São Sebastião.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1doSlXgmrSbOvMDmNyGG52CrJgfhl97N9/view"
+    },
+    {
+     "n": "039 - SEAGRI",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - SÃO SEBASTIÃO.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11X5NjiAqk3O0FHa1IPbqay7Xj9uCtd9z/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório atividades GDF na sua porta São Sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1v99rwJfMT809YOHzhJU9SneiYyHMIj6s/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO SÃO SEBASTIÃO.pdf",
+     "data": "03/07/2026",
+     "url": "https://drive.google.com/file/d/1K7K2i84XlGFldelRtmKHQAnydjO6A87j/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "gdf relatório.docx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1FAoxX2SxHunraLCv-oHe1ABD_96JxkDo/view"
+    },
+    {
+     "n": "052 - JUCIS",
+     "arq": "São Sebastião.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1j72QC_Z7oLFnlwEP7wfK0olAvTW1I6wk/view"
+    }
+   ]
+  },
+  {
+   "cod": "P010",
+   "ed": 10,
+   "ra": "Recanto das Emas",
+   "entregues": 18,
+   "pendentes": 36,
+   "total": 54,
+   "ultima": "22/07/2026",
+   "orgaos": [
+    {
+     "n": "002 - SEE",
+     "arq": "GDF NA SUA PORTA - RECANTO DAS EMAS.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/16T7GXF1JxEnApTc4cVqKZrMfAyvh06tH/view"
+    },
+    {
+     "n": "003 - SSP",
+     "arq": "relatorio GDF NA SUA PORTA - Recanto das Emas.pdf",
+     "data": "16/07/2026",
+     "url": "https://drive.google.com/file/d/1G8ifngyt20sbEQ6P6zJAMOEG7Jnb3H0v/view"
+    },
+    {
+     "n": "009 - SEMOB",
+     "arq": "Relatório - Semana 10",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1E2R3tXBZpZJ_58BpNJHiLINSK-c14BlI/view"
+    },
+    {
+     "n": "010 - DETRAN",
+     "arq": "Planilha GDF NA SUA PORTA - 10ª EDIÇÃO - RECANTO DAS EMAS - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1r5G0ILuWdYRzg-Y7V3UmDOVmRoDjT4Nx/view"
+    },
+    {
+     "n": "011 - CAESB",
+     "arq": "CAESB - Plano de Ação - Recanto das Emas - Executado.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1aXmx2tXFQAUGlAwfRf5eIA7t4n6AGCqB/view"
+    },
+    {
+     "n": "014 - SEPAN",
+     "arq": "Sepan - Recanto das Emas (13_07_2026 - 17_07_2026).pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1P-CK9Q-H1A_PFRqu7-Nq5wGdEyrYUlPN/view"
+    },
+    {
+     "n": "018 - SLU",
+     "arq": "catacao.xlsx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/12i0HWaVl6cnkI7bnmWyPI0VNY0LaUy9A/view"
+    },
+    {
+     "n": "019 - SEC Mulher",
+     "arq": "GDF Recanto das Emas UNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1QqVttSrIy6qmPctbr6dftUAihjSj-iRz/view"
+    },
+    {
+     "n": "021 - Na Hora",
+     "arq": "PLANILHA DE ATENDIMENTO - RECANTO DAS EMAS 17.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1Vo-C0XW_wSq0d_m6sIJ9l4EbDB4ehgib/view"
+    },
+    {
+     "n": "027 - Ouvidoria Geral",
+     "arq": "dados_evento_infografico.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1qad6b9d6xW7Fmrm0bRJXb8xRVdb7Kfu3/view"
+    },
+    {
+     "n": "030 - Juventude",
+     "arq": "Relatorio_SEJUVE_RecantoEmas_Julho2026.pdf",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1jB1nf1oF3j791Tx4JhQEPEEtbylWyaIU/view"
+    },
+    {
+     "n": "035 - SETUR (Turismo)",
+     "arq": "ATENDIMENTO DE CARTEIRAS DE ARTESANATOS - SETUR - RECANTO DAS EMAS.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1x1hOoMalUuY8YNxUMCyZiaJfihav86hV/view"
+    },
+    {
+     "n": "038 - Deficiência",
+     "arq": "Relatório de Atividade da Região Administrativa do Recanto das Emas.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1LbEHqMS0JXVgrU8Hr_eoGLiawfdg-7aH/view"
+    },
+    {
+     "n": "040 - CODHAB",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Recanto das Emas.pdf",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1U-TJoKcyTWdbnPKu2NZ69ZRUJ1KXnUuI/view"
+    },
+    {
+     "n": "044 - Família",
+     "arq": "RELATÓRIO RECANTO DAS EMAS.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1_aV5nZDK7hYcvWOI1jWfelQXTXUzCxrq/view"
+    },
+    {
+     "n": "048 - SERINTER",
+     "arq": "gdf relatório.docx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11kmechgz2s4KEyc18Pd3weCab9A3eYvD/view"
+    },
+    {
+     "n": "051 - INAS",
+     "arq": "Recanto dia 13-07-2026",
+     "data": "13/07/2026",
+     "url": "https://drive.google.com/file/d/162w0bNu9J8lnK6zIWktHoVf9FLUjPITdyyjC9skoc5s/view"
+    },
+    {
+     "n": "052 - JUCIS",
+     "arq": "Recanto das Emas.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1uoXpJdbhEZeqruGQOrbnEIpt_OoAyIHe/view"
+    }
+   ]
+  }
+ ]
+};
+
+const RAS = SNAP.editions;
+const pct = (a,b)=> b? Math.round(a/b*100) : 0;
+const covCls = c => c>=70?'hi':c>=50?'mid':'lo';
+
+function renderKPIs(){
+  const k=SNAP.kpis;
+  const covs=RAS.map(r=>pct(r.entregues,r.total)).filter(x=>x>0);
+  const covMed=covs.length?Math.round(covs.reduce((s,x)=>s+x,0)/covs.length):0;
+  const cards=[
+    ["c-","Edições realizadas", k.edicoes+" de "+SNAP.totalRAs, "regiões com prestação em curso"],
+    ["c-blue","Órgãos participantes", k.participantes, "com ao menos um relatório"],
+    ["c-green","Prestações entregues", k.entregas, "relatórios válidos no Drive"],
+    ["c-gold","Cobertura média", covMed+"%", "dos órgãos por edição"],
+    ["c-red","Pendências", k.pendencias, "órgãos que ainda não enviaram"],
+    ["c-","Atualização", SNAP.atualizado, "última leitura do Drive"]
+  ];
+  document.getElementById('kpis').innerHTML=cards.map(c=>
+    `<div class="kpi ${c[0]}"><div class="kl">${c[1]}</div><div class="kv">${c[2]}</div><div class="ks">${c[3]}</div></div>`).join('');
+  document.getElementById('hRas').textContent=k.edicoes;
+  document.getElementById('hTot').textContent=SNAP.totalRAs;
+  document.getElementById('hEnt').textContent=k.entregas;
+  document.getElementById('hUp').textContent=SNAP.atualizado;
+  document.getElementById('snapDate').textContent=SNAP.atualizado;
+}
+
+function renderTL(){
+  document.getElementById('tl').innerHTML=RAS.map((r,i)=>{
+    const cc=pct(r.entregues,r.total), cl=covCls(cc);
+    return `<div class="tl-node" data-i="${i}"><div class="tl-dot ${cl}">${r.ed}</div>`+
+    `<div class="tl-ra">${r.ra}</div><div class="tl-cov ${cl}">${cc}%</div></div>`;}).join('');
+  document.querySelectorAll('.tl-node').forEach(n=>n.onclick=()=>openModal(+n.dataset.i));
+}
+
+let curF='all', curRA='', curQ='';
+function match(r){
+  const c=pct(r.entregues,r.total);
+  if(curF==='alta'&&c<70)return false;
+  if(curF==='baixa'&&c>=50)return false;
+  if(curRA&&r.cod!==curRA)return false;
+  if(curQ){
+    const blob=(r.ra+' '+r.cod+' '+r.orgaos.map(o=>o.n).join(' ')).toLowerCase();
+    if(!blob.includes(curQ.toLowerCase()))return false;
+  }
+  return true;
+}
+function renderGrid(){
+  const list=RAS.filter(match);
+  document.getElementById('cnt').textContent=list.length+' de '+RAS.length+' RAs';
+  document.getElementById('grid').innerHTML=list.map(r=>{
+    const i=RAS.indexOf(r), c=pct(r.entregues,r.total), cl=covCls(c);
+    return `<div class="card ${cl}" data-i="${i}">
+      <div class="card-h"><span class="ed-badge">${r.ed}ª edição</span>
+        <div class="card-ra">${r.ra}</div>
+        <div class="card-dt">Última entrega: <b>${r.ultima||'—'}</b></div></div>
+      <div class="cov-wrap">
+        <div class="cov-top"><div class="cov-num">${r.entregues}<small> / ${r.total} órgãos</small></div><div class="cov-pct ${cl}">${c}%</div></div>
+        <div class="bar"><div class="bar-fill ${cl}" style="width:${c}%"></div></div>
+      </div>
+      <div class="card-foot"><span><b>${r.entregues}</b> entregaram</span><span><b>${r.pendentes}</b> pendentes</span></div>
+    </div>`;
+  }).join('')||'<div style="padding:30px;color:var(--mut)">Nenhuma RA encontrada com esse filtro.</div>';
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
+}
+
+function openModal(i){
+  const r=RAS[i], c=pct(r.entregues,r.total);
+  const kpis=[["Órgãos que atuaram",r.entregues],["Cobertura",c+"%"],["Pendentes",r.pendentes],["Última entrega",r.ultima||'—']];
+  const orgs=r.orgaos.map(o=>
+    `<div class="org"><span class="on">${o.n}</span>`+
+    `<span class="oa" title="${o.arq||''}">${o.arq||''}</span>`+
+    `<span class="od">${o.data||''}</span>`+
+    (o.url?`<a class="open" href="${o.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`).join('');
+  document.getElementById('modal').innerHTML=`
+    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>
+      <h2>${r.ra}</h2><div class="mh-sub">${r.ed}ª edição · ${r.cod} · ${r.entregues} de ${r.total} órgãos com relatório</div></div>
+    <div class="modal-b">
+      <div class="mkpi">${kpis.map(k=>`<div><div class="m-v">${k[1]}</div><div class="m-l">${k[0]}</div></div>`).join('')}</div>
+      <div class="blk-lbl">Órgãos que entregaram — clique em “abrir” para ver o relatório</div>
+      ${orgs||'<p style="color:var(--mut)">Sem entregas registradas ainda.</p>'}
+    </div>`;
+  document.getElementById('ov').classList.add('open');
+}
+function closeModal(){document.getElementById('ov').classList.remove('open')}
+document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+function initControls(){
+  const sel=document.getElementById('fRA');
+  RAS.forEach(r=>{const o=document.createElement('option');o.value=r.cod;o.textContent=r.ed+'ª · '+r.ra;sel.appendChild(o)});
+  sel.onchange=()=>{curRA=sel.value;renderGrid()};
+  document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.quick').forEach(x=>x.classList.remove('ativo'));
+    b.classList.add('ativo');curF=b.dataset.f;renderGrid();
+  });
+  document.getElementById('fQ').oninput=e=>{curQ=e.target.value;renderGrid()};
+}
+renderKPIs();renderTL();initControls();renderGrid();
+</script>
+</body>
+</html>

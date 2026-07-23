@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GDF na Sua Porta — Painel de Prestação de Contas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pd:#4a1963;--pm:#7a2380;--pmid:#a93d8e;--pale:#f5edf8;
+  --bl:#0071bb;--gold:#c47a00;--crit:#b91c1c;--aten:#b45309;--adeq:#166534;
+  --bg:#ede7f3;--txt:#1e0a35;--mut:#6b5680;--line:#e5d9ef;
+  --cov-hi:#16a34a;--cov-mid:#d98c00;--cov-lo:#dc2626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Unbounded','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px}
+h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15}
+.hdr{background:linear-gradient(135deg,var(--pd) 0%,#2d0f4e 100%);padding:20px 36px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.hdr p{font-size:.8rem;color:rgba(255,255,255,.85);font-weight:500;margin-top:5px;letter-spacing:.02em}
+.hdr-meta{text-align:right;color:#fff}
+.hdr-status{display:flex;align-items:center;gap:7px;justify-content:flex-end;font-size:.76rem;color:rgba(255,255,255,.9)}
+.dot{width:8px;height:8px;border-radius:50%;background:#c9b6dd;box-shadow:0 0 0 3px rgba(201,182,221,.25)}
+.hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
+.stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
+.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28)}
+.band span{color:#fff;font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.band svg{flex:none}
+.wrap{padding:22px 36px 60px;max-width:1400px;margin:0 auto}
+.sec-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mut);margin:26px 0 10px}
+.sec-label:first-child{margin-top:0}
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.kpi{background:#fff;border-radius:12px;padding:14px 16px;border-left:5px solid var(--pmid);box-shadow:0 2px 8px rgba(74,25,99,.07)}
+.kpi.c-gold{border-left-color:var(--gold)}.kpi.c-blue{border-left-color:var(--bl)}
+.kpi.c-green{border-left-color:var(--adeq)}.kpi.c-red{border-left-color:var(--crit)}
+.kl{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-weight:700;margin-bottom:6px;line-height:1.3}
+.kv{font-size:clamp(1.15rem,1.8vw,1.7rem);font-weight:800;color:var(--pd);line-height:1}
+.kpi.c-gold .kv{color:var(--gold)}.kpi.c-blue .kv{color:var(--bl)}.kpi.c-green .kv{color:var(--adeq)}.kpi.c-red .kv{color:var(--crit)}
+.ks{font-size:.62rem;color:var(--mut);margin-top:5px;font-weight:600}
+.tl{background:#fff;border-radius:14px;padding:18px 20px 8px;box-shadow:0 2px 8px rgba(74,25,99,.07);overflow-x:auto}
+.tl-track{display:flex;gap:0;min-width:640px;position:relative}
+.tl-track:before{content:"";position:absolute;top:15px;left:26px;right:26px;height:3px;background:linear-gradient(90deg,var(--gold),var(--bl))}
+.tl-node{flex:1;text-align:center;position:relative;padding:0 4px 14px;cursor:pointer}
+.tl-dot{width:32px;height:32px;border-radius:50%;background:var(--pd);color:#fff;border:3px solid var(--pd);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;position:relative;z-index:1;transition:.15s}
+.tl-node:hover .tl-dot{transform:scale(1.12)}
+.tl-ra{font-size:.64rem;font-weight:800;color:var(--txt);line-height:1.2;text-transform:uppercase;letter-spacing:.02em}
+.tl-cov{font-size:.62rem;color:var(--bl);margin-top:3px;font-weight:800}
+.tl-dot.hi{background:var(--cov-hi);border-color:var(--cov-hi)}.tl-dot.mid{background:var(--cov-mid);border-color:var(--cov-mid)}.tl-dot.lo{background:var(--cov-lo);border-color:var(--cov-lo)}
+.tl-cov.hi{color:var(--cov-hi)}.tl-cov.mid{color:var(--cov-mid)}.tl-cov.lo{color:var(--cov-lo)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 4px}
+.quick{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1.5px solid #d0b8e8;background:#fff;font-family:inherit;font-size:.66rem;font-weight:700;cursor:pointer;color:var(--mut);transition:.12s}
+.quick:hover{border-color:var(--pm)}.quick.ativo{background:var(--pd);color:#fff;border-color:var(--pd)}
+select,input[type=search]{font-family:inherit;font-size:.72rem;padding:7px 11px;border:1.5px solid #d0b8e8;border-radius:9px;background:#fff;color:var(--txt);font-weight:600}
+input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a2380' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;padding-left:33px}
+.count{font-size:.66rem;color:var(--mut);font-weight:700;margin-left:auto}
+.legend{font-size:.66rem;color:var(--mut);font-weight:700;display:flex;gap:6px;align-items:center;margin:0 0 2px 2px}
+.legend .lg{font-size:.95rem;line-height:1}.legend .lg.hi{color:var(--cov-hi)}.legend .lg.mid{color:var(--cov-mid)}.legend .lg.lo{color:var(--cov-lo)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:14px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(74,25,99,.08);overflow:hidden;display:flex;flex-direction:column;border-top:4px solid var(--pm);cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(74,25,99,.14)}
+.card.hi{border-top-color:var(--cov-hi)}.card.mid{border-top-color:var(--cov-mid)}.card.lo{border-top-color:var(--cov-lo)}
+.card-h{padding:14px 16px 10px;background:linear-gradient(135deg,#faf6fe,#fff)}
+.ed-badge{display:inline-block;font-size:.58rem;font-weight:800;color:#fff;background:var(--pm);padding:2px 9px;border-radius:20px;letter-spacing:.05em}
+.card-ra{font-size:1.05rem;font-weight:800;color:var(--pd);margin-top:8px;line-height:1.1}
+.card-dt{font-size:.64rem;color:var(--mut);font-weight:600;margin-top:4px}
+.card-dt b{color:var(--bl)}
+.cov-wrap{padding:10px 16px 6px}
+.cov-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.cov-num{font-size:1.4rem;font-weight:800;color:var(--pd)}
+.cov-num small{font-size:.7rem;color:var(--mut);font-weight:700}
+.cov-pct{font-size:.8rem;font-weight:800;color:var(--bl)}
+.bar{height:9px;border-radius:6px;background:var(--pale);overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--pm),var(--bl));transition:width .4s}
+.bar-fill.hi{background:linear-gradient(90deg,#34d399,var(--cov-hi))}
+.bar-fill.mid{background:linear-gradient(90deg,#fbbf24,var(--cov-mid))}
+.bar-fill.lo{background:linear-gradient(90deg,#f87171,var(--cov-lo))}
+.cov-pct.hi{color:var(--cov-hi)}.cov-pct.mid{color:var(--cov-mid)}.cov-pct.lo{color:var(--cov-lo)}
+.card-foot{padding:8px 16px 14px;font-size:.64rem;color:var(--mut);font-weight:600;display:flex;justify-content:space-between}
+.card-foot b{color:var(--pd)}
+.overlay{position:fixed;inset:0;background:rgba(30,10,53,.55);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:50;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:860px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.modal-h{background:linear-gradient(135deg,var(--pd),#2d0f4e);color:#fff;padding:20px 26px;position:relative}
+.modal-h h2{font-size:1.3rem;font-weight:800}
+.modal-h .mh-sub{font-size:.74rem;color:rgba(255,255,255,.85);margin-top:5px;font-weight:600}
+.modal-x{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;line-height:1}
+.modal-b{padding:18px 26px 26px;max-height:70vh;overflow-y:auto}
+.mkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px}
+.mkpi div{background:var(--pale);border-radius:10px;padding:11px 13px}
+.mkpi .m-v{font-size:1.2rem;font-weight:800;color:var(--pd)}
+.mkpi .m-l{font-size:.58rem;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-top:3px}
+.blk-lbl{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--pm);margin:6px 0 10px;padding-bottom:5px;border-bottom:2px solid var(--pale)}
+.org{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:.78rem}
+.org .on{font-weight:700;color:var(--txt);flex:1;min-width:0}
+.org .oa{color:var(--mut);font-size:.68rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}
+.org .od{color:var(--bl);font-size:.68rem;font-weight:700;white-space:nowrap}
+.org a.open{text-decoration:none;background:var(--pd);color:#fff;font-size:.62rem;font-weight:800;padding:5px 11px;border-radius:7px;white-space:nowrap}
+.org a.open:hover{background:var(--pm)}
+.footer{margin-top:34px;font-size:.66rem;color:var(--mut);text-align:center;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
+.footer b{color:var(--pd)}
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpi-row{grid-template-columns:repeat(2,1fr)};.wrap{padding:18px 16px 50px};.hdr{padding:16px 18px};.org .oa{display:none}}
+@media print{
+  @page{size:A4 landscape;margin:8mm}
+  body{background:#fff}.card:hover{transform:none}.toolbar,.overlay{display:none!important}
+  .card,.kpi,.tl{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>GDF na Sua Porta — Painel de Prestação de Contas</h1>
+    <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+  </div>
+  <div class="hdr-meta">
+    <div class="hdr-status"><span class="dot"></span><span>Atualizado em <span id="hUp">—</span></span></div>
+    <div class="hdr-big"><span id="hRas">—</span> de <span id="hTot">35</span> RAs&nbsp;·&nbsp;<span id="hEnt">—</span> prestações entregues</div>
+  </div>
+</div>
+<div class="stripe"></div>
+<div class="band"><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>O que cada órgão fez em cada região — com o relatório, a data e a fonte</span></div>
+
+<div class="wrap">
+  <div class="sec-label">Visão geral</div>
+  <div class="kpi-row" id="kpis"></div>
+
+  <div class="sec-label">Edições realizadas — cobertura por região</div>
+  <div class="tl"><div class="tl-track" id="tl"></div></div>
+
+  <div class="sec-label">Regiões — clique numa RA para ver os órgãos e abrir os relatórios</div>
+  <div class="toolbar">
+    <select id="fRA"><option value="">Todas as RAs</option></select>
+    <button class="quick ativo" data-f="all">Todas</button>
+    <button class="quick" data-f="alta">Cobertura alta (≥70%)</button>
+    <button class="quick" data-f="baixa">Cobertura baixa (&lt;50%)</button>
+    <input type="search" id="fQ" placeholder="Buscar RA ou órgão…">
+    <span class="count" id="cnt">—</span>
+  </div>
+  <div class="legend"><span class="lg hi">●</span>≥70%&nbsp;&nbsp;<span class="lg mid">●</span>50–69%&nbsp;&nbsp;<span class="lg lo">●</span>&lt;50% de cobertura</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="footer">
+    <b>Fonte:</b> pasta oficial "Prestação de Contas" no Google Drive, lida automaticamente pelo sistema de monitoramento (abas Painel e Entregues).<br>
+    Entregue = a pasta da edição contém relatório em PDF, Word ou planilha. Números conforme os arquivos depositados pelos órgãos, sem auditoria de conteúdo. Retrato de <b id="snapDate">—</b>.<br>
+    Elaboração: Adacto Artur Dornas de Oliveira · SEGOV.
+  </div>
+</div>
+
+<div class="overlay" id="ov"><div class="modal" id="modal"></div></div>
+
+<script>
+/* ===== SNAPSHOT — gerado das abas Resumo/Painel/Entregues da planilha viva ===== */
+const SNAP = __SNAP_JSON__;
+
+const RAS = SNAP.editions;
+const pct = (a,b)=> b? Math.round(a/b*100) : 0;
+const covCls = c => c>=70?'hi':c>=50?'mid':'lo';
+
+function renderKPIs(){
+  const k=SNAP.kpis;
+  const covs=RAS.map(r=>pct(r.entregues,r.total)).filter(x=>x>0);
+  const covMed=covs.length?Math.round(covs.reduce((s,x)=>s+x,0)/covs.length):0;
+  const cards=[
+    ["c-","Edições realizadas", k.edicoes+" de "+SNAP.totalRAs, "regiões com prestação em curso"],
+    ["c-blue","Órgãos participantes", k.participantes, "com ao menos um relatório"],
+    ["c-green","Prestações entregues", k.entregas, "relatórios válidos no Drive"],
+    ["c-gold","Cobertura média", covMed+"%", "dos órgãos por edição"],
+    ["c-red","Pendências", k.pendencias, "órgãos que ainda não enviaram"],
+    ["c-","Atualização", SNAP.atualizado, "última leitura do Drive"]
+  ];
+  document.getElementById('kpis').innerHTML=cards.map(c=>
+    `<div class="kpi ${c[0]}"><div class="kl">${c[1]}</div><div class="kv">${c[2]}</div><div class="ks">${c[3]}</div></div>`).join('');
+  document.getElementById('hRas').textContent=k.edicoes;
+  document.getElementById('hTot').textContent=SNAP.totalRAs;
+  document.getElementById('hEnt').textContent=k.entregas;
+  document.getElementById('hUp').textContent=SNAP.atualizado;
+  document.getElementById('snapDate').textContent=SNAP.atualizado;
+}
+
+function renderTL(){
+  document.getElementById('tl').innerHTML=RAS.map((r,i)=>{
+    const cc=pct(r.entregues,r.total), cl=covCls(cc);
+    return `<div class="tl-node" data-i="${i}"><div class="tl-dot ${cl}">${r.ed}</div>`+
+    `<div class="tl-ra">${r.ra}</div><div class="tl-cov ${cl}">${cc}%</div></div>`;}).join('');
+  document.querySelectorAll('.tl-node').forEach(n=>n.onclick=()=>openModal(+n.dataset.i));
+}
+
+let curF='all', curRA='', curQ='';
+function match(r){
+  const c=pct(r.entregues,r.total);
+  if(curF==='alta'&&c<70)return false;
+  if(curF==='baixa'&&c>=50)return false;
+  if(curRA&&r.cod!==curRA)return false;
+  if(curQ){
+    const blob=(r.ra+' '+r.cod+' '+r.orgaos.map(o=>o.n).join(' ')).toLowerCase();
+    if(!blob.includes(curQ.toLowerCase()))return false;
+  }
+  return true;
+}
+function renderGrid(){
+  const list=RAS.filter(match);
+  document.getElementById('cnt').textContent=list.length+' de '+RAS.length+' RAs';
+  document.getElementById('grid').innerHTML=list.map(r=>{
+    const i=RAS.indexOf(r), c=pct(r.entregues,r.total), cl=covCls(c);
+    return `<div class="card ${cl}" data-i="${i}">
+      <div class="card-h"><span class="ed-badge">${r.ed}ª edição</span>
+        <div class="card-ra">${r.ra}</div>
+        <div class="card-dt">Última entrega: <b>${r.ultima||'—'}</b></div></div>
+      <div class="cov-wrap">
+        <div class="cov-top"><div class="cov-num">${r.entregues}<small> / ${r.total} órgãos</small></div><div class="cov-pct ${cl}">${c}%</div></div>
+        <div class="bar"><div class="bar-fill ${cl}" style="width:${c}%"></div></div>
+      </div>
+      <div class="card-foot"><span><b>${r.entregues}</b> entregaram</span><span><b>${r.pendentes}</b> pendentes</span></div>
+    </div>`;
+  }).join('')||'<div style="padding:30px;color:var(--mut)">Nenhuma RA encontrada com esse filtro.</div>';
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
+}
+
+function openModal(i){
+  const r=RAS[i], c=pct(r.entregues,r.total);
+  const kpis=[["Órgãos que atuaram",r.entregues],["Cobertura",c+"%"],["Pendentes",r.pendentes],["Última entrega",r.ultima||'—']];
+  const orgs=r.orgaos.map(o=>
+    `<div class="org"><span class="on">${o.n}</span>`+
+    `<span class="oa" title="${o.arq||''}">${o.arq||''}</span>`+
+    `<span class="od">${o.data||''}</span>`+
+    (o.url?`<a class="open" href="${o.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`).join('');
+  document.getElementById('modal').innerHTML=`
+    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>
+      <h2>${r.ra}</h2><div class="mh-sub">${r.ed}ª edição · ${r.cod} · ${r.entregues} de ${r.total} órgãos com relatório</div></div>
+    <div class="modal-b">
+      <div class="mkpi">${kpis.map(k=>`<div><div class="m-v">${k[1]}</div><div class="m-l">${k[0]}</div></div>`).join('')}</div>
+      <div class="blk-lbl">Órgãos que entregaram — clique em “abrir” para ver o relatório</div>
+      ${orgs||'<p style="color:var(--mut)">Sem entregas registradas ainda.</p>'}
+    </div>`;
+  document.getElementById('ov').classList.add('open');
+}
+function closeModal(){document.getElementById('ov').classList.remove('open')}
+document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+function initControls(){
+  const sel=document.getElementById('fRA');
+  RAS.forEach(r=>{const o=document.createElement('option');o.value=r.cod;o.textContent=r.ed+'ª · '+r.ra;sel.appendChild(o)});
+  sel.onchange=()=>{curRA=sel.value;renderGrid()};
+  document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.quick').forEach(x=>x.classList.remove('ativo'));
+    b.classList.add('ativo');curF=b.dataset.f;renderGrid();
+  });
+  document.getElementById('fQ').oninput=e=>{curQ=e.target.value;renderGrid()};
+}
+renderKPIs();renderTL();initControls();renderGrid();
+</script>
+</body>
+</html>
