@@ -98,13 +98,38 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
 .org a.open:hover{background:var(--pm)}
 .footer{margin-top:34px;font-size:.66rem;color:var(--mut);text-align:center;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .footer b{color:var(--pd)}
+.btn-pdf{font-family:inherit;font-size:.66rem;font-weight:800;cursor:pointer;border:none;border-radius:9px;padding:8px 14px;background:linear-gradient(135deg,var(--pm),var(--bl));color:#fff;display:inline-flex;align-items:center;gap:6px}
+.btn-pdf:hover{filter:brightness(1.08)}
+.org-head{grid-column:1/-1;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(74,25,99,.08);padding:16px 18px;border-top:4px solid var(--bl)}
+.org-head h3{font-size:1.15rem;color:var(--pd);font-weight:800}
+.org-head .oh-sub{font-size:.72rem;color:var(--mut);font-weight:700;margin:4px 0 8px}
+.org-row{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:.78rem}
+.org-row .orr-ra{font-weight:800;color:var(--txt);flex:1;min-width:110px}
+.org-row .orr-ed{font-size:.6rem;color:var(--mut);font-weight:700}
+.st{font-size:.58rem;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+.st.ent{background:#dcfce7;color:#166534}.st.pend{background:#fde2e2;color:#b91c1c}
+.org-row .orr-arq{color:var(--mut);font-size:.66rem;font-weight:600;flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.org-row .orr-dt{color:var(--bl);font-size:.66rem;font-weight:700}
+.org-row a.open{text-decoration:none;background:var(--pd);color:#fff;font-size:.6rem;font-weight:800;padding:5px 10px;border-radius:7px;white-space:nowrap}
+.pend-block{margin-top:6px}
+.pend-chip{display:inline-block;font-size:.63rem;background:#fde2e2;color:#b91c1c;border-radius:7px;padding:3px 9px;margin:0 5px 5px 0;font-weight:700}
+.mpdf{position:absolute;top:17px;right:58px;background:rgba(255,255,255,.18);border:none;color:#fff;font-size:.6rem;font-weight:800;padding:6px 11px;border-radius:7px;cursor:pointer}
+.mpdf:hover{background:rgba(255,255,255,.3)}
+.print-ctx{display:none}
 @media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){.kpi-row{grid-template-columns:repeat(2,1fr)};.wrap{padding:18px 16px 50px};.hdr{padding:16px 18px};.org .oa{display:none}}
 @media print{
   @page{size:A4 landscape;margin:8mm}
-  body{background:#fff}.card:hover{transform:none}.toolbar,.overlay{display:none!important}
-  .card,.kpi,.tl{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
-  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}.card:hover{transform:none}.toolbar{display:none!important}
+  .overlay{display:none!important}
+  .card,.kpi,.tl,.org-head{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill,.st,.pend-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
+  body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
+  body.print-one .modal{box-shadow:none;max-width:100%;border:none}
+  body.print-one .modal-b{max-height:none;overflow:visible}
+  body.print-one .modal-x,body.print-one .mpdf{display:none!important}
 }
 </style>
 </head>
@@ -123,6 +148,7 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
 <div class="band"><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>O que cada órgão fez em cada região — com o relatório, a data e a fonte</span></div>
 
 <div class="wrap">
+  <div class="print-ctx" id="printCtx"></div>
   <div class="sec-label">Visão geral</div>
   <div class="kpi-row" id="kpis"></div>
 
@@ -132,10 +158,12 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
   <div class="sec-label">Regiões — clique numa RA para ver os órgãos e abrir os relatórios</div>
   <div class="toolbar">
     <select id="fRA"><option value="">Todas as RAs</option></select>
+    <select id="fOrg"><option value="">Todos os órgãos</option></select>
     <button class="quick ativo" data-f="all">Todas</button>
     <button class="quick" data-f="alta">Cobertura alta (≥70%)</button>
     <button class="quick" data-f="baixa">Cobertura baixa (&lt;50%)</button>
     <input type="search" id="fQ" placeholder="Buscar RA ou órgão…">
+    <button id="btnPdf" class="btn-pdf" title="Salva em PDF o que está na tela">⤓ Salvar PDF</button>
     <span class="count" id="cnt">—</span>
   </div>
   <div class="legend"><span class="lg hi">●</span>≥70%&nbsp;&nbsp;<span class="lg mid">●</span>50–69%&nbsp;&nbsp;<span class="lg lo">●</span>&lt;50% de cobertura</div>
@@ -157,6 +185,8 @@ const SNAP = __SNAP_JSON__;
 const RAS = SNAP.editions;
 const pct = (a,b)=> b? Math.round(a/b*100) : 0;
 const covCls = c => c>=70?'hi':c>=50?'mid':'lo';
+const ORG = SNAP.orgaos||[];
+function setCtx(t){document.getElementById('printCtx').textContent='Recorte: '+t;}
 
 function renderKPIs(){
   const k=SNAP.kpis;
@@ -187,7 +217,7 @@ function renderTL(){
   document.querySelectorAll('.tl-node').forEach(n=>n.onclick=()=>openModal(+n.dataset.i));
 }
 
-let curF='all', curRA='', curQ='';
+let curF='all', curRA='', curQ='', curOrg='';
 function match(r){
   const c=pct(r.entregues,r.total);
   if(curF==='alta'&&c<70)return false;
@@ -200,9 +230,12 @@ function match(r){
   return true;
 }
 function renderGrid(){
+  const grid=document.getElementById('grid');
+  if(curOrg){ renderOrg(grid); return; }
   const list=RAS.filter(match);
   document.getElementById('cnt').textContent=list.length+' de '+RAS.length+' RAs';
-  document.getElementById('grid').innerHTML=list.map(r=>{
+  setCtx(curRA ? ('RA '+((RAS.find(r=>r.cod===curRA)||{}).ra||'')) : (curF==='alta'?'cobertura alta (≥70%)':curF==='baixa'?'cobertura baixa (<50%)':(curQ?('busca "'+curQ+'"'):'visão geral — todas as RAs')));
+  grid.innerHTML=list.map(r=>{
     const i=RAS.indexOf(r), c=pct(r.entregues,r.total), cl=covCls(c);
     return `<div class="card ${cl}" data-i="${i}">
       <div class="card-h"><span class="ed-badge">${r.ed}ª edição</span>
@@ -218,37 +251,63 @@ function renderGrid(){
   document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
 }
 
+function renderOrg(grid){
+  const o=ORG.find(x=>x.n===curOrg);
+  if(!o){ grid.innerHTML='<div style="padding:30px;color:var(--mut)">Órgão sem registros.</div>'; return; }
+  const cov=pct(o.entregues,o.total);
+  document.getElementById('cnt').textContent=o.entregues+' de '+o.total+' RAs';
+  setCtx('órgão '+o.n);
+  const rows=o.itens.map(it=>{
+    const ent=it.status==='ENTREGUE';
+    return `<div class="org-row"><span class="orr-ra">${it.ra}</span>`+
+      `<span class="orr-ed">${it.ed}ª</span>`+
+      `<span class="st ${ent?'ent':'pend'}">${ent?'Entregou':'Pendente'}</span>`+
+      `<span class="orr-arq" title="${ent?(it.arq||''):''}">${ent?(it.arq||''):''}</span>`+
+      `<span class="orr-dt">${ent?(it.data||''):''}</span>`+
+      (ent&&it.url?`<a class="open" href="${it.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`;
+  }).join('');
+  grid.innerHTML=`<div class="org-head"><h3>${o.n}</h3>`+
+    `<div class="oh-sub">Entregou em ${o.entregues} de ${o.total} regiões · ${cov}% de presença</div>`+rows+`</div>`;
+}
+
 function openModal(i){
   const r=RAS[i], c=pct(r.entregues,r.total);
   const kpis=[["Órgãos que atuaram",r.entregues],["Cobertura",c+"%"],["Pendentes",r.pendentes],["Última entrega",r.ultima||'—']];
+  const pend=r.pendentesList||[];
+  const pendHtml=pend.length?`<div class="blk-lbl">Órgãos pendentes (${pend.length})</div><div class="pend-block">${pend.map(n=>`<span class="pend-chip">${n}</span>`).join('')}</div>`:'';
   const orgs=r.orgaos.map(o=>
     `<div class="org"><span class="on">${o.n}</span>`+
     `<span class="oa" title="${o.arq||''}">${o.arq||''}</span>`+
     `<span class="od">${o.data||''}</span>`+
     (o.url?`<a class="open" href="${o.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`).join('');
   document.getElementById('modal').innerHTML=`
-    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button><button class="mpdf" onclick="printOne()">⤓ PDF desta RA</button>
       <h2>${r.ra}</h2><div class="mh-sub">${r.ed}ª edição · ${r.cod} · ${r.entregues} de ${r.total} órgãos com relatório</div></div>
     <div class="modal-b">
       <div class="mkpi">${kpis.map(k=>`<div><div class="m-v">${k[1]}</div><div class="m-l">${k[0]}</div></div>`).join('')}</div>
       <div class="blk-lbl">Órgãos que entregaram — clique em “abrir” para ver o relatório</div>
       ${orgs||'<p style="color:var(--mut)">Sem entregas registradas ainda.</p>'}
+      ${pendHtml}
     </div>`;
   document.getElementById('ov').classList.add('open');
 }
 function closeModal(){document.getElementById('ov').classList.remove('open')}
+function printOne(){document.body.classList.add('print-one');window.print();setTimeout(()=>document.body.classList.remove('print-one'),400);}
 document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
 function initControls(){
-  const sel=document.getElementById('fRA');
+  const sel=document.getElementById('fRA'), selO=document.getElementById('fOrg');
   RAS.forEach(r=>{const o=document.createElement('option');o.value=r.cod;o.textContent=r.ed+'ª · '+r.ra;sel.appendChild(o)});
-  sel.onchange=()=>{curRA=sel.value;renderGrid()};
+  ORG.forEach(o=>{const op=document.createElement('option');op.value=o.n;op.textContent=o.n;selO.appendChild(op)});
+  sel.onchange=()=>{curRA=sel.value; if(curRA){curOrg='';selO.value='';} renderGrid()};
+  selO.onchange=()=>{curOrg=selO.value; if(curOrg){curRA='';sel.value='';} renderGrid()};
   document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>{
     document.querySelectorAll('.quick').forEach(x=>x.classList.remove('ativo'));
-    b.classList.add('ativo');curF=b.dataset.f;renderGrid();
+    b.classList.add('ativo');curF=b.dataset.f; curOrg='';selO.value=''; renderGrid();
   });
-  document.getElementById('fQ').oninput=e=>{curQ=e.target.value;renderGrid()};
+  document.getElementById('fQ').oninput=e=>{curQ=e.target.value; curOrg='';selO.value=''; renderGrid()};
+  document.getElementById('btnPdf').onclick=()=>window.print();
 }
 renderKPIs();renderTL();initControls();renderGrid();
 </script>

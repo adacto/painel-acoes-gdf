@@ -98,13 +98,38 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
 .org a.open:hover{background:var(--pm)}
 .footer{margin-top:34px;font-size:.66rem;color:var(--mut);text-align:center;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .footer b{color:var(--pd)}
+.btn-pdf{font-family:inherit;font-size:.66rem;font-weight:800;cursor:pointer;border:none;border-radius:9px;padding:8px 14px;background:linear-gradient(135deg,var(--pm),var(--bl));color:#fff;display:inline-flex;align-items:center;gap:6px}
+.btn-pdf:hover{filter:brightness(1.08)}
+.org-head{grid-column:1/-1;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(74,25,99,.08);padding:16px 18px;border-top:4px solid var(--bl)}
+.org-head h3{font-size:1.15rem;color:var(--pd);font-weight:800}
+.org-head .oh-sub{font-size:.72rem;color:var(--mut);font-weight:700;margin:4px 0 8px}
+.org-row{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:.78rem}
+.org-row .orr-ra{font-weight:800;color:var(--txt);flex:1;min-width:110px}
+.org-row .orr-ed{font-size:.6rem;color:var(--mut);font-weight:700}
+.st{font-size:.58rem;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+.st.ent{background:#dcfce7;color:#166534}.st.pend{background:#fde2e2;color:#b91c1c}
+.org-row .orr-arq{color:var(--mut);font-size:.66rem;font-weight:600;flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.org-row .orr-dt{color:var(--bl);font-size:.66rem;font-weight:700}
+.org-row a.open{text-decoration:none;background:var(--pd);color:#fff;font-size:.6rem;font-weight:800;padding:5px 10px;border-radius:7px;white-space:nowrap}
+.pend-block{margin-top:6px}
+.pend-chip{display:inline-block;font-size:.63rem;background:#fde2e2;color:#b91c1c;border-radius:7px;padding:3px 9px;margin:0 5px 5px 0;font-weight:700}
+.mpdf{position:absolute;top:17px;right:58px;background:rgba(255,255,255,.18);border:none;color:#fff;font-size:.6rem;font-weight:800;padding:6px 11px;border-radius:7px;cursor:pointer}
+.mpdf:hover{background:rgba(255,255,255,.3)}
+.print-ctx{display:none}
 @media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){.kpi-row{grid-template-columns:repeat(2,1fr)};.wrap{padding:18px 16px 50px};.hdr{padding:16px 18px};.org .oa{display:none}}
 @media print{
   @page{size:A4 landscape;margin:8mm}
-  body{background:#fff}.card:hover{transform:none}.toolbar,.overlay{display:none!important}
-  .card,.kpi,.tl{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
-  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}.card:hover{transform:none}.toolbar{display:none!important}
+  .overlay{display:none!important}
+  .card,.kpi,.tl,.org-head{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .hdr,.stripe,.band,.ed-badge,.tl-dot,.bar,.bar-fill,.st,.pend-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
+  body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
+  body.print-one .modal{box-shadow:none;max-width:100%;border:none}
+  body.print-one .modal-b{max-height:none;overflow:visible}
+  body.print-one .modal-x,body.print-one .mpdf{display:none!important}
 }
 </style>
 </head>
@@ -123,6 +148,7 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
 <div class="band"><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>O que cada órgão fez em cada região — com o relatório, a data e a fonte</span></div>
 
 <div class="wrap">
+  <div class="print-ctx" id="printCtx"></div>
   <div class="sec-label">Visão geral</div>
   <div class="kpi-row" id="kpis"></div>
 
@@ -132,10 +158,12 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
   <div class="sec-label">Regiões — clique numa RA para ver os órgãos e abrir os relatórios</div>
   <div class="toolbar">
     <select id="fRA"><option value="">Todas as RAs</option></select>
+    <select id="fOrg"><option value="">Todos os órgãos</option></select>
     <button class="quick ativo" data-f="all">Todas</button>
     <button class="quick" data-f="alta">Cobertura alta (≥70%)</button>
     <button class="quick" data-f="baixa">Cobertura baixa (&lt;50%)</button>
     <input type="search" id="fQ" placeholder="Buscar RA ou órgão…">
+    <button id="btnPdf" class="btn-pdf" title="Salva em PDF o que está na tela">⤓ Salvar PDF</button>
     <span class="count" id="cnt">—</span>
   </div>
   <div class="legend"><span class="lg hi">●</span>≥70%&nbsp;&nbsp;<span class="lg mid">●</span>50–69%&nbsp;&nbsp;<span class="lg lo">●</span>&lt;50% de cobertura</div>
@@ -383,6 +411,19 @@ const SNAP = {
      "data": "19/06/2026",
      "url": "https://drive.google.com/file/d/1KwOWKKOuFofxM4JU5d7DYlnFnTgaqvI4/view"
     }
+   ],
+   "pendentesList": [
+    "002 - SEE",
+    "007 - SODF",
+    "022 - IBRAM",
+    "025 - SEEC",
+    "030 - Juventude",
+    "033 - SUTIC",
+    "036 - SEL",
+    "037 - CULTURA",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "062 - IPEDF"
    ]
   },
   {
@@ -598,6 +639,20 @@ const SNAP = {
      "data": "19/06/2026",
      "url": "https://drive.google.com/file/d/1z9usihC46yjrf168lhEXhYgSgWPRZxci/view"
     }
+   ],
+   "pendentesList": [
+    "002 - SEE",
+    "007 - SODF",
+    "022 - IBRAM",
+    "025 - SEEC",
+    "026 - CGDF",
+    "029 - Casa Militar",
+    "032 - Ciências e Tecnologia",
+    "033 - SUTIC",
+    "041 - TERRACAP",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "062 - IPEDF"
    ]
   },
   {
@@ -795,6 +850,23 @@ const SNAP = {
      "data": "19/06/2026",
      "url": "https://drive.google.com/file/d/1hMp1clw4TogthRkoswq121qO6rbQpWb0/view"
     }
+   ],
+   "pendentesList": [
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "017 - PROCON",
+    "022 - IBRAM",
+    "025 - SEEC",
+    "026 - CGDF",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "039 - SEAGRI",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "062 - IPEDF"
    ]
   },
   {
@@ -992,6 +1064,23 @@ const SNAP = {
      "data": "19/06/2026",
      "url": "https://drive.google.com/file/d/168byU_tQYJWDBkTkLz9b9CiFod-c-7Fj/view"
     }
+   ],
+   "pendentesList": [
+    "006 - DER/DF",
+    "007 - SODF",
+    "012 - CEB",
+    "022 - IBRAM",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "037 - CULTURA",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "062 - IPEDF"
    ]
   },
   {
@@ -1159,6 +1248,28 @@ const SNAP = {
      "data": "19/06/2026",
      "url": "https://drive.google.com/file/d/1jQFeVqeKe59kVIqAdg66lZDDxMAGReyw/view"
     }
+   ],
+   "pendentesList": [
+    "006 - DER/DF",
+    "007 - SODF",
+    "010 - DETRAN",
+    "012 - CEB",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "035 - SETUR (Turismo)",
+    "037 - CULTURA",
+    "039 - SEAGRI",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "045 - SEPE",
+    "046 - ETR",
+    "062 - IPEDF"
    ]
   },
   {
@@ -1344,6 +1455,34 @@ const SNAP = {
      "data": "20/07/2026",
      "url": "https://drive.google.com/file/d/1KydA8vqLoD7D_8KAGmbF2EzPV1m5UwGN/view"
     }
+   ],
+   "pendentesList": [
+    "004 - SEDES",
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "012 - CEB",
+    "017 - PROCON",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "047 - CEASA",
+    "049 - ADASA",
+    "050 - Emater",
+    "051 - INAS",
+    "053 - SEBRAE",
+    "055 - SECTI",
+    "060 - TCB",
+    "061 - Zoo Brasília",
+    "062 - IPEDF"
    ]
   },
   {
@@ -1505,6 +1644,37 @@ const SNAP = {
      "data": "20/07/2026",
      "url": "https://drive.google.com/file/d/1wu9jlWncb9gD_lH7XDV-jgljEzy0QroK/view"
     }
+   ],
+   "pendentesList": [
+    "004 - SEDES",
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "012 - CEB",
+    "013 - DFLEGAL",
+    "017 - PROCON",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "038 - Deficiência",
+    "039 - SEAGRI",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "046 - ETR",
+    "047 - CEASA",
+    "049 - ADASA",
+    "050 - Emater",
+    "051 - INAS",
+    "053 - SEBRAE",
+    "055 - SECTI",
+    "060 - TCB",
+    "061 - Zoo Brasília",
+    "062 - IPEDF"
    ]
   },
   {
@@ -1534,6 +1704,59 @@ const SNAP = {
      "data": "17/07/2026",
      "url": "https://drive.google.com/file/d/1hPAe4bPBQYtugvNu4_0ksHB6X4Hw1hHz/view"
     }
+   ],
+   "pendentesList": [
+    "001 - SES",
+    "002 - SEE",
+    "003 - SSP",
+    "004 - SEDES",
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "009 - SEMOB",
+    "010 - DETRAN",
+    "011 - CAESB",
+    "012 - CEB",
+    "013 - DFLEGAL",
+    "014 - SEPAN",
+    "017 - PROCON",
+    "019 - SEC Mulher",
+    "020 - Defensoria",
+    "021 - Na Hora",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "024 - SEJUS",
+    "025 - SEEC",
+    "026 - CGDF",
+    "027 - Ouvidoria Geral",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "030 - Juventude",
+    "031 - SEMA",
+    "032 - Ciências e Tecnologia",
+    "033 - SUTIC",
+    "034 - Atendimento a Comunidade",
+    "035 - SETUR (Turismo)",
+    "037 - CULTURA",
+    "038 - Deficiência",
+    "039 - SEAGRI",
+    "040 - CODHAB",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "044 - Família",
+    "045 - SEPE",
+    "046 - ETR",
+    "047 - CEASA",
+    "048 - SERINTER",
+    "049 - ADASA",
+    "050 - Emater",
+    "051 - INAS",
+    "052 - JUCIS",
+    "053 - SEBRAE",
+    "055 - SECTI",
+    "060 - TCB",
+    "061 - Zoo Brasília"
    ]
   },
   {
@@ -1707,6 +1930,35 @@ const SNAP = {
      "data": "20/07/2026",
      "url": "https://drive.google.com/file/d/1j72QC_Z7oLFnlwEP7wfK0olAvTW1I6wk/view"
     }
+   ],
+   "pendentesList": [
+    "004 - SEDES",
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "012 - CEB",
+    "013 - DFLEGAL",
+    "017 - PROCON",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "033 - SUTIC",
+    "041 - TERRACAP",
+    "042 - POLO RURAL",
+    "043 - POLO URBANO",
+    "045 - SEPE",
+    "046 - ETR",
+    "047 - CEASA",
+    "049 - ADASA",
+    "050 - Emater",
+    "051 - INAS",
+    "053 - SEBRAE",
+    "055 - SECTI",
+    "060 - TCB",
+    "061 - Zoo Brasília"
    ]
   },
   {
@@ -1826,6 +2078,4940 @@ const SNAP = {
      "data": "20/07/2026",
      "url": "https://drive.google.com/file/d/1uoXpJdbhEZeqruGQOrbnEIpt_OoAyIHe/view"
     }
+   ],
+   "pendentesList": [
+    "001 - SES",
+    "004 - SEDES",
+    "005 - SEDET",
+    "006 - DER/DF",
+    "007 - SODF",
+    "008 - NOVACAP",
+    "012 - CEB",
+    "013 - DFLEGAL",
+    "017 - PROCON",
+    "020 - Defensoria",
+    "022 - IBRAM",
+    "023 - NEOENERGIA",
+    "024 - SEJUS",
+    "025 - SEEC",
+    "026 - CGDF",
+    "028 - CACI",
+    "029 - Casa Militar",
+    "031 - SEMA",
+    "032 - Ciências e Tecnologia",
+    "033 - SUTIC",
+    "034 - Atendimento a Comunidade",
+    "036 - SEL",
+    "037 - CULTURA",
+    "039 - SEAGRI",
+    "041 - TERRACAP",
+    "043 - POLO URBANO",
+    "045 - SEPE",
+    "046 - ETR",
+    "047 - CEASA",
+    "049 - ADASA",
+    "050 - Emater",
+    "053 - SEBRAE",
+    "055 - SECTI",
+    "060 - TCB",
+    "061 - Zoo Brasília",
+    "062 - IPEDF"
+   ]
+  }
+ ],
+ "orgaos": [
+  {
+   "n": "001 - SES",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - Itapoã",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/1KedWTXAkpzcl3pUSe2UEPz5S0fRe562cZ8KQIMMdkLM/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - Paranoá",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1F2gwDu-AckK6kPMJcJIcOuO_axDk3q4Zvf-yrDoCzGw/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF- Riacho Fundo II.pdf",
+     "data": "13/05/2026",
+     "url": "https://drive.google.com/file/d/1y3x5Wx7Sqk5z_WQnLjNd1yQNIpWqsQ3x/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF - Samambaia.pdf",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/1E1ydn4x03yaNLrx3ecCEJewSa1cAE3XQ/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua porta - SES_DF - 26 de Setembro.pdf",
+     "data": "11/06/2026",
+     "url": "https://drive.google.com/file/d/1t3DwJ85IdRjB_hVb2NlzzGGmswt4wbbH/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - CEILÂNDIA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1LOGavNNAfsI9hAAUvq0sINRBgTc-DNNq/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - PLANALTINA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1I-vhr8vHeF-KFkuGOFiMYKPQ1aEPH4Fj/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatórios de Atendimentos - GDF Na sua Porta - SES_DF - SÃO SEBASTIÃO.pdf",
+     "data": "13/07/2026",
+     "url": "https://drive.google.com/file/d/1Z4pcSmqmYYe4ByTmnfslHfNdcWFbo2CA/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "002 - SEE",
+   "total": 10,
+   "entregues": 7,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - RIACHO FUNDO II.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1VkzwZJEs4uWUGoo-SixL1Gx0p2E-aIZX/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - SAMAMBAIA.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/107CxAhpkMO-ScFar1uDZYxHFRc-hTPVA/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - 26 DE SETEMBRO.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1EMeE1Awx04iRoGo71o43wqPirubAU8TW/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - CEILÂNDIA.pdf",
+     "data": "26/06/2026",
+     "url": "https://drive.google.com/file/d/1Ej38gxx3PnAu38fMaP3YwYVpiG3lgedo/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - PLANALTINA.pdf",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1ta7lQWa4LgRtbLaSZhMHZQMq2RAZMi3j/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - SÃO SEBASTIÃO.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1Dgt_mQFi5yV_caWHOrxu1gy-vH8r0oPB/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - RECANTO DAS EMAS.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/16T7GXF1JxEnApTc4cVqKZrMfAyvh06tH/view"
+    }
+   ]
+  },
+  {
+   "n": "003 - SSP",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Itapoã -2 .pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/13V9yuk4ozriAs1EKs4xQvxnGmAsTJ7s1/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Paranoá.pdf",
+     "data": "15/04/2026",
+     "url": "https://drive.google.com/file/d/1eSbnHmZuUEd45-05viGndm7ichP0sq4r/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - Riacho Fundo II.pdf",
+     "data": "13/05/2026",
+     "url": "https://drive.google.com/file/d/1tRwviQedv6_3dqsxUAq1bsfEYDI6TDjP/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - Samambaia.pdf",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1HEkzFfZNKpvlGjeKrq9TdVD78MVtXrl5/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - 26 de Setembro.pdf",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1bHJ9z0vlYtT5OIuAeHrYn2XEXPzAY4ib/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "relatorio GDF NA SUA PORTA - Ceilândia.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1F96akmbC9IaeEcw9A-QwnDocZy6Wqs1f/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "relatorio GDF NA SUA PORTA - PLANALTINA.pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1tWLPMbes9Ggcc8k8wMAZoRPqgturiIzm/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - São Sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1VQTd7v77x3mLBLbuGoPIs-433nq_nZGK/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "relatorio GDF NA SUA PORTA - Recanto das Emas.pdf",
+     "data": "16/07/2026",
+     "url": "https://drive.google.com/file/d/1G8ifngyt20sbEQ6P6zJAMOEG7Jnb3H0v/view"
+    }
+   ]
+  },
+  {
+   "n": "004 - SEDES",
+   "total": 10,
+   "entregues": 5,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na sua porta_SUBSAS_SEDES.xlsx - GDF na sua porta.pdf",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/1UjeE2i4x8LRhK8thDYyKd8C2LmKXzR81/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na sua porta Paranoá SEDES.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1NXG5Xd9iYrO9kqVneUjjgfN3WH8EWtGO/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na sua porta- Riacho Fundo SEDES.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ukDjHoPPHUks7NsbnmxWVDYMH9tHxXve/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na sua porta SAMAMBAIA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1lortlZjs9xxEaVYN3vvRF5ZeQT1_RWRw/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na sua porta (4).xlsx",
+     "data": "29/05/2026",
+     "url": "https://drive.google.com/file/d/13mj3UPC4eh8pPw74BaR0HCVor6Lj_22s/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "005 - SEDET",
+   "total": 10,
+   "entregues": 4,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Atendimentos Preliminar - Sedet.docx",
+     "data": "05/04/2026",
+     "url": "https://drive.google.com/file/d/11v-zRK_gaMHfj-Rj5DmUtOCg5Xm5omb2/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF na Sua Porta.pdf",
+     "data": "08/05/2026",
+     "url": "https://drive.google.com/file/d/1e8rBCEPl0voLDzm1z8zHldwC_HJvQf-r/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF na sua porta Samambaia.pdf",
+     "data": "25/05/2026",
+     "url": "https://drive.google.com/file/d/1h-Do0EWE5VorI1nz3jk9x0oDKEyKwXOf/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "RelatÃ³rio Programa GDF na Sua Porta 26 de Setembro.pdf",
+     "data": "08/06/2026",
+     "url": "https://drive.google.com/file/d/1Z8-D684QK9FvBX9e2LZufHIQA-ZNRwCs/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "006 - DER/DF",
+   "total": 10,
+   "entregues": 2,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - DER-DF (Itapoã).pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1ka18KAAn4i9UF09kQBY2MoEXawvI8DXD/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - PARANOÁ (1).xlsx",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1p1OVdlPeANGC5zCP6WBfJacQCVUg4KVD/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "007 - SODF",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "008 - NOVACAP",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP Itapoã 16.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1vIGLRap9CfnW0AZy7DgFoIA75-PhILim/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP Parano 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/11_7ckI8FQCYwjdbskGl1gCRI63s5q5vh/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP RF II 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1SnHJDCYa36nIt8gv4VKRS4FdG9ZcXQ2H/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP SAMAMBAIA 16.07 (2).pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/14tBn6i32kj3GZB7BQe7M2dwkHNLq9RuE/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP 26 Setembro 16.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1LSsANbUbdQCDyOqy5-mOSpGh5zlyU8dl/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP Ceilandia 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1Uv_qtD2U3Uf52YZ3o-Vd7G2yIWdb7mnj/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Resumo DEP Arapoanga Atualizado 17.07.pdf",
+     "data": "19/07/2026",
+     "url": "https://drive.google.com/file/d/1evTJ-2mgmwi67xXBiM98Qc3PvUFehYrz/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "ENTREGUE",
+     "arq": "NOVACAP Plano de ação 4_DRCS.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/1to39ZZW81R2gsOJYrrdZp8cAUeAPHjLA/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Plano de Ação - GDF - São Sebatião.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/1JNv6yhpFE3lNXIXVoNKozp-F6hv9hd9K/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "009 - SEMOB",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 01",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1y9-dkJfcR60Yauj3h_k3AQ0_IuNFwXe4/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 02",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1R4EcWlji2UWR3klQh11H_p7bsGgnnSOK/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 03.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1UEPDKJ-uSpUk1vtR28v3AkfYTni5UjoG/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 04 (2).pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1lHzd6LSwDGOOMqbco6sWiJMDBAcbbbXD/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1Pd_uKYQYIgl-jkio09LFjHT5hZOYhYyT/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 06",
+     "data": "17/06/2026",
+     "url": "https://drive.google.com/file/d/1ZWMALsCDX6yvxjk2_MCf9Ai7F9SnKaU5/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 07",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/10M5oxFFfhyRcW4ahLKB0NScOnUMy7cA_/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 09",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1phD89Y2LZmG1mgChvLnj22YBJpMkpEeX/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Relatório - Semana 10",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1E2R3tXBZpZJ_58BpNJHiLINSK-c14BlI/view"
+    }
+   ]
+  },
+  {
+   "n": "010 - DETRAN",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Cópia de Planilha GDF NA SUA PORTA - 2026",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1fLfNinr-a6CWnEQFb0VCcNZnjPT0oPeNTNOrBTGNV3k/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - EDIÇÃO PARANOÁ - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/17fBrC2ZzxPXU6JvA907gD2lLerJ1CkmZ/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - 3ª EDIÇÃO RIACHO FUNDO II - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/13wNQri3uwfH_DhU91f6v1-20OsnqFn7R/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - 4ª EDIÇÃO SAMAMBAIA - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1QJojnAMyQzE3qkn5l3n959jy2ZTy8BsL/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - EDIÇÃO CEILÂNDIA - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "15/06/2026",
+     "url": "https://drive.google.com/file/d/1HRlgS-vI_8UALoikm2CUEVxmTauYEK76/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - 7ª EDIÇÃO - PLANALTINA - 2026 - EDUCAÇÃO DE TRÂNSITO .xlsx",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/1Rmd26FQ_vDP9AoE8PMU5tZuG3fs6gRuo/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - 9ª EDIÇÃO - SÃO SEBASTIÃO - 2026 - EDUCAÇÃO DE TRÂNSITO .xlsx",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1cuaQfSoLldOL7f0y0CXNOLRRGE87H4--/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Planilha GDF NA SUA PORTA - 10ª EDIÇÃO - RECANTO DAS EMAS - 2026 - EDUCAÇÃO DE TRÂNSITO.xlsx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1r5G0ILuWdYRzg-Y7V3UmDOVmRoDjT4Nx/view"
+    }
+   ]
+  },
+  {
+   "n": "011 - CAESB",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Demandas__Itapoa - GDF Na Sua Porta.pdf",
+     "data": "28/04/2026",
+     "url": "https://drive.google.com/file/d/1nPz2Nswd4UlaQKAOfdvhd8_eNFDE1o6v/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Paranoá.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1s6yph9GsIlPVkdjvj0jBa_QiFl0xfenW/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatorio de Plano de Ação Riacho Fundo II - CAESB.xlsx - Planilha.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1k2hw1STCqSrnJYPQA3gDsQI1Hf6G6WbM/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Samambaia.pdf",
+     "data": "25/05/2026",
+     "url": "https://drive.google.com/file/d/17erUUqorzK8n4hto4IXI8_SpJ4GJs8d8/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - 26 de Setembro.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/12ZWsYGuqcw5YBhJhFBxzIV7egj47PZp4/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Ceilândia.pdf",
+     "data": "17/06/2026",
+     "url": "https://drive.google.com/file/d/1wrcItrMFOJJXNEnrbv6u5vQEMgNk9IHT/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - Planaltina.pdf",
+     "data": "22/06/2026",
+     "url": "https://drive.google.com/file/d/10B6NppLFzvWTJ-qZqdy_6I8lhulzx-1Q/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF na Sua Porta - São Sebastião.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1FrUDwvgUZXjj55WkOHfaEazEF3A6inbJ/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "CAESB - Plano de Ação - Recanto das Emas - Executado.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1aXmx2tXFQAUGlAwfRf5eIA7t4n6AGCqB/view"
+    }
+   ]
+  },
+  {
+   "n": "012 - CEB",
+   "total": 10,
+   "entregues": 3,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "ADM24h no Itapoã_Protocolo-IP.xlsx",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1eVOEhAd2fsZCe9Gh1x4mr--QNeYXgRpY/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório_24h_CEB-IP-Paranoá.pdf",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/1oik7c-SrXDE1Dku8faBHz9b6efpMx8D5/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Riacho_Fundo_II_Portal_24h.pdf",
+     "data": "27/04/2026",
+     "url": "https://drive.google.com/file/d/1e6O15Yd7k9nL3KoBrM-NN6E2hMjz0B57/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "013 - DFLEGAL",
+   "total": 10,
+   "entregues": 6,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DE PLANO DE AÇÃO - ITAPOÃ.xlsx - Página1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1FXEhgSy2acgzjKPdOcmgZC2v3d59avL-/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA RUA_PARANOÁ_2026.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1BlyrpEkG_St51sYaTG84o4a2ZDr2iG3C/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026-RIACHO FUNDO II E.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1U1QTTurJzr5hbYOCoVJ3GCrMLX-q78Ot/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_SAMAMBAIA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1Q30-AwS5upg5KsFIu_JkADYmfqv-ga6k/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_26 DE SETEMBRO.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1q9uU7L7kH280ykMZY47XUol6vZ1ahU6l/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "DF LEGAL_ INFOGRÁFICO_GDF NA SUA PORTA 2026_CEILANDIA.pdf.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1AR0fPaublS-MkBzfqx4F5wanmbi-k4nX/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "014 - SEPAN",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "GDF na sua porta - Itapoã.pdf",
+     "data": "01/04/2026",
+     "url": "https://drive.google.com/file/d/1xwRLCn83sL_KaN53Ri4vbmnEDCLZkEmE/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – Paranoá_DF.pdf",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/12RlPKG1i6DxeirZ_ezpTIRO-Tv3f3XO7/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – Riacho Fundo II_DF (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/10RmWJaXBvcr7LTKoNmn_x0AnUKWvZK63/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – Samambaia_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1U3lQgcjnTZFZYw8ubuc5RMiSvY8HI5Sv/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – 26 de Setembro_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1whrCXoPEb1bjL0jsJfHZkmnQQewwlzvg/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – Ceilândia_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1gRm9zLVVmfwD4VfCq3XfbDJADP3Wy_si/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – Planaltina_DF.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1HkIVj3sFACp_ctJ0VCa1UYUYg8qohj8x/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Programa GDF Na Sua Porta – São Sebatsião (30_06_2026 - 04_07_2026).pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1tuNZzD9m2OU0KBkYQImSCsgbQuB1bydv/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Sepan - Recanto das Emas (13_07_2026 - 17_07_2026).pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1P-CK9Q-H1A_PFRqu7-Nq5wGdEyrYUlPN/view"
+    }
+   ]
+  },
+  {
+   "n": "017 - PROCON",
+   "total": 10,
+   "entregues": 4,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Atividades Procon - GDF na sua Porta - Itapoã.docx",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/12QQDqJSQ1ApYWZvvvI03exgU4OVVLeCY/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "GDF na sua Porta - Paranoá - PROCON.docx",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1ETB_8JChh_pdUEQEyucua09ARFGwPmcd/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF na Sua Porta - Samambaia - PROCON.docx",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1xk7lkQbSkF-UFznxuNWew26sReddP9_W/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "GDF na Sua Porta - 26 de Setembro - PROCON.docx",
+     "data": "09/06/2026",
+     "url": "https://drive.google.com/file/d/1GalcSDJnxBrL6NVTsCogJwhZxxZfrvPX/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "018 - SLU",
+   "total": 10,
+   "entregues": 10,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1KoYiR71GLMPOzc_YPrC3hoLX-ciRj95N/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1aw4VSyNXa7we7we-PG2vNGm0VaPJoB4C/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "papa_entulho.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1r3RvgMF1ZhJv5GZ25blkkTs0T_gV8jdm/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1FOB2of2RijP0yojTQvnP759U7Hl2D7_z/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "remocao_entulho",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/18Vr2s0Y4AjQ9x8MwOT8RvzSbdxPUdwHIVZoaf78kWT0/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1LY01rARp8U9D2aEMPArN65FSiyEGCpTc/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1QHJxNG255CQuBCQbjlwAF6AG3A6zA8nn/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1Cb2DxSnEAzBkOJZ-tWnAuh85xos__htU/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "de_cara_nova.xlsx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/12TTGgZRPytlW3q1klSXN7pvlizP_kFxo/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "catacao.xlsx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/12i0HWaVl6cnkI7bnmWyPI0VNY0LaUy9A/view"
+    }
+   ]
+  },
+  {
+   "n": "019 - SEC Mulher",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "SMDF/SUBPROTM - STAND COMITÊS DE PROTEÇÃO",
+     "data": "16/06/2026",
+     "url": "https://drive.google.com/file/d/1yDp5hV67-jVs5c9tadv2OEO5qIkBa8llxJT_6Pa9QT0/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "GDF PARANOÁ SMDF SUBATPP UNIDADE MOVEL.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1Ps0BcuBWn1BZEc59ogug2IROzT5ICLec/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "SUBPROTM Relatório GDF na sua porta - Riacho Fundo II (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1artdibFkrLucGOpuGqstUEGyBy_Z-gkh/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF SAMAMBAIA UNIDADE MÓVEL SMDF.pdf",
+     "data": "28/05/2026",
+     "url": "https://drive.google.com/file/d/1X6KMYDkdue_1ACxp4CBgNxPPVMnsO66S/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "26 de setmbro UNIDADE MÓVEL SMDF.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1GmFRETnkNGILiKrMYFTj6JGlSj7CYUQ7/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "gdf ceilandia UNIDADE MÓVEL SMDF.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1OF3GwHDVoSIfyXERJ4z1d5hnkvlKyVBi/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "gdf PlanaltinaUNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1OGTKPgF-a3jQK3-T4pb0CZMPalc29NNh/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "GDF SÃO SEBASTIÃO UNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/12IHqsKEZayrPiE1TVvzvZgBDC85c1w0N/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "GDF Recanto das Emas UNIDADE MÓVEL SMDF.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1QqVttSrIy6qmPctbr6dftUAihjSj-iRz/view"
+    }
+   ]
+  },
+  {
+   "n": "020 - Defensoria",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO ITAPOÃ.pdf",
+     "data": "05/04/2026",
+     "url": "https://drive.google.com/file/d/1Wd1kbXxAd1qNr-UE88QrIMPntO-q4H6p/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "SEI_200685819_Relatorio_50.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1n3wSR-SyUL-0LS_2xuGFzRoUrQUMWiXi/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "SEI_204528810_Relatorio_69.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1L6Xqqu6Oh4sL8TWJUz8zfj3aCMe9wvoD/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "SEI_204527950_Relatorio_68.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/11STvj6MmIsBj6NkoxDLOYZ23-eMo1sRI/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "SEI_204527363_Relatorio_67.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1zBCcGuIDCKiEWSStRZyzTPw4dEC8vAQu/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "SEI_206427493_Relatorio_74.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/13kVmWAqwRSICaE7dmsMuXin45bCvMNg1/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "SEI_206929032_Relatorio_81.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1EW5_BgZhBdlS9z2f0jiiIJSrLDs8Jof9/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "SEI_207719495_Relatorio_86.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1DZnl2gmxj5GG6aDj3I4NHd4Qx9HWpkUj/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "021 - Na Hora",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - ITAPOÃ 31.03.26 a 01.04.26.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1MpRqh-3EkpT_kdei953fZt1XDkPLatZJ/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - PARANOA 13 A 17 .04.2026 (1).pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1oahVDFpWPElktjQnrPYpk38Lv_J2nzgh/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - RIACHO FUNDO II 05.05 a 08.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1BYiCyZVNuW59OPVbJd5TEvMcF5G1vfHX/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - samambaia 22.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1OSsZiER_z9zwhQe90av-JWR3eZhDaClc/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - 26 DE SETEMBRO 29.05.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1wx6Q7fbW-LEz1THZt-EUx7UoIszU9i-C/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - CEILANDIA 08 A 12 DE JUNHO.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/16UZQlVLaAmGTk-nOqzIFUuuoI2Z7_EK2/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - PLANALTINA 19.06.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11dbj7dkjC8UxgUNrJTvgK2g7hDZOiDGb/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - SÃO SEBASTIÃO 04.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1t3yC-CO6SAueJuaBgMVjN2AnQ-mPJNBB/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - RECANTO DAS EMAS 17.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1Vo-C0XW_wSq0d_m6sIJ9l4EbDB4ehgib/view"
+    }
+   ]
+  },
+  {
+   "n": "022 - IBRAM",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "023 - NEOENERGIA",
+   "total": 10,
+   "entregues": 4,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "NEONERGIA.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "NEONERGIA.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "NEONERGIA RIACHO FUNDO II.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "NeoEnergia.pdf",
+     "data": "11/06/2026",
+     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "024 - SEJUS",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - ITAPOÃ 31.03.26 a 01.04.26.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1dp-n0lBBLNr8hrwN8TaS33OArw0SLsYD/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - PARANOA 13 A 17 .04.2026.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1kJmFliKtee038LQmvTpxdmTSoW3xUDuM/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - RIACHO FUNDO II 05.05 a 08.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1qM0czhclfbfKIQYx7Np98QK7vjwjlHEa/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - samambaia 22.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/1GABXqz-rb9AIY0GKySY_G2Wbo_8Ni8ks/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - 26 DE SETEMBRO 29.05.pdf",
+     "data": "03/06/2026",
+     "url": "https://drive.google.com/file/d/116wAqqORq5bWiSjX4F7ljpvJx6wjJZ6l/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - CEILANDIA 08 A 12 DE JUNHO.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1Tq4kwHfsWKmNBz85I980myujKKFWgteg/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - PLANALTINA 19.06.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1M674MnG_zYi9rvLECKGY9Nw80ZIJy1zv/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "PLANILHA DE ATENDIMENTO - SÃO SEBASTIÃO 04.07.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1XKy6nmBSeArtPnUr42auEx2T1qjBxz-r/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "025 - SEEC",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "026 - CGDF",
+   "total": 10,
+   "entregues": 1,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório CGDF - Manifestações de ouvidoria - GDF na sua porta Itapoã.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/13BXySE1pfVTCyPvawOttBW_x1BFBz1eD/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "027 - Ouvidoria Geral",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "infografico_itapoa_07_04.pdf",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/1bt4Yl8cVh5AdoYp9wI44XcMfcA0pPUL5/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "relatorio paranoa (1).pdf",
+     "data": "23/04/2026",
+     "url": "https://drive.google.com/file/d/1tmSZhfKi73ptBL8q2OK3yhjMniJKlrEI/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "infografico_RFII_GDF_Sua_Porta (4).pdf",
+     "data": "12/05/2026",
+     "url": "https://drive.google.com/file/d/17UWFG1cnHh_98DXf7ECPgUrSBgJ6c0Sp/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Infografico_GDF_na_Sua_Porta_Samambaia_RA_XII_18a22_mai_2026.pdf",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1rmpHVkuGZ3TjnpkzRsmEHg1HQLZX9X8c/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório 26 de Setembro RA-VP - GDF Na Sua Porta.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1QSFdJlFikKNb4o2W_oXP1Y0vTWLi145V/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Infografico_GDF_na_Sua_Porta_IX_1a12_jun_2026_260618_145351.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1d3Zzcoazz8HTMCcU-ZGos2bXSIjZPVmu/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Infografico_GDF_na_Sua_Porta_VI_15a19_jun_2026 (1).pdf",
+     "data": "01/07/2026",
+     "url": "https://drive.google.com/file/d/1rI6e2PMSMLQixAQpphVyKzSsyBxIWqE2/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Infografico_GDF_na_Sua_Porta_RA_XIV_30_juna4_jul_2026 (1).pdf",
+     "data": "07/07/2026",
+     "url": "https://drive.google.com/file/d/1SCI6kEbBQVa0w32T_JHfBj6pf6wa-6Qr/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "dados_evento_infografico.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1qad6b9d6xW7Fmrm0bRJXb8xRVdb7Kfu3/view"
+    }
+   ]
+  },
+  {
+   "n": "028 - CACI",
+   "total": 10,
+   "entregues": 3,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "1º RELATÓRIO_GDF_NA_SUA_PORTA_CACI_ITAPOÃ.pdf",
+     "data": "17/04/2026",
+     "url": "https://drive.google.com/file/d/18rn-EEze6BGHEPPL9-li-mSklQEQIeTP/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "2º RELATÓRIO_GDF_NA_SUA_PORTA_PARANOÁ_CACI.pdf",
+     "data": "21/04/2026",
+     "url": "https://drive.google.com/file/d/1CqDhAZ_v0RAwE_1HsDEi24kpePXDQZum/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatório_GDF NA SUA PORTA_Risacho Fundo II_CACI (1).pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1VPhhOJghNhMmHrt824sKYpd9DxqlZL8T/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "029 - Casa Militar",
+   "total": 10,
+   "entregues": 1,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "SEI_199152022_Oficio_14.pdf",
+     "data": "31/03/2026",
+     "url": "https://drive.google.com/file/d/1G9f3MysWNG48dB5dreZAZACfttlG21vU/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "030 - Juventude",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_Detalhado_SEJUVE_Abril2026_Final.docx",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1cRfxCkiHCcdLuzsHf55K1Of5hBy7pa9D/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_SEJUVE_RiachoFundoII_GDFnaSuaPorta.pdf",
+     "data": "12/05/2026",
+     "url": "https://drive.google.com/file/d/1c61nmQtnRbVdVx0PydS54rrp0ZMxtek4/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_Completo_SEJUVE_Samambaia_Sul_V2.pdf",
+     "data": "27/05/2026",
+     "url": "https://drive.google.com/file/d/1ucnmaT0yauAccTS3MNYZ_Pz9Ugmf25Ss/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_SEJUVE_26Setembro_Maio2026.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1gbplAknm1QzbiMjLzVjtPI0v1m_1gXD5/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_SEJUVE_Ceilandia_Junho2026.pdf",
+     "data": "16/06/2026",
+     "url": "https://drive.google.com/file/d/1D6yebVC5OnRxKxXiBUyJ95rYTQFAeXjd/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_SEJUVE_Planaltina_Junho2026_v2.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1OT6xKIIw5v3AZx6IIqMpxGV12ISJv8EY/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatorio SEJUVE SaoSebastiao Julho2026 v2.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1t-_Ak_WddAJjnbYBUBs7FbvQ7tA8iE5x/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_SEJUVE_RecantoEmas_Julho2026.pdf",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1jB1nf1oF3j791Tx4JhQEPEEtbylWyaIU/view"
+    }
+   ]
+  },
+  {
+   "n": "031 - SEMA",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - ITAPOÃ 30_3 a 1_4.docx",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1cGpnzUS14jVzTvGYzm_4oP0Ki5ZmVsgQ/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - PARANOÁ 14 A 17_ABRIL.docx",
+     "data": "24/06/2026",
+     "url": "https://drive.google.com/file/d/1HMR6avFoJU0a2IO_hXewV5DOcBU4QfOS/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO - GDF NA SUA PORTA - RIACHO FUNDO (1).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1eIC1yViKJJdEsLAJ5jALpgexcYQh98r_/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SEMA SAMAMBAIA.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1G60ilqAPUUKR5Lm0YtNkyL92G2JzoI9w/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SEMA 26 DE SETEMBRO.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1SJqLDMvE3G690zuBcHQYy6FIKX2ibaYH/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SEMA CEILÂNDIA (2).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/11kjbFtRrpkyAd3jtZjy7qSpq_5Yu4ngE/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SEMA PLANALTINA (2).pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1A5d5_9GuigoQiijjXg0Qe1bouvjbawgu/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SEMA SÃO SEBASTIÃO.pdf",
+     "data": "08/07/2026",
+     "url": "https://drive.google.com/file/d/1F43NiNNSh8GIcgGfZcO4IaH9wJd4s21c/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "032 - Ciências e Tecnologia",
+   "total": 10,
+   "entregues": 7,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividades_Unidade Móvel SECTI-DF no Itapoã.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1OwCTHEwMj-fFlFeHbXyM64G-PfAMVGqn/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Atendimentos do Riacho Fundo II.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/13pbFCddIv04wzpTuAhkh0zN1NkombWLs/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Alunos de Samambaia.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1aJTLOdVmpCLHAAiyxbpwEGo1gpREovW0/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Alunos 26 de Setembro - Página1.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1SPA9eldB2F2UFDREhVpxDAKbJNzuXkyD/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Alunos de Ceilândia.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1EoRsjCMbeChBAkU9Fd6-BByRvO78ATLG/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Alunos de Planaltina.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1_5Idbiua-27qGALBnrWasrikeaz6WX1u/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Alunos de São Sebastião.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1GHHItMcGGeFaluvI1YQJHw3lXz71JkQL/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "033 - SUTIC",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "034 - Atendimento a Comunidade",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - ITAPOA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1X-OXn8nMb2FbXCrnPCor2wUDcHrrtUOJ/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - PARANOA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1CMSHdIMrTz1JQ3ogASD75-UtQSv6RNAy/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - RIACHO FUNDO II - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1FWL2hMWsLTbMYFStkCFVre0pVVSthbaf/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - SAMAMBAIA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1pargpxC3CCg-lyxmdJjLgYtDHtsVpNuz/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - 26 DE SETEMBRO - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1kIgHbYkx88Djo--g5LntKUuNcieCX8jh/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - CEILANDIA 1 VISITA - SEAC.pdf",
+     "data": "02/07/2026",
+     "url": "https://drive.google.com/file/d/1TYvOai-nhW8PIYeqFGoUL7--P3XcrPEf/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "GDF NA SUA PORTA - PLANALTINA - SEAC.pdf",
+     "data": "09/07/2026",
+     "url": "https://drive.google.com/file/d/19-ZQJykEUG7QzzoxCjrbsb_xpXst0t8G/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Atendimento_em_Movimento_Sao_Sebastiao (1).pdf",
+     "data": "14/07/2026",
+     "url": "https://drive.google.com/file/d/1LH1eCcgDFwTMwBSozmrhZNltvgeOoEWt/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "035 - SETUR (Turismo)",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "CARTEIRAS ITAPOÃ.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1lwppgLDFST981klzZPSZFIteLG2MAhLY/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO PARANOÃ.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1-b4ibH50CcIp7_RZ5y6gu4O4CNwMlBQe/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO RIACHO FUNDO II.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1A90rKbNdIBaTM9iLytHx52Oy3hnmQQaH/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO SAMAMBAIA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1AXlhKRWgVh8nu1_3vM9tGIwQnoWAuytQ/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO CEILÂNDIA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1YQvQq0kOah9yFWHsCgy9ldhdI_g4p5k-/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO PLANALTINA.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1NcOvCxTuRjWCaGjJwcRCARKAS_OPmWnX/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "CARTEIRAS DE SÃO SEBASTIÃO.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/15ZkXL9KlkpkHZLiasTjhSHUyznWrRvmG/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "ATENDIMENTO DE CARTEIRAS DE ARTESANATOS - SETUR - RECANTO DAS EMAS.xls",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1x1hOoMalUuY8YNxUMCyZiaJfihav86hV/view"
+    }
+   ]
+  },
+  {
+   "n": "036 - SEL",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "ilovepdf_merged-8.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/1iAeMCsanP69XDqPH3ox75qR_E59qhW8Q/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatorio Riacho 2_260512_151234.pdf",
+     "data": "15/05/2026",
+     "url": "https://drive.google.com/file/d/13-6zEw89w1wQPCtJDC06sklhESPDa_E3/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "pdf24_merged-1_compressed.pdf",
+     "data": "26/05/2026",
+     "url": "https://drive.google.com/file/d/1wLzne3_PQL-QxKXiZ1d2LX8Eqy_7hZPk/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatorio Completo.pdf",
+     "data": "02/06/2026",
+     "url": "https://drive.google.com/file/d/1qu_rWDfDZfYLSQ5Oigl0bYxYh10dDj_f/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatório Matriculados Parque da Vaquejada - 01_06 a 12_06_26-mesclado.pdf",
+     "data": "23/06/2026",
+     "url": "https://drive.google.com/file/d/1E35X5OassT1ORcDuiMY4QOdnw64TJLbT/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Inscritos COP Planaltina - 15-06 a 19-06.pdf",
+     "data": "03/07/2026",
+     "url": "https://drive.google.com/file/d/1y4Dj2pffLiKsuqfdi9sEixU6fqIOvdmK/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "ENTREGUE",
+     "arq": "edição plano piloto gdf na sua porta.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1hPAe4bPBQYtugvNu4_0ksHB6X4Hw1hHz/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "GDF na sua porta - são sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/17yh6NluxM4fDUt_9S7Jc7D6Jm6lqdzZy/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "037 - CULTURA",
+   "total": 10,
+   "entregues": 5,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Paranoá.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1eRe-vznoD3Uhlg4LF-OwPuNTxcg3yikp/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Riacho Fundo II.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1huiJCzZkH_Acyh_bt3-ummsTxUUdJxxX/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Ceilândia.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1bCRpEXi8pZWuhDtUdVQzRGpcFY1J8zLe/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Planaltina.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1TsPuTUTDQTdX7RD-_BZtBSe_Szu6tTKP/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "São Sebastião.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1CEw0c-sYYlkRABtO8gaK77TLXA4Q_nwN/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "038 - Deficiência",
+   "total": 10,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade do Paranoá - Secretaria da Pessoa com Deficiência.pdf",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1pR5UgNdaDl-CBU5alymM5ap4CPFl_pap/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade do Paranoá - Secretaria da Pessoa com Deficiência",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/17SpM9QgYZREXw1sg6M5kPmaiF96Vxp_p/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade do Riacho Fundo II.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1RjzjnTDoTA14Z5E1OHspLrvpa_CRRycY/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade da Região Administrativa da Samambaia.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1_uzQnAJ02mogj9b_u4gj3WsaL5ZEUo7X/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade da Região Administrativa da 26 de Setembro.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/12aVp_Kf-sZXyrIdzY_c5oopxyI5Po6cX/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade da Região Administrativa da Ceilândia.pdf",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1BM-M74y0-f1k7C6Ll2GwKoCO6Y8yzMTU/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade da Região Administrativa de São Sebastião.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1doSlXgmrSbOvMDmNyGG52CrJgfhl97N9/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atividade da Região Administrativa do Recanto das Emas.pdf",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1LbEHqMS0JXVgrU8Hr_eoGLiawfdg-7aH/view"
+    }
+   ]
+  },
+  {
+   "n": "039 - SEAGRI",
+   "total": 10,
+   "entregues": 5,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatorio serviço executado - Itapoã.xlsx - Planilha1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ZFz7C1PlmmQ9xKuJq53I-XF8jyAhrIYB/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - PARANOÁ.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1muXrblFK8RZhxMuM5gIeFq1WE4qvpij6/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - SAMAMBAIA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1gCzp6Bqrd4hpBT1duk5zvEgnYIOlVBXy/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF -CEILÂNDIA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/181bFj8LmK5Iq_L282v16H5e68PA1AnB8/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DE SERVIÇO EXECUTADO GDF - SÃO SEBASTIÃO.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11X5NjiAqk3O0FHa1IPbqay7Xj9uCtd9z/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "040 - CODHAB",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - Carreta da Regularização.pdf",
+     "data": "07/04/2026",
+     "url": "https://drive.google.com/file/d/10J4F9EokV3WWbT761dWB1JcdNxjSR4X1/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Paranoá.pdf",
+     "data": "22/04/2026",
+     "url": "https://drive.google.com/file/d/1zyo4IyWyBuSDS3XbAd7LGdYbOtxDQSaQ/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Riacho Fundo II.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/1hYslZmLEVPiUYBaKJmsUULyJslP7NWG5/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Samambaia.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/15QlubYgvQQSD9uaYtTdApq0UW92gCye-/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - 26 de Setembro.pdf",
+     "data": "05/06/2026",
+     "url": "https://drive.google.com/file/d/19tIoo0163Q8R_6AbqweKDYKPZURzgR0k/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Ceilândia.pdf",
+     "data": "06/07/2026",
+     "url": "https://drive.google.com/file/d/1TjuRypgzyvkUkddL95nMugJvRX-xqr55/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - PLANALTINA.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1fs0EwMxigA8EDbwsCeC0I0GI_QZ_fbmI/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "Relatório atividades GDF na sua porta São Sebastião.pdf",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1v99rwJfMT809YOHzhJU9SneiYyHMIj6s/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Relatório de Atendimento - GDF Na Sua Porta - Recanto das Emas.pdf",
+     "data": "22/07/2026",
+     "url": "https://drive.google.com/file/d/1U-TJoKcyTWdbnPKu2NZ69ZRUJ1KXnUuI/view"
+    }
+   ]
+  },
+  {
+   "n": "041 - TERRACAP",
+   "total": 10,
+   "entregues": 1,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "AÇÕES TERRACAP - Itapõa.pdf",
+     "data": "06/04/2026",
+     "url": "https://drive.google.com/file/d/1n38h71TDZynB8fE_W8ujZth5Ydx-mtd4/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "042 - POLO RURAL",
+   "total": 9,
+   "entregues": 2,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório polo rural GDF NA SUA PORTA 02.ITAPOA.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1ggVT4NfV8HdqJV0r5-3aulnCaK0Oq6b7/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "RELATORIO POLO RURAL GDF NA SUA PORTA PARANOÁ 2.xlsx - Plan1.pdf",
+     "data": "01/06/2026",
+     "url": "https://drive.google.com/file/d/1xzXvM-4_rVTYqwdsbFHiiUu4T1flRCSA/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "043 - POLO URBANO",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "044 - Família",
+   "total": 10,
+   "entregues": 9,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO ITAPOA.pdf",
+     "data": "21/06/2026",
+     "url": "https://drive.google.com/file/d/1cOGHDJ4nAmFyaTHCTUa7dCahX9I0lFyC/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DA AÇÃO NO PARANOÁ-1.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1sfCu_UPyDmOCITxTrZ8jApgKmohUh-3D/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO DA AÇÃO NO RIACHO FUNDO II.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1rtxdEc0U625I3NFSylmb-sTheQJxghBP/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SAMAMBAIA-2.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/1RIML2jVr4hrfIvX-R9IIlCT12kBfDT_s/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO 26 DE SETEMBRO.pdf",
+     "data": "18/06/2026",
+     "url": "https://drive.google.com/file/d/154PKlykYyDyzDIdtcDgneqXCdRTQKMD1/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO CEILANDIA.pdf",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1B4VVVjf1g1NWBFiIcQuRKMjSCKh_hl2H/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO PLANALTINA DF.pdf",
+     "data": "20/06/2026",
+     "url": "https://drive.google.com/file/d/1HeuyngfBXLunyhMH00EYvqmxCcIPCrf_/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO SÃO SEBASTIÃO.pdf",
+     "data": "03/07/2026",
+     "url": "https://drive.google.com/file/d/1K7K2i84XlGFldelRtmKHQAnydjO6A87j/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "RELATÓRIO RECANTO DAS EMAS.pdf",
+     "data": "21/07/2026",
+     "url": "https://drive.google.com/file/d/1_aV5nZDK7hYcvWOI1jWfelQXTXUzCxrq/view"
+    }
+   ]
+  },
+  {
+   "n": "045 - SEPE",
+   "total": 10,
+   "entregues": 6,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Prestacao_de_Contas_Itapoa_V2_Formatado",
+     "data": "28/05/2026",
+     "url": "https://drive.google.com/file/d/1RWjFL4dkPGs7AAlq209cNS9eKwptXLiT3mAbLb2yiw0/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "relatorio_gdf_porta_paranoa.pdf",
+     "data": "24/04/2026",
+     "url": "https://drive.google.com/file/d/14qb9I41zilAh1VXwS1pPsoI5u8YlaUtu/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "Relatorio_ações_Riacho Fundo II",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1CWF_pARzJ53RXfOJzlzfTcCPXfsOUsgYrMIEWzM8P-g/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "Relatório_Samambaia_GDF_Adote_Praca.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1rM2TQTJm8fZUh_6AczwwiG-7me29KqgK/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "GDF_NA_SUA_PORTA_CEILANDIA.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/19VmO_Ktu1WIBESL_-YWidCvHSNzTWdzM/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "RELATORIO_GDF_NA_SUA_PORTA_PLANALTINA (1).docx",
+     "data": "30/06/2026",
+     "url": "https://drive.google.com/file/d/1XzB3_pIzyDNOMoSswOAk7A1kE7BK6wtm/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "046 - ETR",
+   "total": 10,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "047 - CEASA",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "048 - SERINTER",
+   "total": 9,
+   "entregues": 8,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1KwOWKKOuFofxM4JU5d7DYlnFnTgaqvI4/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1z9usihC46yjrf168lhEXhYgSgWPRZxci/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "ENTREGUE",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1hMp1clw4TogthRkoswq121qO6rbQpWb0/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "ENTREGUE",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/168byU_tQYJWDBkTkLz9b9CiFod-c-7Fj/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "ENTREGUE",
+     "arq": "Relatório GDF - Cerimonia de abertura.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/1jQFeVqeKe59kVIqAdg66lZDDxMAGReyw/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "gdf relatório.docx",
+     "data": "19/06/2026",
+     "url": "https://drive.google.com/file/d/19f5vf3wDcirIwYcYnx4FSRX8JA9Lcnds/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "gdf relatório.docx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/1FAoxX2SxHunraLCv-oHe1ABD_96JxkDo/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "gdf relatório.docx",
+     "data": "17/07/2026",
+     "url": "https://drive.google.com/file/d/11kmechgz2s4KEyc18Pd3weCab9A3eYvD/view"
+    }
+   ]
+  },
+  {
+   "n": "049 - ADASA",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "050 - Emater",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "051 - INAS",
+   "total": 5,
+   "entregues": 1,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Recanto dia 13-07-2026",
+     "data": "13/07/2026",
+     "url": "https://drive.google.com/file/d/162w0bNu9J8lnK6zIWktHoVf9FLUjPITdyyjC9skoc5s/view"
+    }
+   ]
+  },
+  {
+   "n": "052 - JUCIS",
+   "total": 5,
+   "entregues": 4,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "ENTREGUE",
+     "arq": "Ceilândia.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1KydA8vqLoD7D_8KAGmbF2EzPV1m5UwGN/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "ENTREGUE",
+     "arq": "Planaltina.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1wu9jlWncb9gD_lH7XDV-jgljEzy0QroK/view"
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "ENTREGUE",
+     "arq": "São Sebastião.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1j72QC_Z7oLFnlwEP7wfK0olAvTW1I6wk/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "ENTREGUE",
+     "arq": "Recanto das Emas.docx",
+     "data": "20/07/2026",
+     "url": "https://drive.google.com/file/d/1uoXpJdbhEZeqruGQOrbnEIpt_OoAyIHe/view"
+    }
+   ]
+  },
+  {
+   "n": "053 - SEBRAE",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "055 - SECTI",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "060 - TCB",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "061 - Zoo Brasília",
+   "total": 5,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P008",
+     "ra": "Plano Piloto",
+     "ed": 8,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
+   ]
+  },
+  {
+   "n": "062 - IPEDF",
+   "total": 8,
+   "entregues": 0,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "status": "PENDENTE",
+     "arq": "",
+     "data": "",
+     "url": null
+    }
    ]
   }
  ]
@@ -1834,6 +7020,8 @@ const SNAP = {
 const RAS = SNAP.editions;
 const pct = (a,b)=> b? Math.round(a/b*100) : 0;
 const covCls = c => c>=70?'hi':c>=50?'mid':'lo';
+const ORG = SNAP.orgaos||[];
+function setCtx(t){document.getElementById('printCtx').textContent='Recorte: '+t;}
 
 function renderKPIs(){
   const k=SNAP.kpis;
@@ -1864,7 +7052,7 @@ function renderTL(){
   document.querySelectorAll('.tl-node').forEach(n=>n.onclick=()=>openModal(+n.dataset.i));
 }
 
-let curF='all', curRA='', curQ='';
+let curF='all', curRA='', curQ='', curOrg='';
 function match(r){
   const c=pct(r.entregues,r.total);
   if(curF==='alta'&&c<70)return false;
@@ -1877,9 +7065,12 @@ function match(r){
   return true;
 }
 function renderGrid(){
+  const grid=document.getElementById('grid');
+  if(curOrg){ renderOrg(grid); return; }
   const list=RAS.filter(match);
   document.getElementById('cnt').textContent=list.length+' de '+RAS.length+' RAs';
-  document.getElementById('grid').innerHTML=list.map(r=>{
+  setCtx(curRA ? ('RA '+((RAS.find(r=>r.cod===curRA)||{}).ra||'')) : (curF==='alta'?'cobertura alta (≥70%)':curF==='baixa'?'cobertura baixa (<50%)':(curQ?('busca "'+curQ+'"'):'visão geral — todas as RAs')));
+  grid.innerHTML=list.map(r=>{
     const i=RAS.indexOf(r), c=pct(r.entregues,r.total), cl=covCls(c);
     return `<div class="card ${cl}" data-i="${i}">
       <div class="card-h"><span class="ed-badge">${r.ed}ª edição</span>
@@ -1895,37 +7086,63 @@ function renderGrid(){
   document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(+c.dataset.i));
 }
 
+function renderOrg(grid){
+  const o=ORG.find(x=>x.n===curOrg);
+  if(!o){ grid.innerHTML='<div style="padding:30px;color:var(--mut)">Órgão sem registros.</div>'; return; }
+  const cov=pct(o.entregues,o.total);
+  document.getElementById('cnt').textContent=o.entregues+' de '+o.total+' RAs';
+  setCtx('órgão '+o.n);
+  const rows=o.itens.map(it=>{
+    const ent=it.status==='ENTREGUE';
+    return `<div class="org-row"><span class="orr-ra">${it.ra}</span>`+
+      `<span class="orr-ed">${it.ed}ª</span>`+
+      `<span class="st ${ent?'ent':'pend'}">${ent?'Entregou':'Pendente'}</span>`+
+      `<span class="orr-arq" title="${ent?(it.arq||''):''}">${ent?(it.arq||''):''}</span>`+
+      `<span class="orr-dt">${ent?(it.data||''):''}</span>`+
+      (ent&&it.url?`<a class="open" href="${it.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`;
+  }).join('');
+  grid.innerHTML=`<div class="org-head"><h3>${o.n}</h3>`+
+    `<div class="oh-sub">Entregou em ${o.entregues} de ${o.total} regiões · ${cov}% de presença</div>`+rows+`</div>`;
+}
+
 function openModal(i){
   const r=RAS[i], c=pct(r.entregues,r.total);
   const kpis=[["Órgãos que atuaram",r.entregues],["Cobertura",c+"%"],["Pendentes",r.pendentes],["Última entrega",r.ultima||'—']];
+  const pend=r.pendentesList||[];
+  const pendHtml=pend.length?`<div class="blk-lbl">Órgãos pendentes (${pend.length})</div><div class="pend-block">${pend.map(n=>`<span class="pend-chip">${n}</span>`).join('')}</div>`:'';
   const orgs=r.orgaos.map(o=>
     `<div class="org"><span class="on">${o.n}</span>`+
     `<span class="oa" title="${o.arq||''}">${o.arq||''}</span>`+
     `<span class="od">${o.data||''}</span>`+
     (o.url?`<a class="open" href="${o.url}" target="_blank" rel="noopener">abrir</a>`:'')+`</div>`).join('');
   document.getElementById('modal').innerHTML=`
-    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button><button class="mpdf" onclick="printOne()">⤓ PDF desta RA</button>
       <h2>${r.ra}</h2><div class="mh-sub">${r.ed}ª edição · ${r.cod} · ${r.entregues} de ${r.total} órgãos com relatório</div></div>
     <div class="modal-b">
       <div class="mkpi">${kpis.map(k=>`<div><div class="m-v">${k[1]}</div><div class="m-l">${k[0]}</div></div>`).join('')}</div>
       <div class="blk-lbl">Órgãos que entregaram — clique em “abrir” para ver o relatório</div>
       ${orgs||'<p style="color:var(--mut)">Sem entregas registradas ainda.</p>'}
+      ${pendHtml}
     </div>`;
   document.getElementById('ov').classList.add('open');
 }
 function closeModal(){document.getElementById('ov').classList.remove('open')}
+function printOne(){document.body.classList.add('print-one');window.print();setTimeout(()=>document.body.classList.remove('print-one'),400);}
 document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
 function initControls(){
-  const sel=document.getElementById('fRA');
+  const sel=document.getElementById('fRA'), selO=document.getElementById('fOrg');
   RAS.forEach(r=>{const o=document.createElement('option');o.value=r.cod;o.textContent=r.ed+'ª · '+r.ra;sel.appendChild(o)});
-  sel.onchange=()=>{curRA=sel.value;renderGrid()};
+  ORG.forEach(o=>{const op=document.createElement('option');op.value=o.n;op.textContent=o.n;selO.appendChild(op)});
+  sel.onchange=()=>{curRA=sel.value; if(curRA){curOrg='';selO.value='';} renderGrid()};
+  selO.onchange=()=>{curOrg=selO.value; if(curOrg){curRA='';sel.value='';} renderGrid()};
   document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>{
     document.querySelectorAll('.quick').forEach(x=>x.classList.remove('ativo'));
-    b.classList.add('ativo');curF=b.dataset.f;renderGrid();
+    b.classList.add('ativo');curF=b.dataset.f; curOrg='';selO.value=''; renderGrid();
   });
-  document.getElementById('fQ').oninput=e=>{curQ=e.target.value;renderGrid()};
+  document.getElementById('fQ').oninput=e=>{curQ=e.target.value; curOrg='';selO.value=''; renderGrid()};
+  document.getElementById('btnPdf').onclick=()=>window.print();
 }
 renderKPIs();renderTL();initControls();renderGrid();
 </script>

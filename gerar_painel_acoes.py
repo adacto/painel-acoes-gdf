@@ -146,9 +146,56 @@ def main():
             "ultima": data_br(ult_por_ed.get(cod, "")), "orgaos": orgs,
         })
 
+    # ---- PAINEL: matriz órgão × edição (status) -> visão por órgão + pendentes ----
+    wp = wb_v["Painel"]
+    hdr_row = None
+    for i in range(1, wp.max_row + 1):
+        if str(wp.cell(i, 1).value or "").strip() == "Órgão":
+            hdr_row = i
+            break
+    matrix = {}   # orgao -> {cod: status}
+    ed_cols = []  # (coluna, cod)
+    if hdr_row:
+        for c in range(2, wp.max_column + 1):
+            m = re.match(r"(P0\d\d)", str(wp.cell(hdr_row, c).value or "").strip())
+            if m:
+                ed_cols.append((c, m.group(1)))
+        for i in range(hdr_row + 1, wp.max_row + 1):
+            org = str(wp.cell(i, 1).value or "").strip()
+            if not org or org.upper().startswith("TOTAL"):
+                continue
+            matrix[org] = {cod: str(wp.cell(i, c).value or "").strip().upper() for c, cod in ed_cols}
+
+    ed_meta = {e["cod"]: {"ra": e["ra"], "ed": e["ed"]} for e in editions}
+    det = {(e["cod"], o["n"]): o for e in editions for o in e["orgaos"]}
+
+    def onum(o):
+        m = re.match(r"0*(\d+)", o)
+        return int(m.group(1)) if m else 999
+
+    orgaos = []
+    for org in sorted(matrix, key=onum):
+        itens, ent, total = [], 0, 0
+        for cod in sorted(ed_meta):
+            st = matrix[org].get(cod, "SEM PASTA")
+            if st == "SEM PASTA":
+                continue
+            total += 1
+            d = det.get((cod, org), {})
+            if st == "ENTREGUE":
+                ent += 1
+            itens.append({"cod": cod, "ra": ed_meta[cod]["ra"], "ed": ed_meta[cod]["ed"],
+                          "status": st, "arq": d.get("arq", ""), "data": d.get("data", ""),
+                          "url": d.get("url")})
+        if total:
+            orgaos.append({"n": org, "total": total, "entregues": ent, "itens": itens})
+
+    for e in editions:
+        e["pendentesList"] = sorted([o for o in matrix if matrix[o].get(e["cod"]) == "PENDENTE"], key=onum)
+
     kpi["participantes"] = len(participantes)
     snap = {"totalRAs": max(TOTAL_RAS_MIN, total_ras), "atualizado": atualizado,
-            "kpis": kpi, "editions": editions}
+            "kpis": kpi, "editions": editions, "orgaos": orgaos}
     snap_json = json.dumps(snap, ensure_ascii=False, indent=1)
 
     tpl = open(TEMPLATE, encoding="utf-8").read()
