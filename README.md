@@ -1,46 +1,40 @@
-# Painel de Prestação de Contas — GDF na sua Porta
+# Painéis GDF na sua Porta
 
-Painel para a sala da Governadora: mostra, por Região Administrativa, **o que cada órgão fez** — com o relatório abrível, a data e a fonte. Mesmo visual do Painel de Obras.
+Dois painéis para a sala da Governadora, mesmo visual do Painel de Obras. O link do Vercel abre no painel principal (Ações Sociais); o de Cobertura fica a um clique, pelo botão no cabeçalho.
 
 Autoria: Adacto Artur Dornas de Oliveira — SEGOV.
 
+## Os dois painéis
+
+- **`index.html` — Painel de Ações Sociais (principal).** Volume absoluto de atendimentos por órgão, do maior para o menor. Grandes números no topo, atendimentos por região, e o detalhe de cada órgão por RA ao clicar. Bloco à parte de "métricas de unidade própria" (bem-estar animal, zeladoria), que não entram no total de atendimentos a pessoas.
+- **`cobertura.html` — Painel de Cobertura / Prestação de Contas (secundário, em `/cobertura`).** Mostra, por RA, o que cada órgão entregou — com o relatório abrível, a data e a fonte.
+
+Cada painel tem um botão no cabeçalho para o outro.
+
 ## De onde vêm os dados
 
-Da mesma planilha de **Monitoramento GDF na Sua Porta**, nas abas que o **Apps Script mantém vivas** varrendo a pasta "Prestação de Contas" no Google Drive:
+Da planilha **Monitoramento GDF na Sua Porta**, nas abas que o **Apps Script mantém vivas** varrendo o Google Drive:
 
-- **Resumo** → KPIs (edições realizadas, órgãos, entregas válidas, pendências) e o total por edição.
-- **Painel** → matriz órgão × edição (entregue/pendente).
-- **Entregues** → cada relatório entregue por RA, com **data e link** para abrir o arquivo.
-- **CONFIG** → nome oficial de cada RA.
+- **Ações Sociais:** matriz órgão × RA = total de atendimentos. Os números saem **de dentro dos relatórios de cada órgão** (links da aba Entregues), somando as sub-áreas — o método validado com a SES (SAIS+SUSAM+SVS). Hoje o gerador usa o arquivo `ACOES_SOCIAIS_modelo.xlsx`; quando a equipe criar a aba `ACOES_SOCIAIS` na planilha, o gerador passa a lê-la automaticamente.
+- **Cobertura:** abas `Resumo`, `Painel`, `Entregues`, `CONFIG`. A aba `INDICADORES` **não é usada**.
 
-> A aba `INDICADORES` (números de atendimento) **não é usada** — é manual e estava desatualizada. Só entram edições que o Apps Script considera válidas (as ocultas — P008/P010/P011 — ficam de fora automaticamente).
+> Os números de Ações Sociais são um **levantamento-rascunho**, sem auditoria dos órgãos. Ressalvas em `ACOES_SOCIAIS_levantamento_NOTAS.md`.
 
 ## Arquivos
 
-- `index.html` — o painel (snapshot embutido).
-- `template.html` — molde usado pelo gerador (não publicar sozinho).
-- `gerar_painel_acoes.py` — baixa a planilha e **regrava o `index.html`**.
-- `vercel.json` — configuração de publicação.
+- `index.html` / `cobertura.html` — os painéis (snapshot embutido, funcionam offline).
+- `template_social.html` / `template.html` — moldes dos geradores (não publicar sozinhos).
+- `gerar_painel_social.py` — regrava o `index.html` (Ações Sociais).
+- `gerar_painel_acoes.py` — regrava o `cobertura.html` (Cobertura).
+- `ACOES_SOCIAIS_modelo.xlsx` — matriz de atendimentos (fonte do painel de Ações Sociais).
+- `vercel.json` — configuração de publicação (`cleanUrls`, então `/cobertura` funciona).
 
 ## Como atualizar (snapshot + republicar)
 
 ```bash
-pip install openpyxl           # só na 1ª vez
-python3 gerar_painel_acoes.py  # baixa a planilha e regrava index.html
+pip install openpyxl            # só na 1ª vez
+python3 gerar_painel_social.py  # regrava index.html (Ações Sociais)
+python3 gerar_painel_acoes.py   # regrava cobertura.html (Cobertura)
 ```
 
-Depois publique o `index.html` (passo abaixo). Como o Apps Script já atualiza as abas todo dia às 7h, o ideal é **automatizar a republicação** (rodar o gerador logo após a rotina diária), para o painel nunca ficar atrás da planilha.
-
-## Deploy — projeto novo no Vercel
-
-**Opção A — GitHub + Vercel (recomendado, auto-publica a cada push):**
-1. Crie um repositório novo (ex.: `painel-acoes-gdf`) e suba estes arquivos.
-2. No Vercel: *Add New → Project → Import* o repositório. Framework: *Other*. Deploy.
-3. A cada `git push` do `index.html` regerado, o Vercel republica sozinho.
-
-**Opção B — sem GitHub:** `npm i -g vercel` e, nesta pasta, `vercel --prod`.
-
-## Observações
-
-- "Entregue" = a pasta da edição tem relatório em PDF, Word ou planilha. Sem auditoria de conteúdo.
-- O painel funciona offline (dados embutidos) — a tela na sala não depende da internet.
+Depois `git push` — o Vercel republica sozinho a cada push.

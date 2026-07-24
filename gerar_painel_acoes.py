@@ -18,7 +18,7 @@ TOTAL_RAS_MIN = 37  # piso; o total real é lido da planilha (Resumo "X de N")
 XLSX_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx"
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(HERE, "template.html")
-OUT = os.path.join(HERE, "index.html")
+OUT = os.path.join(HERE, "cobertura.html")
 
 _MIN = {"de", "da", "do", "das", "dos", "e"}
 _ROM = {"ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi"}

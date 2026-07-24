@@ -18,8 +18,6 @@ h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height
 .hdr-status{display:flex;align-items:center;gap:7px;justify-content:flex-end;font-size:.76rem;color:rgba(255,255,255,.9)}
 .dot{width:8px;height:8px;border-radius:50%;background:#c9b6dd;box-shadow:0 0 0 3px rgba(201,182,221,.25)}
 .hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
-.nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
-.nav-switch:hover{background:rgba(255,255,255,.28)}
 .stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
 .band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28)}
 .band span{color:#fff;font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
@@ -81,69 +79,10 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 .rr-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px 14px;background:var(--pale);border-radius:10px}
 .rr-total .t-l{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--pm)}
 .rr-total .t-v{font-size:1.5rem;font-weight:800;color:var(--pd)}
-/* participação especial (mesmo padrão do ranking) */
-.esp-note{font-size:.66rem;color:var(--mut);font-weight:600;margin:-4px 0 10px;line-height:1.5}
-.esp{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(74,25,99,.08);padding:8px 18px 14px}
-.er{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
-.er:last-child{border-bottom:none}
-.er-ic{width:30px;flex:none;text-align:center;font-size:1rem}
-.er-main{flex:1;min-width:0}
-.er-name{display:block;font-weight:800;color:var(--txt);font-size:.84rem}
-.er-area{display:block;font-size:.68rem;color:var(--mut);font-weight:600;margin-top:2px}
-.er-val{font-weight:800;color:var(--pm);font-size:.8rem;text-align:right;flex:none;max-width:230px}
-.er.feat{cursor:pointer;background:linear-gradient(90deg,#fff7ec,#fff);border-radius:11px;padding:14px 12px;margin:2px 0;border-bottom:none;box-shadow:inset 0 0 0 1.5px #f0d9ab;transition:.12s}
-.er.feat:hover{box-shadow:inset 0 0 0 1.5px var(--gold),0 4px 14px rgba(196,122,0,.16)}
-.er.feat .er-name{color:var(--pd)}
-.er.feat .er-ic{color:var(--gold)}
-.er-badge{display:inline-block;font-size:.56rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#fff;background:var(--gold);padding:2px 7px;border-radius:6px;margin-left:8px;vertical-align:middle}
-.er-cta{font-size:.66rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--pm),var(--bl));padding:7px 13px;border-radius:8px;flex:none;white-space:nowrap}
-/* modal SLU: por região com serviços */
-.sr{padding:11px 4px;border-bottom:1px solid var(--line)}
-.sr:last-child{border-bottom:none}
-.sr-ra{font-weight:800;color:var(--pd);font-size:.9rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.sr-ed{font-size:.6rem;color:#fff;background:var(--pd);width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex:none}
-.sr-svcs{display:flex;flex-wrap:wrap;gap:6px}
-.sv{font-size:.7rem;background:var(--pale);border:1px solid var(--line);border-radius:7px;padding:4px 9px;font-weight:600;color:var(--txt)}
-.sv b{color:var(--bl);font-weight:800}
 .footer{margin-top:34px;font-size:.66rem;color:var(--mut);text-align:center;line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
 .footer b{color:var(--pd)}
 .print-ctx{display:none}
-@media(max-width:900px){.big-row{grid-template-columns:1fr 1fr}.rk-name{width:150px}}
-@media(max-width:640px){
-  h1{font-size:1.15rem}
-  .hdr{flex-direction:column;align-items:flex-start;gap:8px;padding:15px 16px}
-  .hdr p{font-size:.72rem}
-  .hdr-meta{text-align:left}
-  .hdr-status{justify-content:flex-start}
-  .hdr-big{font-size:.92rem}
-  .nav-switch{margin-top:6px}
-  .band{padding:11px 14px}
-  .band span{font-size:.68rem;letter-spacing:.06em;gap:7px}
-  .wrap{padding:16px 14px 44px}
-  .sec-label{margin:20px 0 8px}
-  .big-row{grid-template-columns:1fr;gap:11px}
-  .big{padding:15px 17px}
-  .big.hero .bv{font-size:2.6rem}
-  /* ranking: nome+valor em cima, barra full-width embaixo */
-  .rk{flex-wrap:wrap;gap:5px 10px;padding:12px 0}
-  .rk-pos{width:22px;font-size:.82rem}
-  .rk-name{width:auto;flex:1;font-size:.8rem}
-  .rk-val{width:auto;font-size:.85rem;margin-left:auto}
-  .rk-val small{display:inline;font-size:.55rem;margin-left:5px}
-  .rk-barwrap{order:3;flex-basis:100%;width:100%;height:13px}
-  .compl-row{grid-template-columns:1fr}
-  .compl .cv{font-size:1.8rem}
-  /* modal em tela cheia no celular */
-  .overlay{padding:0}
-  .modal{border-radius:0;min-height:100%}
-  .modal-h{padding:16px 18px}
-  .modal-h h2{font-size:1.05rem;margin-top:34px}
-  .mpdf{top:14px;right:50px;font-size:.55rem;padding:5px 8px}
-  .modal-x{top:12px;right:14px}
-  .modal-b{max-height:none;padding:14px 16px 22px}
-  .rr .rr-ra{font-size:.8rem}
-  .rr-total .t-v{font-size:1.3rem}
-}
+@media(max-width:900px){.big-row{grid-template-columns:1fr 1fr}.rk-name{width:130px}}
 @media print{
   @page{size:A4 landscape;margin:8mm}
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
@@ -168,7 +107,6 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="hdr-meta">
     <div class="hdr-status"><span class="dot"></span><span>Atualizado em <span id="hUp">—</span></span></div>
     <div class="hdr-big"><span id="hAt">—</span> atendimentos&nbsp;·&nbsp;<span id="hRas">—</span> RAs</div>
-    <a class="nav-switch" href="cobertura.html">Painel de Cobertura&nbsp;→</a>
   </div>
 </div>
 <div class="stripe"></div>
@@ -191,10 +129,6 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   </div>
   <div class="rank" id="rank"></div>
 
-  <div class="sec-label" id="espLabel" style="display:none">Participação especial — órgãos com entregas de outra natureza</div>
-  <div class="esp-note" id="espNote" style="display:none">Estes órgãos também estiveram nas ações, com entregas que não se medem em atendimentos a pessoas (zeladoria, fiscalização, cultura, meio ambiente, obras…). Por isso não entram no total de atendimentos — mas ninguém ficou de fora.</div>
-  <div class="esp" id="esp"></div>
-
   <div class="footer">
     <b>Fonte:</b> aba ACOES_SOCIAIS da planilha oficial (totais de atendimento informados pelos órgãos). Os relatórios originais de cada órgão permanecem no Drive.<br>
     Números conforme informado pelos órgãos, sem auditoria. Retrato de <b id="snapDate">—</b>. Elaboração: Adacto Artur Dornas de Oliveira · SEGOV.
@@ -205,55 +139,54 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 
 <script>
 const SNAP = {
- "atualizado": "24/07/2026 09:55",
+ "atualizado": "23/07/2026 15:38",
  "kpis": {
-  "atendimentos": 229045,
-  "ras": 10,
-  "orgaos": 26,
-  "participantes": 41
+  "atendimentos": 212466,
+  "ras": 9,
+  "orgaos": 11
  },
  "ras": [
   {
    "cod": "P001",
    "ed": 1,
    "ra": "Itapoã",
-   "atend": 9544
+   "atend": 6608
   },
   {
    "cod": "P002",
    "ed": 2,
    "ra": "Paranoá",
-   "atend": 33831
+   "atend": 30784
   },
   {
    "cod": "P003",
    "ed": 3,
    "ra": "Riacho Fundo II",
-   "atend": 14395
+   "atend": 11490
   },
   {
    "cod": "P004",
    "ed": 4,
    "ra": "Samambaia",
-   "atend": 37769
+   "atend": 35711
   },
   {
    "cod": "P005",
    "ed": 5,
    "ra": "26 de Setembro",
-   "atend": 9887
+   "atend": 8674
   },
   {
    "cod": "P006",
    "ed": 6,
    "ra": "Ceilândia",
-   "atend": 52224
+   "atend": 50418
   },
   {
    "cod": "P007",
    "ed": 7,
    "ra": "Planaltina",
-   "atend": 30071
+   "atend": 29174
   },
   {
    "cod": "P008",
@@ -265,13 +198,13 @@ const SNAP = {
    "cod": "P009",
    "ed": 9,
    "ra": "São Sebastião",
-   "atend": 35063
+   "atend": 34222
   },
   {
    "cod": "P010",
    "ed": 10,
    "ra": "Recanto das Emas",
-   "atend": 6261
+   "atend": 5385
   }
  ],
  "orgaos": [
@@ -470,7 +403,7 @@ const SNAP = {
   },
   {
    "n": "019 - SEC Mulher",
-   "total": 10970,
+   "total": 9970,
    "itens": [
     {
      "cod": "P001",
@@ -485,13 +418,6 @@ const SNAP = {
      "ed": 2,
      "atend": 1067,
      "url": "https://drive.google.com/file/d/1Ps0BcuBWn1BZEc59ogug2IROzT5ICLec/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 1000,
-     "url": "https://drive.google.com/file/d/1artdibFkrLucGOpuGqstUEGyBy_Z-gkh/view"
     },
     {
      "cod": "P004",
@@ -534,75 +460,6 @@ const SNAP = {
      "ed": 10,
      "atend": 846,
      "url": "https://drive.google.com/file/d/1QqVttSrIy6qmPctbr6dftUAihjSj-iRz/view"
-    }
-   ]
-  },
-  {
-   "n": "014 - SEPAN",
-   "total": 4628,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 189,
-     "url": "https://drive.google.com/file/d/1xwRLCn83sL_KaN53Ri4vbmnEDCLZkEmE/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 313,
-     "url": "https://drive.google.com/file/d/12RlPKG1i6DxeirZ_ezpTIRO-Tv3f3XO7/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 555,
-     "url": "https://drive.google.com/file/d/10RmWJaXBvcr7LTKoNmn_x0AnUKWvZK63/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 579,
-     "url": "https://drive.google.com/file/d/1U3lQgcjnTZFZYw8ubuc5RMiSvY8HI5Sv/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 444,
-     "url": "https://drive.google.com/file/d/1whrCXoPEb1bjL0jsJfHZkmnQQewwlzvg/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 808,
-     "url": "https://drive.google.com/file/d/1gRm9zLVVmfwD4VfCq3XfbDJADP3Wy_si/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 571,
-     "url": "https://drive.google.com/file/d/1HkIVj3sFACp_ctJ0VCa1UYUYg8qohj8x/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 545,
-     "url": "https://drive.google.com/file/d/1tuNZzD9m2OU0KBkYQImSCsgbQuB1bydv/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 624,
-     "url": "https://drive.google.com/file/d/1P-CK9Q-H1A_PFRqu7-Nq5wGdEyrYUlPN/view"
     }
    ]
   },
@@ -676,40 +533,6 @@ const SNAP = {
    ]
   },
   {
-   "n": "005 - SEDET",
-   "total": 3492,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 821,
-     "url": "https://drive.google.com/file/d/11v-zRK_gaMHfj-Rj5DmUtOCg5Xm5omb2/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 1200,
-     "url": "https://drive.google.com/file/d/1e8rBCEPl0voLDzm1z8zHldwC_HJvQf-r/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 829,
-     "url": "https://drive.google.com/file/d/1h-Do0EWE5VorI1nz3jk9x0oDKEyKwXOf/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 642,
-     "url": "https://drive.google.com/file/d/1Z8-D684QK9FvBX9e2LZufHIQA-ZNRwCs/view"
-    }
-   ]
-  },
-  {
    "n": "020 - Defensoria",
    "total": 2410,
    "itens": [
@@ -768,61 +591,6 @@ const SNAP = {
      "ed": 9,
      "atend": 316,
      "url": "https://drive.google.com/file/d/1DZnl2gmxj5GG6aDj3I4NHd4Qx9HWpkUj/view"
-    }
-   ]
-  },
-  {
-   "n": "032 - Ciências e Tecnologia",
-   "total": 1712,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 890,
-     "url": "https://drive.google.com/file/d/1OwCTHEwMj-fFlFeHbXyM64G-PfAMVGqn/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 435,
-     "url": "https://drive.google.com/file/d/13pbFCddIv04wzpTuAhkh0zN1NkombWLs/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 80,
-     "url": "https://drive.google.com/file/d/1aJTLOdVmpCLHAAiyxbpwEGo1gpREovW0/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 73,
-     "url": "https://drive.google.com/file/d/1SPA9eldB2F2UFDREhVpxDAKbJNzuXkyD/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 57,
-     "url": "https://drive.google.com/file/d/1EoRsjCMbeChBAkU9Fd6-BByRvO78ATLG/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 80,
-     "url": "https://drive.google.com/file/d/1_5Idbiua-27qGALBnrWasrikeaz6WX1u/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 97,
-     "url": "https://drive.google.com/file/d/1GHHItMcGGeFaluvI1YQJHw3lXz71JkQL/view"
     }
    ]
   },
@@ -923,88 +691,6 @@ const SNAP = {
    ]
   },
   {
-   "n": "034 - Atendimento a Comunidade",
-   "total": 1473,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 320,
-     "url": "https://drive.google.com/file/d/1X-OXn8nMb2FbXCrnPCor2wUDcHrrtUOJ/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 587,
-     "url": "https://drive.google.com/file/d/1CMSHdIMrTz1JQ3ogASD75-UtQSv6RNAy/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 334,
-     "url": "https://drive.google.com/file/d/1FWL2hMWsLTbMYFStkCFVre0pVVSthbaf/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 187,
-     "url": "https://drive.google.com/file/d/1pargpxC3CCg-lyxmdJjLgYtDHtsVpNuz/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 11,
-     "url": "https://drive.google.com/file/d/19-ZQJykEUG7QzzoxCjrbsb_xpXst0t8G/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 34,
-     "url": "https://drive.google.com/file/d/1LH1eCcgDFwTMwBSozmrhZNltvgeOoEWt/view"
-    }
-   ]
-  },
-  {
-   "n": "023 - NEOENERGIA",
-   "total": 1253,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 210,
-     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 439,
-     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 361,
-     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 243,
-     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
-    }
-   ]
-  },
-  {
    "n": "030 - Juventude",
    "total": 924,
    "itens": [
@@ -1063,115 +749,6 @@ const SNAP = {
      "ed": 10,
      "atend": 60,
      "url": "https://drive.google.com/file/d/1jB1nf1oF3j791Tx4JhQEPEEtbylWyaIU/view"
-    }
-   ]
-  },
-  {
-   "n": "027 - Ouvidoria Geral",
-   "total": 903,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 57,
-     "url": "https://drive.google.com/file/d/1bt4Yl8cVh5AdoYp9wI44XcMfcA0pPUL5/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 99,
-     "url": "https://drive.google.com/file/d/1tmSZhfKi73ptBL8q2OK3yhjMniJKlrEI/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 120,
-     "url": "https://drive.google.com/file/d/17UWFG1cnHh_98DXf7ECPgUrSBgJ6c0Sp/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 74,
-     "url": "https://drive.google.com/file/d/1rmpHVkuGZ3TjnpkzRsmEHg1HQLZX9X8c/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 36,
-     "url": "https://drive.google.com/file/d/1QSFdJlFikKNb4o2W_oXP1Y0vTWLi145V/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 297,
-     "url": "https://drive.google.com/file/d/1d3Zzcoazz8HTMCcU-ZGos2bXSIjZPVmu/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 92,
-     "url": "https://drive.google.com/file/d/1rI6e2PMSMLQixAQpphVyKzSsyBxIWqE2/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 70,
-     "url": "https://drive.google.com/file/d/1SCI6kEbBQVa0w32T_JHfBj6pf6wa-6Qr/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 58,
-     "url": "https://drive.google.com/file/d/1qad6b9d6xW7Fmrm0bRJXb8xRVdb7Kfu3/view"
-    }
-   ]
-  },
-  {
-   "n": "036 - SEL",
-   "total": 760,
-   "itens": [
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 218,
-     "url": "https://drive.google.com/file/d/1iAeMCsanP69XDqPH3ox75qR_E59qhW8Q/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 433,
-     "url": "https://drive.google.com/file/d/1E35X5OassT1ORcDuiMY4QOdnw64TJLbT/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 109,
-     "url": "https://drive.google.com/file/d/1y4Dj2pffLiKsuqfdi9sEixU6fqIOvdmK/view"
-    }
-   ]
-  },
-  {
-   "n": "006 - DER/DF",
-   "total": 351,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 351,
-     "url": "https://drive.google.com/file/d/1ka18KAAn4i9UF09kQBY2MoEXawvI8DXD/view"
     }
    ]
   },
@@ -1245,252 +822,6 @@ const SNAP = {
    ]
   },
   {
-   "n": "038 - Deficiência",
-   "total": 296,
-   "itens": [
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 26,
-     "url": "https://drive.google.com/file/d/17SpM9QgYZREXw1sg6M5kPmaiF96Vxp_p/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 43,
-     "url": "https://drive.google.com/file/d/1RjzjnTDoTA14Z5E1OHspLrvpa_CRRycY/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 38,
-     "url": "https://drive.google.com/file/d/1_uzQnAJ02mogj9b_u4gj3WsaL5ZEUo7X/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 14,
-     "url": "https://drive.google.com/file/d/12aVp_Kf-sZXyrIdzY_c5oopxyI5Po6cX/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 106,
-     "url": "https://drive.google.com/file/d/1BM-M74y0-f1k7C6Ll2GwKoCO6Y8yzMTU/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 53,
-     "url": "https://drive.google.com/file/d/1doSlXgmrSbOvMDmNyGG52CrJgfhl97N9/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 16,
-     "url": "https://drive.google.com/file/d/1LbEHqMS0JXVgrU8Hr_eoGLiawfdg-7aH/view"
-    }
-   ]
-  },
-  {
-   "n": "009 - SEMOB",
-   "total": 221,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 13,
-     "url": "https://drive.google.com/file/d/1y9-dkJfcR60Yauj3h_k3AQ0_IuNFwXe4/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 53,
-     "url": "https://drive.google.com/file/d/1R4EcWlji2UWR3klQh11H_p7bsGgnnSOK/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 8,
-     "url": "https://drive.google.com/file/d/1UEPDKJ-uSpUk1vtR28v3AkfYTni5UjoG/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 18,
-     "url": "https://drive.google.com/file/d/1lHzd6LSwDGOOMqbco6sWiJMDBAcbbbXD/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 4,
-     "url": "https://drive.google.com/file/d/1Pd_uKYQYIgl-jkio09LFjHT5hZOYhYyT/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 62,
-     "url": "https://drive.google.com/file/d/1ZWMALsCDX6yvxjk2_MCf9Ai7F9SnKaU5/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 24,
-     "url": "https://drive.google.com/file/d/10M5oxFFfhyRcW4ahLKB0NScOnUMy7cA_/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 23,
-     "url": "https://drive.google.com/file/d/1phD89Y2LZmG1mgChvLnj22YBJpMkpEeX/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 16,
-     "url": "https://drive.google.com/file/d/1E2R3tXBZpZJ_58BpNJHiLINSK-c14BlI/view"
-    }
-   ]
-  },
-  {
-   "n": "051 - INAS",
-   "total": 160,
-   "itens": [
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 160,
-     "url": "https://drive.google.com/file/d/162w0bNu9J8lnK6zIWktHoVf9FLUjPITdyyjC9skoc5s/view"
-    }
-   ]
-  },
-  {
-   "n": "012 - CEB",
-   "total": 153,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 61,
-     "url": "https://drive.google.com/file/d/1eVOEhAd2fsZCe9Gh1x4mr--QNeYXgRpY/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 92,
-     "url": "https://drive.google.com/file/d/1oik7c-SrXDE1Dku8faBHz9b6efpMx8D5/view"
-    }
-   ]
-  },
-  {
-   "n": "035 - SETUR (Turismo)",
-   "total": 107,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 12,
-     "url": "https://drive.google.com/file/d/1UoF5wcMKNQXikhNHqn6_k43Lughg2NML/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 11,
-     "url": "https://drive.google.com/file/d/1-b4ibH50CcIp7_RZ5y6gu4O4CNwMlBQe/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 14,
-     "url": "https://drive.google.com/file/d/1A90rKbNdIBaTM9iLytHx52Oy3hnmQQaH/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 10,
-     "url": "https://drive.google.com/file/d/1AXlhKRWgVh8nu1_3vM9tGIwQnoWAuytQ/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 35,
-     "url": "https://drive.google.com/file/d/1YQvQq0kOah9yFWHsCgy9ldhdI_g4p5k-/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 6,
-     "url": "https://drive.google.com/file/d/1NcOvCxTuRjWCaGjJwcRCARKAS_OPmWnX/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 17,
-     "url": "https://drive.google.com/file/d/15ZkXL9KlkpkHZLiasTjhSHUyznWrRvmG/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 2,
-     "url": "https://drive.google.com/file/d/1x1hOoMalUuY8YNxUMCyZiaJfihav86hV/view"
-    }
-   ]
-  },
-  {
-   "n": "028 - CACI",
-   "total": 56,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 12,
-     "url": "https://drive.google.com/file/d/18rn-EEze6BGHEPPL9-li-mSklQEQIeTP/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 9,
-     "url": "https://drive.google.com/file/d/1CqDhAZ_v0RAwE_1HsDEi24kpePXDQZum/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 35,
-     "url": "https://drive.google.com/file/d/1VPhhOJghNhMmHrt824sKYpd9DxqlZL8T/view"
-    }
-   ]
-  },
-  {
    "n": "017 - PROCON",
    "total": 17,
    "itens": [
@@ -1523,392 +854,6 @@ const SNAP = {
      "url": "https://drive.google.com/file/d/1GalcSDJnxBrL6NVTsCogJwhZxxZfrvPX/view"
     }
    ]
-  },
-  {
-   "n": "052 - JUCIS",
-   "total": 14,
-   "itens": [
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 8,
-     "url": "https://drive.google.com/file/d/1KydA8vqLoD7D_8KAGmbF2EzPV1m5UwGN/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 4,
-     "url": "https://drive.google.com/file/d/1wu9jlWncb9gD_lH7XDV-jgljEzy0QroK/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 2,
-     "url": "https://drive.google.com/file/d/1j72QC_Z7oLFnlwEP7wfK0olAvTW1I6wk/view"
-    }
-   ]
-  }
- ],
- "especial": [
-  {
-   "orgao": "018 - SLU",
-   "area": "Zeladoria e limpeza urbana",
-   "destaque": "coleta, entulho, varrição, catação e mais",
-   "slu": true,
-   "nota": "Indicação da Governadora. Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."
-  },
-  {
-   "orgao": "013 - DFLEGAL",
-   "area": "Fiscalização (DF Legal)",
-   "destaque": "386 ações fiscais · 6 RAs"
-  },
-  {
-   "orgao": "037 - CULTURA",
-   "area": "Cultura — Mala do Livro",
-   "destaque": "≈2.500 livros · 5 RAs"
-  },
-  {
-   "orgao": "048 - SERINTER",
-   "area": "Relações internacionais",
-   "destaque": "19 embaixadas"
-  },
-  {
-   "orgao": "026 - CGDF",
-   "area": "Controladoria — Ouvidoria",
-   "destaque": "34 manifestações"
-  },
-  {
-   "orgao": "039 - SEAGRI",
-   "area": "Agricultura",
-   "destaque": "estradas rurais e roçagem (km/m²)"
-  },
-  {
-   "orgao": "003 - SSP",
-   "area": "Segurança pública",
-   "destaque": "videomonitoramento · 28 veículos"
-  },
-  {
-   "orgao": "011 - CAESB",
-   "area": "Saneamento — água",
-   "destaque": "unidade móvel e chamados"
-  },
-  {
-   "orgao": "042 - POLO RURAL",
-   "area": "Polo Rural",
-   "destaque": "estradas rurais (km)"
-  },
-  {
-   "orgao": "045 - SEPE",
-   "area": "Projetos Especiais",
-   "destaque": "Adote uma Praça"
-  },
-  {
-   "orgao": "031 - SEMA",
-   "area": "Meio ambiente",
-   "destaque": "orientação e educação ambiental"
-  },
-  {
-   "orgao": "041 - TERRACAP",
-   "area": "Patrimonial",
-   "destaque": "cercamento e cessão de uso"
-  },
-  {
-   "orgao": "029 - Casa Militar",
-   "area": "Apoio institucional",
-   "destaque": "apoio à organização das ações"
-  }
- ],
- "slu_ras": [
-  {
-   "ra": "Itapoã",
-   "ed": 1,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "256,4 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "95 t"
-    },
-    {
-     "s": "Varrição manual",
-     "v": "293,58 km"
-    },
-    {
-     "s": "Pintura/frisagem de meio-fio",
-     "v": "359,59 km"
-    },
-    {
-     "s": "Catação",
-     "v": "480 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "35"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "2 instalados"
-    }
-   ]
-  },
-  {
-   "ra": "Paranoá",
-   "ed": 2,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "166,07 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "150 t"
-    },
-    {
-     "s": "Varrição manual",
-     "v": "295,78 km"
-    },
-    {
-     "s": "Pintura/frisagem de meio-fio",
-     "v": "59,25 km"
-    },
-    {
-     "s": "Catação",
-     "v": "600 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "20"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "42 operantes"
-    }
-   ]
-  },
-  {
-   "ra": "Riacho Fundo II",
-   "ed": 3,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "183,22 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "55 t"
-    },
-    {
-     "s": "Varrição manual",
-     "v": "177,45 km"
-    },
-    {
-     "s": "Pintura/frisagem de meio-fio",
-     "v": "35,11 km"
-    },
-    {
-     "s": "Catação",
-     "v": "600 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "8"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "9 operantes"
-    },
-    {
-     "s": "Construção do Papa-Entulho",
-     "v": "50%"
-    }
-   ]
-  },
-  {
-   "ra": "Samambaia",
-   "ed": 4,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "898,82 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "350 t"
-    },
-    {
-     "s": "Varrição manual",
-     "v": "998,45 km"
-    },
-    {
-     "s": "Pintura/frisagem de meio-fio",
-     "v": "94,25 km"
-    },
-    {
-     "s": "Catação",
-     "v": "600 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "25"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "25 operantes"
-    }
-   ]
-  },
-  {
-   "ra": "26 de Setembro",
-   "ed": 5,
-   "servicos": [
-    {
-     "s": "Remoção de entulho",
-     "v": "45 t"
-    },
-    {
-     "s": "Demais serviços",
-     "v": "leitura em andamento"
-    }
-   ]
-  },
-  {
-   "ra": "Ceilândia",
-   "ed": 6,
-   "servicos": [
-    {
-     "s": "GDF de cara nova",
-     "v": "25% do planejado"
-    },
-    {
-     "s": "Demais serviços",
-     "v": "leitura em andamento"
-    }
-   ]
-  },
-  {
-   "ra": "Planaltina",
-   "ed": 7,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "666,1 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "703,53 t"
-    },
-    {
-     "s": "Catação",
-     "v": "600 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "22"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "25 operantes"
-    },
-    {
-     "s": "Construção do Papa-Entulho",
-     "v": "15%"
-    },
-    {
-     "s": "Varrição / Pintura",
-     "v": "total indisponível no arquivo"
-    }
-   ]
-  },
-  {
-   "ra": "Plano Piloto",
-   "ed": 8,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "1.158,93 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "105 t"
-    },
-    {
-     "s": "Coleta seletiva",
-     "v": "40,74 t"
-    },
-    {
-     "s": "Catação",
-     "v": "600 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "25"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "93 operantes"
-    },
-    {
-     "s": "Varrição / Pintura",
-     "v": "total indisponível no arquivo"
-    }
-   ]
-  },
-  {
-   "ra": "São Sebastião",
-   "ed": 9,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "331,06 t"
-    },
-    {
-     "s": "Remoção de entulho",
-     "v": "90 t"
-    },
-    {
-     "s": "Catação",
-     "v": "480 m²"
-    },
-    {
-     "s": "Coleta de animais mortos",
-     "v": "22"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "33 operantes"
-    },
-    {
-     "s": "Varrição / Pintura",
-     "v": "total indisponível no arquivo"
-    }
-   ]
-  },
-  {
-   "ra": "Recanto das Emas",
-   "ed": 10,
-   "servicos": [
-    {
-     "s": "Coleta convencional",
-     "v": "229,15 t"
-    },
-    {
-     "s": "Catação",
-     "v": "720 m²"
-    },
-    {
-     "s": "Papa-lixo",
-     "v": "12 operantes"
-    },
-    {
-     "s": "Varrição / Pintura",
-     "v": "total indisponível no arquivo"
-    }
-   ]
   }
  ]
 };
@@ -1923,7 +868,7 @@ function renderBigs(){
   document.getElementById('bigs').innerHTML=
     `<div class="big hero"><div class="bl">Total de atendimentos</div><div class="bv">${nf(k.atendimentos)}</div><div class="bs">serviços entregues à população</div></div>`+
     `<div class="big"><div class="bl">RAs contempladas</div><div class="bv">${k.ras}</div><div class="bs">regiões administrativas</div></div>`+
-    `<div class="big"><div class="bl">Órgãos participantes</div><div class="bv">${k.participantes||k.orgaos}</div><div class="bs">${k.orgaos} com atendimentos medidos · demais com outras entregas</div></div>`;
+    `<div class="big"><div class="bl">Órgãos com ações</div><div class="bv">${k.orgaos}</div><div class="bs">secretarias e empresas</div></div>`;
   document.getElementById('hAt').textContent=nf(k.atendimentos);
   document.getElementById('hRas').textContent=k.ras;
   document.getElementById('hUp').textContent=SNAP.atualizado;
@@ -1984,38 +929,7 @@ function init(){
   document.getElementById('fQ').oninput=e=>{curQ=e.target.value;renderRank()};
   document.getElementById('btnPdf').onclick=()=>window.print();
 }
-function renderEspecial(){
-  const c=SNAP.especial||[];
-  if(!c.length)return;
-  document.getElementById('espLabel').style.display='';
-  document.getElementById('espNote').style.display='';
-  document.getElementById('esp').innerHTML=c.map(x=>{
-    if(x.slu){
-      return `<div class="er feat" id="sluRow"><span class="er-ic">★</span>`+
-        `<span class="er-main"><span class="er-name">${x.orgao}<span class="er-badge">Indicação da Governadora</span></span>`+
-        `<span class="er-area">${x.area} — ${x.destaque}</span></span>`+
-        `<span class="er-cta">Ver por região →</span></div>`;
-    }
-    return `<div class="er"><span class="er-ic">·</span>`+
-      `<span class="er-main"><span class="er-name">${x.orgao}</span>`+
-      `<span class="er-area">${x.area}</span></span>`+
-      `<span class="er-val">${x.destaque||''}</span></div>`;
-  }).join('');
-  const s=document.getElementById('sluRow'); if(s)s.onclick=openSLU;
-}
-function openSLU(){
-  const ras=SNAP.slu_ras||[];
-  const rows=ras.map(r=>
-    `<div class="sr"><div class="sr-ra"><span class="sr-ed">${r.ed}</span>${r.ra}</div>`+
-    `<div class="sr-svcs">${r.servicos.map(v=>`<span class="sv">${v.s} <b>${v.v}</b></span>`).join('')}</div></div>`).join('');
-  document.getElementById('modal').innerHTML=
-    `<div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>`+
-    `<h2>018 - SLU</h2><div class="mh-sub">Zeladoria e limpeza urbana — o que fez em cada região</div></div>`+
-    `<div class="modal-b">${rows}`+
-    `<div class="esp-note" style="margin-top:14px">Serviços com unidades diferentes (toneladas, m², km, unidades). Não se somam num total único nem entram no ranking de atendimentos a pessoas. Números conforme os relatórios da SLU no Drive; sem auditoria. 26 de Setembro e Ceilândia com leitura ainda parcial.</div></div>`;
-  document.getElementById('ov').classList.add('open');
-}
-renderBigs();renderTL();init();renderRank();renderEspecial();
+renderBigs();renderTL();init();renderRank();
 </script>
 </body>
 </html>
