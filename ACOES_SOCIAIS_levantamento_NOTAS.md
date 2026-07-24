@@ -74,7 +74,20 @@ A aba Entregues tem **41 órgãos** com relatório depositado. Todos foram lidos
 
 **Métricas próprias quantificáveis** (candidatas a um bloco complementar, se o usuário quiser): DFLEGAL 386 ações fiscais · CULTURA ~2.500 livros · SSP 28 veículos (Planaltina).
 
-## Decisões e mudanças — rodada 24/07 (final)
+## NEOENERGIA — planilhas novas (24/07), usando os TOTAIS (decisão do usuário)
+Planilhas novas (2026-07-24), consolidadas em "…por_Localidade". **Usado o "Subtotal" (total cheio) de cada RA**, a pedido do usuário — inclui atendimentos a pessoas + lâmpadas trocadas + podas.
+Totais por RA: Itapoã 656 · Paranoá 1.015 · Riacho Fundo II 1.006 · Samambaia 995 · Ceilândia 1.779 · Planaltina 446 · São Sebastião 651 · Recanto das Emas 867. Plano Piloto 0 · Estrutural 0.
+- **NEOENERGIA total: 7.415 (8 RAs).** Composição do consolidado: Orientados TSEE 977 + Cadastrados 18 + Clientes troca de lâmpadas 1.010 + **Lâmpadas trocadas 4.290** + Atendimentos comerciais 768 + **Podas 352** = 7.415.
+- **Ressalva:** o total mistura pessoas (~2.773) com itens/serviços (lâmpadas 4.290 + podas 352). Se um dia quiser só pessoas, usar 2.773.
+- Total do painel: **237.741**.
+
+## Reforma visual + dados — 24/07 (versão publicada)
+- **Cultura (037) entrou no ranking como atendimento** (decisão: cada livro foi para uma pessoa): Paranoá 300 · RF2 500 · Ceilândia 800 · Planaltina 500 · São Sebastião 400 = 2.500 (valores "aproximadamente"). Saiu da "participação especial".
+- **CGDF (026) somado à Ouvidoria Geral** (34 manifestações, Itapoã): Ouvidoria Geral P001 57 → 91. CGDF saiu da "participação especial".
+- **Total do ranking: 231.579** em 27 órgãos, 10 RAs, 41 participantes.
+- **Reforma UX/UI:** (1) tipografia Inter no corpo + Unbounded só em títulos/números; (2) SES destacada num card "Maior volume — mostrado à parte" (não "campeã"), e o ranking dos demais numa escala própria; (3) "linha do tempo" virou barras "atendimentos por região" (ordem das edições); (4) mais contraste, respiro e faixa roxa fixa no topo. Identidade roxo+dourado e quadro especial da SLU mantidos.
+
+## Decisões e mudanças — rodada 24/07 (dados)
 - **10 RAs contempladas** (Plano Piloto/P008 conta como região, mesmo com 0 atendimento medido).
 - **CEB entra no ranking** (quantidade de atendimentos): Itapoã 61 + Paranoá 92 = 153. **Riacho Fundo II pendente** (PDF só imagem, não deu para contar).
 - **SEC Mulher RF2 = ~1.000** (estimativa: público ~500/dia × 2 dias, relatório SUBPROTM). **Confirmar com a secretaria** — não é "abordadas" contadas.

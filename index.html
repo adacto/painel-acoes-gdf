@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GDF na Sua Porta — Painel de Ações Sociais</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--pd:#4a1963;--pm:#7a2380;--pmid:#a93d8e;--pale:#f5edf8;--bl:#0071bb;--gold:#c47a00;
---adeq:#166534;--bg:#ede7f3;--txt:#1e0a35;--mut:#6b5680;--line:#e5d9ef}
+:root{--pd:#4a1963;--pm:#7a2380;--pmid:#9c3080;--pale:#f5edf8;--bl:#0064a6;--gold:#b06d00;
+--adeq:#166534;--bg:#ece5f2;--txt:#180528;--mut:#574468;--line:#e5d9ef}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Unbounded','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px}
-h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15}
+body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,.big .bv,.rk-val,.rb-val,.modal-h h2,.rr-total .t-v,.champ .cnum,.tl-at{font-family:'Unbounded','Segoe UI',sans-serif}
+h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15}
 .hdr{background:linear-gradient(135deg,var(--pd) 0%,#2d0f4e 100%);padding:20px 36px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .hdr p{font-size:.8rem;color:rgba(255,255,255,.85);font-weight:500;margin-top:5px}
 .hdr-meta{text-align:right;color:#fff}
@@ -21,10 +23,10 @@ h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height
 .nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
 .nav-switch:hover{background:rgba(255,255,255,.28)}
 .stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
-.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28)}
-.band span{color:#fff;font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
-.wrap{padding:22px 36px 60px;max-width:1400px;margin:0 auto}
-.sec-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mut);margin:26px 0 10px}
+.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28);position:sticky;top:0;z-index:20}
+.band span{color:#fff;font-size:.84rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.wrap{padding:26px 36px 64px;max-width:1400px;margin:0 auto}
+.sec-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin:32px 0 12px}
 .sec-label:first-child{margin-top:0}
 /* grandes números */
 .big-row{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:14px}
@@ -42,6 +44,23 @@ h1{font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height
 .tl-dot{width:32px;height:32px;border-radius:50%;background:var(--pd);color:#fff;border:3px solid var(--pd);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;position:relative;z-index:1}
 .tl-ra{font-size:.64rem;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.02em}
 .tl-at{font-size:.78rem;color:var(--bl);margin-top:3px;font-weight:800}
+/* barras de região */
+.rbars{background:#fff;border-radius:14px;padding:16px 20px;box-shadow:0 2px 8px rgba(74,25,99,.07)}
+.rb{display:flex;align-items:center;gap:12px;padding:7px 0}
+.rb-ed{width:23px;height:23px;border-radius:50%;background:var(--pd);color:#fff;font-size:.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.rb-name{width:155px;flex:none;font-size:.82rem;font-weight:700;color:var(--txt)}
+.rb-track{display:block;flex:1;background:var(--pale);border-radius:7px;height:23px;overflow:hidden;min-width:60px}
+.rb-fill{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--pm),var(--bl));min-width:2px;transition:width .5s}
+.rb-val{width:74px;text-align:right;flex:none;font-weight:700;color:var(--pd);font-size:.85rem}
+.rb-zero{color:var(--mut);font-style:italic;font-weight:600}
+/* card da campeã */
+.champ{display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(135deg,#fff7ea,#fff);border:1.5px solid #eecf96;border-radius:13px;padding:16px 20px;margin:6px 0 14px;cursor:pointer;transition:.14s}
+.champ:hover{box-shadow:0 7px 20px rgba(176,109,0,.18);transform:translateY(-1px)}
+.champ-tag{display:block;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--gold)}
+.champ-name{display:block;font-size:1.18rem;font-weight:800;color:var(--pd);margin-top:3px}
+.champ-r{text-align:right;flex:none}
+.champ .cnum{display:block;font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:800;color:var(--gold);line-height:1}
+.champ-sub{font-size:.66rem;color:var(--mut);font-weight:700;margin-top:2px;display:block}
 /* toolbar */
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 4px}
 select,input[type=search]{font-family:inherit;font-size:.72rem;padding:7px 11px;border:1.5px solid #d0b8e8;border-radius:9px;background:#fff;color:var(--txt);font-weight:600}
@@ -131,8 +150,11 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   .rk-val{width:auto;font-size:.85rem;margin-left:auto}
   .rk-val small{display:inline;font-size:.55rem;margin-left:5px}
   .rk-barwrap{order:3;flex-basis:100%;width:100%;height:13px}
-  .compl-row{grid-template-columns:1fr}
-  .compl .cv{font-size:1.8rem}
+  .rb-name{width:108px;font-size:.74rem}
+  .rb-val{width:60px}
+  .champ{flex-direction:column;align-items:flex-start;gap:6px}
+  .champ-r{text-align:left}
+  .er-cta{padding:6px 10px;font-size:.6rem}
   /* modal em tela cheia no celular */
   .overlay{padding:0}
   .modal{border-radius:0;min-height:100%}
@@ -147,8 +169,9 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 @media print{
   @page{size:A4 landscape;margin:8mm}
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
-  .big,.tl,.rank{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
-  .hdr,.stripe,.band,.tl-dot,.rk-bar,.big.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .big,.rbars,.rank,.esp{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .band{position:static}
+  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
   .rk{break-inside:avoid}
   body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
@@ -180,7 +203,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="big-row" id="bigs"></div>
 
   <div class="sec-label">Atendimentos por região</div>
-  <div class="tl"><div class="tl-track" id="tl"></div></div>
+  <div class="rbars" id="rbars"></div>
 
   <div class="sec-label">Órgãos por volume de atendimentos — do maior para o menor · clique para o detalhe</div>
   <div class="toolbar">
@@ -207,9 +230,9 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 const SNAP = {
  "atualizado": "24/07/2026 09:55",
  "kpis": {
-  "atendimentos": 229045,
+  "atendimentos": 237741,
   "ras": 10,
-  "orgaos": 26,
+  "orgaos": 27,
   "participantes": 41
  },
  "ras": [
@@ -217,25 +240,25 @@ const SNAP = {
    "cod": "P001",
    "ed": 1,
    "ra": "Itapoã",
-   "atend": 9544
+   "atend": 10024
   },
   {
    "cod": "P002",
    "ed": 2,
    "ra": "Paranoá",
-   "atend": 33831
+   "atend": 34707
   },
   {
    "cod": "P003",
    "ed": 3,
    "ra": "Riacho Fundo II",
-   "atend": 14395
+   "atend": 15540
   },
   {
    "cod": "P004",
    "ed": 4,
    "ra": "Samambaia",
-   "atend": 37769
+   "atend": 38521
   },
   {
    "cod": "P005",
@@ -247,13 +270,13 @@ const SNAP = {
    "cod": "P006",
    "ed": 6,
    "ra": "Ceilândia",
-   "atend": 52224
+   "atend": 54803
   },
   {
    "cod": "P007",
    "ed": 7,
    "ra": "Planaltina",
-   "atend": 30071
+   "atend": 31017
   },
   {
    "cod": "P008",
@@ -265,13 +288,13 @@ const SNAP = {
    "cod": "P009",
    "ed": 9,
    "ra": "São Sebastião",
-   "atend": 35063
+   "atend": 36114
   },
   {
    "cod": "P010",
    "ed": 10,
    "ra": "Recanto das Emas",
-   "atend": 6261
+   "atend": 7128
   }
  ],
  "orgaos": [
@@ -538,6 +561,68 @@ const SNAP = {
    ]
   },
   {
+   "n": "023 - NEOENERGIA",
+   "total": 7415,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "atend": 656,
+     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "atend": 1015,
+     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "atend": 1006,
+     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "atend": 995,
+     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "atend": 1779,
+     "url": null
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "atend": 446,
+     "url": null
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "atend": 651,
+     "url": null
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "atend": 867,
+     "url": null
+    }
+   ]
+  },
+  {
    "n": "014 - SEPAN",
    "total": 4628,
    "itens": [
@@ -706,6 +791,47 @@ const SNAP = {
      "ed": 5,
      "atend": 642,
      "url": "https://drive.google.com/file/d/1Z8-D684QK9FvBX9e2LZufHIQA-ZNRwCs/view"
+    }
+   ]
+  },
+  {
+   "n": "037 - CULTURA",
+   "total": 2500,
+   "itens": [
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "atend": 300,
+     "url": "https://drive.google.com/file/d/1eRe-vznoD3Uhlg4LF-OwPuNTxcg3yikp/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "atend": 500,
+     "url": "https://drive.google.com/file/d/1huiJCzZkH_Acyh_bt3-ummsTxUUdJxxX/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "atend": 800,
+     "url": "https://drive.google.com/file/d/1bCRpEXi8pZWuhDtUdVQzRGpcFY1J8zLe/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "atend": 500,
+     "url": "https://drive.google.com/file/d/1TsPuTUTDQTdX7RD-_BZtBSe_Szu6tTKP/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "atend": 400,
+     "url": "https://drive.google.com/file/d/1CEw0c-sYYlkRABtO8gaK77TLXA4Q_nwN/view"
     }
    ]
   },
@@ -971,36 +1097,71 @@ const SNAP = {
    ]
   },
   {
-   "n": "023 - NEOENERGIA",
-   "total": 1253,
+   "n": "027 - Ouvidoria Geral",
+   "total": 937,
    "itens": [
     {
      "cod": "P001",
      "ra": "Itapoã",
      "ed": 1,
-     "atend": 210,
-     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
+     "atend": 91,
+     "url": "https://drive.google.com/file/d/1bt4Yl8cVh5AdoYp9wI44XcMfcA0pPUL5/view"
     },
     {
      "cod": "P002",
      "ra": "Paranoá",
      "ed": 2,
-     "atend": 439,
-     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
+     "atend": 99,
+     "url": "https://drive.google.com/file/d/1tmSZhfKi73ptBL8q2OK3yhjMniJKlrEI/view"
     },
     {
      "cod": "P003",
      "ra": "Riacho Fundo II",
      "ed": 3,
-     "atend": 361,
-     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
+     "atend": 120,
+     "url": "https://drive.google.com/file/d/17UWFG1cnHh_98DXf7ECPgUrSBgJ6c0Sp/view"
     },
     {
      "cod": "P004",
      "ra": "Samambaia",
      "ed": 4,
-     "atend": 243,
-     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
+     "atend": 74,
+     "url": "https://drive.google.com/file/d/1rmpHVkuGZ3TjnpkzRsmEHg1HQLZX9X8c/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "atend": 36,
+     "url": "https://drive.google.com/file/d/1QSFdJlFikKNb4o2W_oXP1Y0vTWLi145V/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "atend": 297,
+     "url": "https://drive.google.com/file/d/1d3Zzcoazz8HTMCcU-ZGos2bXSIjZPVmu/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "atend": 92,
+     "url": "https://drive.google.com/file/d/1rI6e2PMSMLQixAQpphVyKzSsyBxIWqE2/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "atend": 70,
+     "url": "https://drive.google.com/file/d/1SCI6kEbBQVa0w32T_JHfBj6pf6wa-6Qr/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "atend": 58,
+     "url": "https://drive.google.com/file/d/1qad6b9d6xW7Fmrm0bRJXb8xRVdb7Kfu3/view"
     }
    ]
   },
@@ -1063,75 +1224,6 @@ const SNAP = {
      "ed": 10,
      "atend": 60,
      "url": "https://drive.google.com/file/d/1jB1nf1oF3j791Tx4JhQEPEEtbylWyaIU/view"
-    }
-   ]
-  },
-  {
-   "n": "027 - Ouvidoria Geral",
-   "total": 903,
-   "itens": [
-    {
-     "cod": "P001",
-     "ra": "Itapoã",
-     "ed": 1,
-     "atend": 57,
-     "url": "https://drive.google.com/file/d/1bt4Yl8cVh5AdoYp9wI44XcMfcA0pPUL5/view"
-    },
-    {
-     "cod": "P002",
-     "ra": "Paranoá",
-     "ed": 2,
-     "atend": 99,
-     "url": "https://drive.google.com/file/d/1tmSZhfKi73ptBL8q2OK3yhjMniJKlrEI/view"
-    },
-    {
-     "cod": "P003",
-     "ra": "Riacho Fundo II",
-     "ed": 3,
-     "atend": 120,
-     "url": "https://drive.google.com/file/d/17UWFG1cnHh_98DXf7ECPgUrSBgJ6c0Sp/view"
-    },
-    {
-     "cod": "P004",
-     "ra": "Samambaia",
-     "ed": 4,
-     "atend": 74,
-     "url": "https://drive.google.com/file/d/1rmpHVkuGZ3TjnpkzRsmEHg1HQLZX9X8c/view"
-    },
-    {
-     "cod": "P005",
-     "ra": "26 de Setembro",
-     "ed": 5,
-     "atend": 36,
-     "url": "https://drive.google.com/file/d/1QSFdJlFikKNb4o2W_oXP1Y0vTWLi145V/view"
-    },
-    {
-     "cod": "P006",
-     "ra": "Ceilândia",
-     "ed": 6,
-     "atend": 297,
-     "url": "https://drive.google.com/file/d/1d3Zzcoazz8HTMCcU-ZGos2bXSIjZPVmu/view"
-    },
-    {
-     "cod": "P007",
-     "ra": "Planaltina",
-     "ed": 7,
-     "atend": 92,
-     "url": "https://drive.google.com/file/d/1rI6e2PMSMLQixAQpphVyKzSsyBxIWqE2/view"
-    },
-    {
-     "cod": "P009",
-     "ra": "São Sebastião",
-     "ed": 9,
-     "atend": 70,
-     "url": "https://drive.google.com/file/d/1SCI6kEbBQVa0w32T_JHfBj6pf6wa-6Qr/view"
-    },
-    {
-     "cod": "P010",
-     "ra": "Recanto das Emas",
-     "ed": 10,
-     "atend": 58,
-     "url": "https://drive.google.com/file/d/1qad6b9d6xW7Fmrm0bRJXb8xRVdb7Kfu3/view"
     }
    ]
   },
@@ -1566,19 +1658,9 @@ const SNAP = {
    "destaque": "386 ações fiscais · 6 RAs"
   },
   {
-   "orgao": "037 - CULTURA",
-   "area": "Cultura — Mala do Livro",
-   "destaque": "≈2.500 livros · 5 RAs"
-  },
-  {
    "orgao": "048 - SERINTER",
    "area": "Relações internacionais",
    "destaque": "19 embaixadas"
-  },
-  {
-   "orgao": "026 - CGDF",
-   "area": "Controladoria — Ouvidoria",
-   "destaque": "34 manifestações"
   },
   {
    "orgao": "039 - SEAGRI",
@@ -1930,10 +2012,16 @@ function renderBigs(){
   document.getElementById('snapDate').textContent=SNAP.atualizado;
 }
 
-function renderTL(){
-  document.getElementById('tl').innerHTML=RAS.map(r=>
-    `<div class="tl-node"><div class="tl-dot">${r.ed}</div><div class="tl-ra">${r.ra}</div>`+
-    `<div class="tl-at">${nf(r.atend)}</div></div>`).join('');
+function renderRegionBars(){
+  const list=RAS.slice().sort((a,b)=>a.ed-b.ed);
+  const max=Math.max(...RAS.map(r=>r.atend),1);
+  document.getElementById('rbars').innerHTML=list.map(r=>{
+    const w=Math.max(1,Math.round(r.atend/max*100));
+    return `<div class="rb"><span class="rb-ed">${r.ed}</span>`+
+      `<span class="rb-name">${r.ra}</span>`+
+      `<span class="rb-track"><span class="rb-fill" style="width:${w}%"></span></span>`+
+      (r.atend>0?`<span class="rb-val">${nf(r.atend)}</span>`:`<span class="rb-val rb-zero">0</span>`)+`</div>`;
+  }).join('');
 }
 
 function orgValue(o){ // total geral, ou só a RA filtrada
@@ -1945,18 +2033,30 @@ function renderRank(){
   let list=ORG.map(o=>({o,v:orgValue(o)})).filter(x=>x.v>0);
   if(curQ) list=list.filter(x=>x.o.n.toLowerCase().includes(curQ.toLowerCase()));
   list.sort((a,b)=>b.v-a.v);
-  const max=list.length?list[0].v:1;
   document.getElementById('cnt').textContent=list.length+' órgão(s)';
   setCtx(curRA?('RA '+((RAS.find(r=>r.cod===curRA)||{}).ra||'')):'todas as RAs — total geral');
-  document.getElementById('rank').innerHTML=list.map((x,i)=>{
+  const total=list.reduce((s,x)=>s+x.v,0);
+  const champ=list[0], rest=list.slice(1);
+  let html='';
+  if(champ){
+    const pct=total?Math.round(champ.v/total*100):0;
+    html+=`<div class="champ" data-n="${champ.o.n}"><div class="champ-l">`+
+      `<span class="champ-tag">Maior volume — mostrado à parte</span>`+
+      `<span class="champ-name">${champ.o.n}</span></div>`+
+      `<div class="champ-r"><span class="cnum">${nf(champ.v)}</span>`+
+      `<span class="champ-sub">atendimentos · ${pct}% do total</span></div></div>`;
+  }
+  const max=rest.length?rest[0].v:1;
+  html+=rest.map((x,i)=>{
     const w=Math.max(2,Math.round(x.v/max*100));
-    return `<div class="rk ${i===0?'rk-1':''}" data-n="${x.o.n}">`+
-      `<span class="rk-pos">${i+1}º</span>`+
+    return `<div class="rk" data-n="${x.o.n}">`+
+      `<span class="rk-pos">${i+2}º</span>`+
       `<span class="rk-name">${x.o.n}</span>`+
       `<span class="rk-barwrap"><span class="rk-bar" style="width:${w}%"></span></span>`+
       `<span class="rk-val">${nf(x.v)}<small>atendimentos</small></span></div>`;
-  }).join('')||'<div style="padding:26px;color:var(--mut)">Nenhum órgão com dados neste recorte.</div>';
-  document.querySelectorAll('.rk').forEach(el=>el.onclick=()=>openModal(el.dataset.n));
+  }).join('');
+  document.getElementById('rank').innerHTML=html||'<div style="padding:26px;color:var(--mut)">Nenhum órgão com dados neste recorte.</div>';
+  document.querySelectorAll('.rk,.champ').forEach(el=>el.onclick=()=>openModal(el.dataset.n));
 }
 
 function openModal(n){
@@ -2015,7 +2115,7 @@ function openSLU(){
     `<div class="esp-note" style="margin-top:14px">Serviços com unidades diferentes (toneladas, m², km, unidades). Não se somam num total único nem entram no ranking de atendimentos a pessoas. Números conforme os relatórios da SLU no Drive; sem auditoria. 26 de Setembro e Ceilândia com leitura ainda parcial.</div></div>`;
   document.getElementById('ov').classList.add('open');
 }
-renderBigs();renderTL();init();renderRank();renderEspecial();
+renderBigs();renderRegionBars();init();renderRank();renderEspecial();
 </script>
 </body>
 </html>
