@@ -172,8 +172,11 @@ def main():
           "ras":len(ras),  # todas as RAs contempladas (com edição), inclusive as de atendimento 0
           "orgaos":len(orgaos_raw),
           "participantes":len(participantes)}
+    def _cod(e):
+        m=re.match(r"(\d+)",e["orgao"]); return int(m.group(1)) if m else 999
+    especial_ord=sorted(ESPECIAL,key=lambda e:(0 if e.get("slu") else 1,_cod(e)))
     snap={"atualizado":atualizado,"kpis":kpis,"ras":ras,"orgaos":orgaos_raw,
-          "especial":ESPECIAL,"slu_ras":SLU_RAS}
+          "especial":especial_ord,"slu_ras":SLU_RAS}
 
     tpl=open(TEMPLATE,encoding="utf-8").read()
     open(OUT,"w",encoding="utf-8").write(tpl.replace("__SNAP_JSON__",json.dumps(snap,ensure_ascii=False,indent=1)))
