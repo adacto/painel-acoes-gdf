@@ -80,7 +80,7 @@ A aba Entregues tem **41 órgãos** com relatório depositado. Todos foram lidos
 - **SEC Mulher RF2 = ~1.000** (estimativa: público ~500/dia × 2 dias, relatório SUBPROTM). **Confirmar com a secretaria** — não é "abordadas" contadas.
 - **SEC Mulher: métrica oficial = "abordadas"** (diretas + indiretas). **Família e Juventude: métrica = "cadastro".** **DETRAN Planaltina: OK, não é Sobradinho** (removida a ressalva de RA trocada).
 - **DF Legal e SERINTER: fora da contagem** (ficam na "Participação especial"). CEB saiu da "especial" e foi para o ranking.
-- **SLU: leitura profunda** — cada RA tem 7–11 subpastas de serviço no Drive. Volumes reais por RA no quadro especial (só a SLU tem quadro clicável, por decisão: presidente é indicação da Governadora). **26 de Setembro e Ceilândia com leitura ainda parcial.**
+- **SLU: leitura profunda** — cada RA tem 7–11 subpastas de serviço no Drive. Volumes reais por RA no quadro especial (só a SLU tem quadro clicável). **26 de Setembro e Ceilândia com leitura ainda parcial.**
 - Seção **"Participação especial"** substituiu os 14 cards: SLU em destaque (clicável) + demais órgãos em linhas no padrão do ranking. Total do ranking: **229.045** em 26 órgãos.
 
 ### SLU — volumes por região (leitura profunda dos relatórios no Drive)

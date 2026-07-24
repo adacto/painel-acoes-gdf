@@ -64,7 +64,7 @@ SLU_RAS = [
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
      "destaque": "coleta, entulho, varrição, catação e mais", "slu": True,
-     "nota": "Indicação da Governadora. Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."},
+     "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."},
     {"orgao": "013 - DFLEGAL", "area": "Fiscalização (DF Legal)", "destaque": "386 ações fiscais · 6 RAs"},
     {"orgao": "037 - CULTURA", "area": "Cultura — Mala do Livro", "destaque": "≈2.500 livros · 5 RAs"},
     {"orgao": "048 - SERINTER", "area": "Relações internacionais", "destaque": "19 embaixadas"},

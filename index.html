@@ -1558,7 +1558,7 @@ const SNAP = {
    "area": "Zeladoria e limpeza urbana",
    "destaque": "coleta, entulho, varrição, catação e mais",
    "slu": true,
-   "nota": "Indicação da Governadora. Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."
+   "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."
   },
   {
    "orgao": "013 - DFLEGAL",
@@ -1992,7 +1992,7 @@ function renderEspecial(){
   document.getElementById('esp').innerHTML=c.map(x=>{
     if(x.slu){
       return `<div class="er feat" id="sluRow"><span class="er-ic">★</span>`+
-        `<span class="er-main"><span class="er-name">${x.orgao}<span class="er-badge">Indicação da Governadora</span></span>`+
+        `<span class="er-main"><span class="er-name">${x.orgao}</span>`+
         `<span class="er-area">${x.area} — ${x.destaque}</span></span>`+
         `<span class="er-cta">Ver por região →</span></div>`;
     }
