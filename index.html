@@ -23,8 +23,9 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
 .nav-switch:hover{background:rgba(255,255,255,.28)}
 .stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
-.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:13px 36px;text-align:center;box-shadow:0 3px 12px rgba(74,25,99,.28);position:sticky;top:0;z-index:20}
-.band span{color:#fff;font-size:.84rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.band{background:linear-gradient(90deg,var(--pm) 0%,var(--pd) 48%,var(--bl) 100%);padding:15px 36px 17px;text-align:center;box-shadow:0 4px 16px rgba(74,25,99,.32);position:sticky;top:0;z-index:20;border-bottom:2px solid rgba(255,217,168,.5)}
+.band-kicker{display:block;font-size:.72rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:#ffd9a8;margin-bottom:6px}
+.band-title{display:block;font-family:'Unbounded','Segoe UI',sans-serif;font-size:clamp(1.1rem,2.3vw,1.5rem);font-weight:700;color:#fff;letter-spacing:.005em;line-height:1.15;text-shadow:0 1px 6px rgba(0,0,0,.18)}
 .wrap{padding:26px 36px 64px;max-width:1400px;margin:0 auto}
 .sec-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin:32px 0 12px}
 .sec-label:first-child{margin-top:0}
@@ -136,8 +137,9 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   .hdr-status{justify-content:flex-start}
   .hdr-big{font-size:.92rem}
   .nav-switch{margin-top:6px}
-  .band{padding:11px 14px}
-  .band span{font-size:.68rem;letter-spacing:.06em;gap:7px}
+  .band{padding:12px 15px 13px}
+  .band-kicker{font-size:.58rem;letter-spacing:.2em;margin-bottom:4px}
+  .band-title{font-size:1rem;line-height:1.22}
   .wrap{padding:16px 14px 44px}
   .sec-label{margin:20px 0 8px}
   .big-row{grid-template-columns:1fr;gap:11px}
@@ -191,11 +193,10 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="hdr-meta">
     <div class="hdr-status"><span class="dot"></span><span>Atualizado em <span id="hUp">—</span></span></div>
     <div class="hdr-big"><span id="hAt">—</span> atendimentos&nbsp;·&nbsp;<span id="hRas">—</span> RAs</div>
-    <a class="nav-switch" href="cobertura.html">Painel de Cobertura&nbsp;→</a>
   </div>
 </div>
 <div class="stripe"></div>
-<div class="band"><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ações sociais do GDF em cada região — quanto cada órgão atendeu</span></div>
+<div class="band"><span class="band-kicker">✦ GDF na sua Porta ✦</span><span class="band-title">O governo que vai até cada região, mais perto do cidadão</span></div>
 
 <div class="wrap">
   <div class="print-ctx" id="printCtx"></div>
@@ -215,7 +216,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="rank" id="rank"></div>
 
   <div class="sec-label" id="espLabel" style="display:none">Participação especial — órgãos com entregas de outra natureza</div>
-  <div class="esp-note" id="espNote" style="display:none">Estes órgãos também estiveram nas ações, com entregas que não se medem em atendimentos a pessoas (zeladoria, fiscalização, cultura, meio ambiente, obras…). Por isso não entram no total de atendimentos — mas ninguém ficou de fora.</div>
+  <div class="esp-note" id="espNote" style="display:none">Estes órgãos também estiveram nas ações, com entregas que não se medem em atendimentos a pessoas (zeladoria, fiscalização, cultura, meio ambiente, obras…). Por isso não entram no total de atendimentos: aparecem aqui, com o que cada um entregou.</div>
   <div class="esp" id="esp"></div>
 
   <div class="footer">
@@ -228,9 +229,9 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 
 <script>
 const SNAP = {
- "atualizado": "24/07/2026 09:55",
+ "atualizado": "28/07/2026 12:18",
  "kpis": {
-  "atendimentos": 237741,
+  "atendimentos": 247626,
   "ras": 10,
   "orgaos": 27,
   "participantes": 41
@@ -294,13 +295,13 @@ const SNAP = {
    "cod": "P010",
    "ed": 10,
    "ra": "Recanto das Emas",
-   "atend": 7128
+   "atend": 17013
   }
  ],
  "orgaos": [
   {
    "n": "001 - SES",
-   "total": 158080,
+   "total": 167965,
    "itens": [
     {
      "cod": "P001",
@@ -357,6 +358,13 @@ const SNAP = {
      "ed": 9,
      "atend": 28940,
      "url": "https://drive.google.com/file/d/1Z4pcSmqmYYe4ByTmnfslHfNdcWFbo2CA/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "atend": 9885,
+     "url": null
     }
    ]
   },
@@ -569,56 +577,56 @@ const SNAP = {
      "ra": "Itapoã",
      "ed": 1,
      "atend": 656,
-     "url": "https://drive.google.com/file/d/1TS5tKGxyMP6zzbaZTszKYT3Ff8YatChO/view"
+     "url": "https://drive.google.com/file/d/14liM--z-_3533P2Y2ap574tt3HyyxArYcrP5oK1sJIg/view"
     },
     {
      "cod": "P002",
      "ra": "Paranoá",
      "ed": 2,
      "atend": 1015,
-     "url": "https://drive.google.com/file/d/1QP_9trw2Icm2DdSFp22YGSGKwA2P0x5S/view"
+     "url": "https://drive.google.com/file/d/10bNAXyXZuN5BMwvKTTGYzywKNBZI58Qgtl_C-ETref0/view"
     },
     {
      "cod": "P003",
      "ra": "Riacho Fundo II",
      "ed": 3,
      "atend": 1006,
-     "url": "https://drive.google.com/file/d/1F6D5hlrLKjh7Dn0HMBI8NdKUd9I3KG8m/view"
+     "url": "https://drive.google.com/file/d/1bSkf0GELY35TabaGFLDL-VmUTyNltU1cY9UO6lDX-bc/view"
     },
     {
      "cod": "P004",
      "ra": "Samambaia",
      "ed": 4,
      "atend": 995,
-     "url": "https://drive.google.com/file/d/1bE9Sjaw6PpmHvINtzTgBKl_Fh_JGvUAh/view"
+     "url": "https://drive.google.com/file/d/19_3NcfDAvcND10pYEFPlwqN3GBzLBuoRwnr4P7wRTzg/view"
     },
     {
      "cod": "P006",
      "ra": "Ceilândia",
      "ed": 6,
      "atend": 1779,
-     "url": null
+     "url": "https://drive.google.com/file/d/1s8dy5msIF-vHLeM1KK2T2rqlw7SIck6Hdu1I6s3poJc/view"
     },
     {
      "cod": "P007",
      "ra": "Planaltina",
      "ed": 7,
      "atend": 446,
-     "url": null
+     "url": "https://drive.google.com/file/d/1lnQOJ-rNwyPZ0dS5v9uwAY68EXgoFUsfKpTDSRYCxEY/view"
     },
     {
      "cod": "P009",
      "ra": "São Sebastião",
      "ed": 9,
      "atend": 651,
-     "url": null
+     "url": "https://drive.google.com/file/d/1XObnjPSVp7QLXLumsf2_b9RcMOAtDzmPhl1D5evh78M/view"
     },
     {
      "cod": "P010",
      "ra": "Recanto das Emas",
      "ed": 10,
      "atend": 867,
-     "url": null
+     "url": "https://drive.google.com/file/d/1jx4JlVD5eBeBl6kEsjuleQ3Dpyfn9DzBSEkMmGtSnjM/view"
     }
    ]
   },
@@ -2000,12 +2008,24 @@ let curRA='', curQ='';
 
 function setCtx(t){document.getElementById('printCtx').textContent='Recorte: '+t;}
 
+// Abre o KPI "Órgãos participantes" nas suas parcelas, sempre a partir do
+// próprio retrato: medidos + participação especial + os que entregaram
+// relatório mas ainda não foram classificados. A soma fecha com o KPI.
+function detalheParticipantes(k){
+  const esp=(SNAP.especial||[]).length;
+  const tot=k.participantes||k.orgaos;
+  const resto=Math.max(0,tot-k.orgaos-esp);
+  let s=`${k.orgaos} com atendimentos medidos · ${esp} com entregas de outra natureza`;
+  if(resto>0) s+=` · ${resto} com relatório entregue, ainda em classificação`;
+  return s;
+}
+
 function renderBigs(){
   const k=SNAP.kpis;
   document.getElementById('bigs').innerHTML=
     `<div class="big hero"><div class="bl">Total de atendimentos</div><div class="bv">${nf(k.atendimentos)}</div><div class="bs">serviços entregues à população</div></div>`+
     `<div class="big"><div class="bl">RAs contempladas</div><div class="bv">${k.ras}</div><div class="bs">regiões administrativas</div></div>`+
-    `<div class="big"><div class="bl">Órgãos participantes</div><div class="bv">${k.participantes||k.orgaos}</div><div class="bs">${k.orgaos} com atendimentos medidos · demais com outras entregas</div></div>`;
+    `<div class="big"><div class="bl">Órgãos participantes</div><div class="bv">${k.participantes||k.orgaos}</div><div class="bs">${detalheParticipantes(k)}</div></div>`;
   document.getElementById('hAt').textContent=nf(k.atendimentos);
   document.getElementById('hRas').textContent=k.ras;
   document.getElementById('hUp').textContent=SNAP.atualizado;
