@@ -77,6 +77,23 @@ ESPECIAL = [
     {"orgao": "029 - Casa Militar", "area": "Apoio institucional", "destaque": "apoio à organização das ações"},
 ]
 
+# RAs com edição realizada mas sem atendimentos lançados. Em vez de exibir um
+# "0" — que sugere fracasso ou falta de dado — o painel mostra o motivo.
+# P008 Plano Piloto: a edição entregou obras, não atendimentos em tenda; os
+# números dela estão no Painel de Obras.
+NOTA_RA = {
+    "P008": "só obras",
+}
+
+# Rótulo do cartão "Órgãos participando".
+# Participação = estar presente na ação. Vários órgãos prestam serviço no
+# evento sem ter obrigação de entregar relatório (PMDF, PCDF, CBMDF, entre
+# outros), por isso contar apenas quem entrega relatório subestima o programa.
+# Base do rótulo: cadastro de órgãos da planilha (aba CONTATOS) e a relação de
+# presença impressa distribuída nas edições.
+# Enquanto a aba PRESENCA não existir, este rótulo é fixo e revisado à mão.
+PARTICIPACAO_ROTULO = "+ de 60"
+
 SHEET_ID = "1kYjCiFh8R9EOgnwBMEFR7YtZpO9MvUwDSXRuqH5Lvc4"
 XLSX_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx"
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -166,12 +183,16 @@ def main():
     ras=[]
     for j,cod,ra in ra_cols:
         tot=sum(i["atend"] for o in orgaos_raw for i in o["itens"] if i["cod"]==cod)
-        ras.append({"cod":cod,"ed":int(cod[1:]),"ra":ra,"atend":tot})
+        item={"cod":cod,"ed":int(cod[1:]),"ra":ra,"atend":tot}
+        if tot==0 and cod in NOTA_RA:
+            item["nota"]=NOTA_RA[cod]
+        ras.append(item)
 
     kpis={"atendimentos":sum(o["total"] for o in orgaos_raw),
           "ras":len(ras),  # todas as RAs contempladas (com edição), inclusive as de atendimento 0
           "orgaos":len(orgaos_raw),
-          "participantes":len(participantes)}
+          "participantes":len(participantes),
+          "participacao_rotulo":PARTICIPACAO_ROTULO}
     def _cod(e):
         m=re.match(r"(\d+)",e["orgao"]); return int(m.group(1)) if m else 999
     especial_ord=sorted(ESPECIAL,key=lambda e:(0 if e.get("slu") else 1,_cod(e)))

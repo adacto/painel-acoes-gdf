@@ -53,7 +53,10 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .rb-track{display:block;flex:1;background:var(--pale);border-radius:7px;height:23px;overflow:hidden;min-width:60px}
 .rb-fill{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--pm),var(--bl));min-width:2px;transition:width .5s}
 .rb-val{width:74px;text-align:right;flex:none;font-weight:700;color:var(--pd);font-size:.85rem}
-.rb-zero{color:var(--mut);font-style:italic;font-weight:600}
+.rb-zero{color:var(--mut);font-style:italic;font-weight:600;width:auto;min-width:74px;white-space:nowrap}
+.rb-off .rb-ed{background:#c9c3cf}
+.rb-off .rb-name{color:var(--mut);font-weight:600}
+.rb-off .rb-track{background:#eeeaf1}
 /* card da campeã */
 .champ{display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(135deg,#fff7ea,#fff);border:1.5px solid #eecf96;border-radius:13px;padding:16px 20px;margin:6px 0 14px;cursor:pointer;transition:.14s}
 .champ:hover{box-shadow:0 7px 20px rgba(176,109,0,.18);transform:translateY(-1px)}
@@ -216,7 +219,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="rank" id="rank"></div>
 
   <div class="sec-label" id="espLabel" style="display:none">Participação especial — órgãos com entregas de outra natureza</div>
-  <div class="esp-note" id="espNote" style="display:none">Estes órgãos também estiveram nas ações, com entregas que não se medem em atendimentos a pessoas (zeladoria, fiscalização, cultura, meio ambiente, obras…). Por isso não entram no total de atendimentos: aparecem aqui, com o que cada um entregou.</div>
+  <div class="esp-note" id="espNote" style="display:none">Estes órgãos também estiveram nas ações, com entregas que não se medem em atendimentos a pessoas (zeladoria, fiscalização, cultura, meio ambiente, obras…). Por isso não entram no total de atendimentos — mas ninguém ficou de fora.</div>
   <div class="esp" id="esp"></div>
 
   <div class="footer">
@@ -235,24 +238,12 @@ let curRA='', curQ='';
 
 function setCtx(t){document.getElementById('printCtx').textContent='Recorte: '+t;}
 
-// Abre o KPI "Órgãos participantes" nas suas parcelas, sempre a partir do
-// próprio retrato: medidos + participação especial + os que entregaram
-// relatório mas ainda não foram classificados. A soma fecha com o KPI.
-function detalheParticipantes(k){
-  const esp=(SNAP.especial||[]).length;
-  const tot=k.participantes||k.orgaos;
-  const resto=Math.max(0,tot-k.orgaos-esp);
-  let s=`${k.orgaos} com atendimentos medidos · ${esp} com entregas de outra natureza`;
-  if(resto>0) s+=` · ${resto} com relatório entregue, ainda em classificação`;
-  return s;
-}
-
 function renderBigs(){
   const k=SNAP.kpis;
   document.getElementById('bigs').innerHTML=
     `<div class="big hero"><div class="bl">Total de atendimentos</div><div class="bv">${nf(k.atendimentos)}</div><div class="bs">serviços entregues à população</div></div>`+
     `<div class="big"><div class="bl">RAs contempladas</div><div class="bv">${k.ras}</div><div class="bs">regiões administrativas</div></div>`+
-    `<div class="big"><div class="bl">Órgãos participantes</div><div class="bv">${k.participantes||k.orgaos}</div><div class="bs">${detalheParticipantes(k)}</div></div>`;
+    `<div class="big"><div class="bl">Órgãos participando</div><div class="bv">${k.participacao_rotulo||k.participantes||k.orgaos}</div><div class="bs">presentes nas ações</div></div>`;
   document.getElementById('hAt').textContent=nf(k.atendimentos);
   document.getElementById('hRas').textContent=k.ras;
   document.getElementById('hUp').textContent=SNAP.atualizado;
@@ -264,10 +255,12 @@ function renderRegionBars(){
   const max=Math.max(...RAS.map(r=>r.atend),1);
   document.getElementById('rbars').innerHTML=list.map(r=>{
     const w=Math.max(1,Math.round(r.atend/max*100));
-    return `<div class="rb"><span class="rb-ed">${r.ed}</span>`+
+    const off = r.atend<=0;
+    return `<div class="rb${off?' rb-off':''}"><span class="rb-ed">${r.ed}</span>`+
       `<span class="rb-name">${r.ra}</span>`+
-      `<span class="rb-track"><span class="rb-fill" style="width:${w}%"></span></span>`+
-      (r.atend>0?`<span class="rb-val">${nf(r.atend)}</span>`:`<span class="rb-val rb-zero">0</span>`)+`</div>`;
+      `<span class="rb-track">${off?'':`<span class="rb-fill" style="width:${w}%"></span>`}</span>`+
+      (off?`<span class="rb-val rb-zero">${r.nota||'sem registro'}</span>`
+          :`<span class="rb-val">${nf(r.atend)}</span>`)+`</div>`;
   }).join('');
 }
 
