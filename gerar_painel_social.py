@@ -85,7 +85,7 @@ NOTA_RA = {
     "P008": "só obras",
 }
 
-# Rótulo do cartão "Órgãos participando".
+# Rótulo do cartão "Prestadores de serviços".
 # Participação = estar presente na ação. Vários órgãos prestam serviço no
 # evento sem ter obrigação de entregar relatório (PMDF, PCDF, CBMDF, entre
 # outros), por isso contar apenas quem entrega relatório subestima o programa.
