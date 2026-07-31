@@ -2018,7 +2018,7 @@ function renderBigs(){
   document.getElementById('bigs').innerHTML=
     `<div class="big hero"><div class="bl">Total de atendimentos</div><div class="bv">${nf(k.atendimentos)}</div><div class="bs">serviços entregues à população</div></div>`+
     `<div class="big"><div class="bl">RAs contempladas</div><div class="bv">${k.ras}</div><div class="bs">regiões administrativas</div></div>`+
-    `<div class="big"><div class="bl">Prestadores de serviços</div><div class="bv">${k.participacao_rotulo||k.participantes||k.orgaos}</div><div class="bs">presentes em ações, obras e zeladoria</div></div>`;
+    `<div class="big"><div class="bl">Prestadores de serviços</div><div class="bv">${k.participacao_rotulo||k.participantes||k.orgaos}</div><div class="bs">presentes nos eventos sociais de atendimento à população</div></div>`;
   document.getElementById('hAt').textContent=nf(k.atendimentos);
   document.getElementById('hRas').textContent=k.ras;
   document.getElementById('hUp').textContent=SNAP.atualizado;
