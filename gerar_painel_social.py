@@ -37,11 +37,17 @@ SLU_RAS = [
         {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "25"},
         {"s": "Papa-lixo", "v": "25 operantes"}]},
     {"ra": "26 de Setembro", "ed": 5, "servicos": [
-        {"s": "Remoção de entulho", "v": "45 t"},
-        {"s": "Demais serviços", "v": "leitura em andamento"}]},
+        {"s": "Coleta convencional", "v": "29,5 t"}, {"s": "Remoção de entulho", "v": "45 t"},
+        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "8"},
+        {"s": "Papa-lixo", "v": "5 operantes / 11 mapeados"},
+        {"s": "Varrição e pintura de meio-fio", "v": "sem relatório no Drive"}]},
     {"ra": "Ceilândia", "ed": 6, "servicos": [
-        {"s": "GDF de cara nova", "v": "25% do planejado"},
-        {"s": "Demais serviços", "v": "leitura em andamento"}]},
+        {"s": "Coleta convencional", "v": "2.245,9 t"}, {"s": "Remoção de entulho", "v": "5.383,69 t"},
+        {"s": "Varrição manual", "v": "5.429,23 km (soma dos lançamentos)"},
+        {"s": "Pintura/frisagem de meio-fio", "v": "585,69 km"},
+        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "sem arquivo legível"},
+        {"s": "Papa-lixo", "v": "25 operantes / 24 mapeados"},
+        {"s": "GDF de cara nova", "v": "25% do planejado"}]},
     {"ra": "Planaltina", "ed": 7, "servicos": [
         {"s": "Coleta convencional", "v": "666,1 t"}, {"s": "Remoção de entulho", "v": "703,53 t"},
         {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "22"},
