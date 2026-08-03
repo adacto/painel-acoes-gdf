@@ -2219,8 +2219,7 @@ function openNOVACAP(){
   document.getElementById('modal').innerHTML=
     `<div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>`+
     `<h2>016 - NOVACAP</h2><div class="mh-sub">Serviços urbanos — quantidade de demandas em cada região</div></div>`+
-    `<div class="modal-b">${rows}`+
-    `<div class="esp-note" style="margin-top:14px">Quantidade de <b>demandas registradas</b> por serviço (tapa-buraco, roçagem, poda e outros), conforme o "Relatório de Plano de Ação" da Subsecretaria de Operações nas Cidades. Não são as obras — estas ficam no Painel de Obras — e não entram no ranking de atendimentos a pessoas. Sem auditoria. Regiões ainda não listadas seguem em levantamento.</div></div>`;
+    `<div class="modal-b">${rows}`+`</div>`;
   document.getElementById('ov').classList.add('open');
 }
 renderBigs();renderRegionBars();init();renderRank();renderEspecial();
