@@ -79,6 +79,8 @@ NOVACAP_RAS = [
         {"s": "Tapa-buraco", "v": "179"}, {"s": "Roçagem (mato alto)", "v": "108"},
         {"s": "Poda de árvore", "v": "7"}, {"s": "Ponto de Encontro (PEC)", "v": "7"},
         {"s": "Parque infantil", "v": "7"}, {"s": "Jardim", "v": "3"}]},
+    {"ra": "Paranoá", "ed": 2, "servicos": [
+        {"s": "Tapa-buraco", "v": "28"}]},
 ]
 
 ESPECIAL = [
