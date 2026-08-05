@@ -1666,6 +1666,13 @@ const SNAP = {
    "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."
   },
   {
+   "orgao": "016 - NOVACAP",
+   "area": "Serviços urbanos",
+   "novacap": true,
+   "destaque": "tapa-buraco, roçagem, poda e mais",
+   "nota": "Demandas do Plano de Ação por região (quantidade de registros). Clique para ver o detalhe por região."
+  },
+  {
    "orgao": "003 - SSP",
    "area": "Segurança pública",
    "destaque": "videomonitoramento · 28 veículos"
@@ -2045,7 +2052,49 @@ const SNAP = {
     }
    ]
   }
- ]
+ ],
+ "novacap_ras": [
+ {
+  "ra": "Itapoã",
+  "ed": 1,
+  "servicos": [
+   {
+    "s": "Tapa-buraco",
+    "v": "179"
+   },
+   {
+    "s": "Roçagem (mato alto)",
+    "v": "108"
+   },
+   {
+    "s": "Poda de árvore",
+    "v": "7"
+   },
+   {
+    "s": "Ponto de Encontro (PEC)",
+    "v": "7"
+   },
+   {
+    "s": "Parque infantil",
+    "v": "7"
+   },
+   {
+    "s": "Jardim",
+    "v": "3"
+   }
+  ]
+ },
+ {
+  "ra": "Paranoá",
+  "ed": 2,
+  "servicos": [
+   {
+    "s": "Tapa-buraco",
+    "v": "28"
+   }
+  ]
+ }
+]
 };
 const RAS = SNAP.ras, ORG = SNAP.orgaos;
 const nf = n => (n==null||n==='')?'—':Number(n).toLocaleString('pt-BR');
@@ -2145,8 +2194,8 @@ function renderEspecial(){
   document.getElementById('espLabel').style.display='';
   document.getElementById('espNote').style.display='';
   document.getElementById('esp').innerHTML=c.map(x=>{
-    if(x.slu){
-      return `<div class="er feat" id="sluRow"><span class="er-ic">★</span>`+
+    if(x.slu||x.novacap){
+      return `<div class="er feat" id="${x.slu?'sluRow':'novacapRow'}"><span class="er-ic">★</span>`+
         `<span class="er-main"><span class="er-name">${x.orgao}</span>`+
         `<span class="er-area">${x.area} — ${x.destaque}</span></span>`+
         `<span class="er-cta">Ver por região →</span></div>`;
@@ -2157,6 +2206,7 @@ function renderEspecial(){
       `<span class="er-val">${x.destaque||''}</span></div>`;
   }).join('');
   const s=document.getElementById('sluRow'); if(s)s.onclick=openSLU;
+  const nv=document.getElementById('novacapRow'); if(nv)nv.onclick=openNOVACAP;
 }
 function openSLU(){
   const ras=SNAP.slu_ras||[];
@@ -2168,6 +2218,18 @@ function openSLU(){
     `<h2>018 - SLU</h2><div class="mh-sub">Zeladoria e limpeza urbana — o que fez em cada região</div></div>`+
     `<div class="modal-b">${rows}`+
     `<div class="esp-note" style="margin-top:14px">Serviços com unidades diferentes (toneladas, m², km, unidades). Não se somam num total único nem entram no ranking de atendimentos a pessoas. Números conforme os relatórios da SLU no Drive; sem auditoria. 26 de Setembro e Ceilândia com leitura ainda parcial.</div></div>`;
+  document.getElementById('ov').classList.add('open');
+}
+function openNOVACAP(){
+  const ras=SNAP.novacap_ras||[];
+  const rows=ras.length?ras.map(r=>
+    `<div class="sr"><div class="sr-ra"><span class="sr-ed">${r.ed}</span>${r.ra}</div>`+
+    `<div class="sr-svcs">${r.servicos.map(v=>`<span class="sv">${v.s} <b>${v.v}</b></span>`).join('')}</div></div>`).join('')
+    :`<div class="sr"><div class="sr-ra">—</div><div class="sr-svcs">levantamento em andamento</div></div>`;
+  document.getElementById('modal').innerHTML=
+    `<div class="modal-h"><button class="modal-x" onclick="closeModal()">✕</button>`+
+    `<h2>016 - NOVACAP</h2><div class="mh-sub">Serviços urbanos — quantidade de demandas em cada região</div></div>`+
+    `<div class="modal-b">${rows}`+`</div>`;
   document.getElementById('ov').classList.add('open');
 }
 renderBigs();renderRegionBars();init();renderRank();renderEspecial();

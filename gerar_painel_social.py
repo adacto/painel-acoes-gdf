@@ -67,10 +67,29 @@ SLU_RAS = [
         {"s": "Papa-lixo", "v": "12 operantes"}, {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
 ]
 
+# NOVACAP — SERVIÇOS urbanos (tapa-buraco, roçagem/mato alto, poda, PEC...).
+# NÃO são as obras (essas ficam no painel de obras): aqui é o VOLUME DE
+# DEMANDAS do Plano de Ação por RA. Fonte: "RELATÓRIO DE PLANO DE AÇÃO"
+# (Subsecretaria de Operações nas Cidades) — o cabeçalho de cada PDF traz
+# "Total de registros | RA | Ativ.", que é de onde sai cada número aqui.
+# ⚠️ Só Itapoã conferido até agora; completar as demais RAs conforme os
+#    relatórios forem lidos (uma entrada por RA, mesmo formato do SLU).
+NOVACAP_RAS = [
+    {"ra": "Itapoã", "ed": 1, "servicos": [
+        {"s": "Tapa-buraco", "v": "179"}, {"s": "Roçagem (mato alto)", "v": "108"},
+        {"s": "Poda de árvore", "v": "7"}, {"s": "Ponto de Encontro (PEC)", "v": "7"},
+        {"s": "Parque infantil", "v": "7"}, {"s": "Jardim", "v": "3"}]},
+    {"ra": "Paranoá", "ed": 2, "servicos": [
+        {"s": "Tapa-buraco", "v": "28"}]},
+]
+
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
      "destaque": "coleta, entulho, varrição, catação e mais", "slu": True,
      "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."},
+    {"orgao": "016 - NOVACAP", "area": "Serviços urbanos", "novacap": True,
+     "destaque": "tapa-buraco, roçagem, poda e mais",
+     "nota": "Demandas do Plano de Ação por região (quantidade de registros). Clique para ver o detalhe por região."},
     {"orgao": "013 - DFLEGAL", "area": "Fiscalização (DF Legal)", "destaque": "386 ações fiscais · 6 RAs"},
     {"orgao": "048 - SERINTER", "area": "Relações internacionais", "destaque": "19 embaixadas"},
     {"orgao": "039 - SEAGRI", "area": "Agricultura", "destaque": "estradas rurais e roçagem (km/m²)"},
@@ -201,9 +220,11 @@ def main():
           "participacao_rotulo":PARTICIPACAO_ROTULO}
     def _cod(e):
         m=re.match(r"(\d+)",e["orgao"]); return int(m.group(1)) if m else 999
-    especial_ord=sorted(ESPECIAL,key=lambda e:(0 if e.get("slu") else 1,_cod(e)))
+    # ordem: SLU primeiro, NOVACAP logo abaixo (os dois com detalhe por região),
+    # depois os demais por código.
+    especial_ord=sorted(ESPECIAL,key=lambda e:(0 if e.get("slu") else 1 if e.get("novacap") else 2,_cod(e)))
     snap={"atualizado":atualizado,"kpis":kpis,"ras":ras,"orgaos":orgaos_raw,
-          "especial":especial_ord,"slu_ras":SLU_RAS}
+          "especial":especial_ord,"slu_ras":SLU_RAS,"novacap_ras":NOVACAP_RAS}
 
     tpl=open(TEMPLATE,encoding="utf-8").read()
     open(OUT,"w",encoding="utf-8").write(tpl.replace("__SNAP_JSON__",json.dumps(snap,ensure_ascii=False,indent=1)))
