@@ -150,9 +150,10 @@ def carregar_extras():
                 if len(p) < 4:
                     continue
                 cod, ra, org, v = p[0].upper(), p[1], p[2], num(p[3])
+                url = p[4] if len(p) > 4 and p[4].startswith("http") else None
                 if not re.match(r"^P0\d\d$", cod) or v <= 0 or not org:
                     continue
-                out.setdefault((cod, bonito(ra)), {})[org] = v
+                out.setdefault((cod, bonito(ra)), {})[org] = (v, url)
     except Exception as e:
         print(f"Aviso: nao consegui ler {os.path.basename(EXTRA_FILE)} ({e}). Seguindo so com a aba.")
         return {}
@@ -231,13 +232,15 @@ def main():
             print(f"{cod} ja tem coluna na aba ACOES_SOCIAIS — extra ignorado (pode apagar do CSV).")
             continue
         ra_cols.append((None, cod, ra))
-        for org, v in itens.items():
+        for org, (v, url_csv) in itens.items():
             alvo = next((o for o in orgaos_raw if o["n"] == org), None)
             if alvo is None:
                 alvo = {"n": org, "total": 0, "itens": []}
                 orgaos_raw.append(alvo)
+            # a aba Entregues tem preferencia; o link do CSV cobre a edicao que
+            # a varredura ainda nao enxerga (ver EDICOES_OCULTAS no Apps Script)
             alvo["itens"].append({"cod": cod, "ra": ra, "ed": int(cod[1:]), "atend": v,
-                                  "url": link.get((cod, org))})
+                                  "url": link.get((cod, org)) or url_csv})
             alvo["total"] += v
         print(f"{cod} {ra}: {len(itens)} orgaos vindos do CSV extra (a aba ainda nao tem a coluna).")
 
