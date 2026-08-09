@@ -87,8 +87,14 @@ ESPECIAL = [
 # "0" — que sugere fracasso ou falta de dado — o painel mostra o motivo.
 # P008 Plano Piloto: a edição entregou obras, não atendimentos em tenda; os
 # números dela estão no Painel de Obras.
+# P011 Cidade Estrutural: edição de 27 a 31/07/2026, com 17 órgãos já entregues
+# no Drive (ver P011_ENTREGAS_CIDADE_ESTRUTURAL.md). Só falta apurar os totais e
+# lançá-los na aba ACOES_SOCIAIS. A nota é inerte enquanto a coluna
+# "P011 CIDADE ESTRUTURAL" não existir na matriz, e some sozinha assim que o
+# primeiro número entrar — some porque o painel só usa NOTA_RA quando o total é 0.
 NOTA_RA = {
     "P008": "só obras",
+    "P011": "relatórios entregues — apuração em curso",
 }
 
 # Rótulo do cartão "Prestadores de serviços".

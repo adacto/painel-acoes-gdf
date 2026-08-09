@@ -15,10 +15,25 @@ Cada painel tem um botão no cabeçalho para o outro.
 
 Da planilha **Monitoramento GDF na Sua Porta**, nas abas que o **Apps Script mantém vivas** varrendo o Google Drive:
 
-- **Ações Sociais:** matriz órgão × RA = total de atendimentos. Os números saem **de dentro dos relatórios de cada órgão** (links da aba Entregues), somando as sub-áreas — o método validado com a SES (SAIS+SUSAM+SVS). Hoje o gerador usa o arquivo `ACOES_SOCIAIS_modelo.xlsx`; quando a equipe criar a aba `ACOES_SOCIAIS` na planilha, o gerador passa a lê-la automaticamente.
+- **Ações Sociais:** matriz órgão × RA = total de atendimentos. Os números saem **de dentro dos relatórios de cada órgão** (links da aba Entregues), somando as sub-áreas — o método validado com a SES (SAIS+SUSAM+SVS). A aba `ACOES_SOCIAIS` **já existe na planilha e é ela que o gerador lê**; o `ACOES_SOCIAIS_modelo.xlsx` local ficou como fallback, usado só se a aba sumir.
 - **Cobertura:** abas `Resumo`, `Painel`, `Entregues`, `CONFIG`. A aba `INDICADORES` **não é usada**.
 
 > Os números de Ações Sociais são um **levantamento-rascunho**, sem auditoria dos órgãos. Ressalvas em `ACOES_SOCIAIS_levantamento_NOTAS.md`.
+
+### RA nova entra sem mexer em código
+
+O gerador descobre as RAs pelo cabeçalho da matriz: **toda coluna no padrão `P0dd NOME` vira
+uma RA no painel**. Para uma edição nova aparecer, basta criar a coluna na aba `ACOES_SOCIAIS`
+e preencher os números.
+
+> ⚠️ **`EDICOES_OCULTAS` (Apps Script) não afeta estes números.** Ela desliga a edição na
+> varredura do Drive, o que esvazia `Entregues`/`Painel`/`Pendentes` — logo atinge o painel de
+> **Cobertura** e o *link* do relatório de cada órgão, não o total de atendimentos. Uma RA pode
+> aparecer no painel de Ações Sociais mesmo com a varredura desligada para ela.
+
+Caso concreto em aberto: **P011 Cidade Estrutural** (edição de 27 a 31/07/2026) — 17 órgãos já
+entregaram no Drive, mas a RA está oculta na varredura e ainda não tem coluna na matriz. A lista
+das entregas, com links, está em `P011_ENTREGAS_CIDADE_ESTRUTURAL.md`.
 
 ## Arquivos
 
