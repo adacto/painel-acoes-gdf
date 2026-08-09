@@ -1,0 +1,18 @@
+# PONTE TEMPORÁRIA — edições que ainda não têm coluna na aba ACOES_SOCIAIS da planilha.
+# Assim que a coluna "P011 CIDADE ESTRUTURAL" existir na aba, a planilha passa a mandar
+# e este arquivo é ignorado (o gerador avisa no console). Apague-o quando isso acontecer.
+#
+# Apuração de 09/08/2026, feita lendo os relatórios entregues no Drive pelos órgãos.
+# Formato: cod;ra;orgao;atendimentos   (o nome do órgão precisa bater com a coluna Orgao da aba)
+cod;ra;orgao;atendimentos
+P011;CIDADE ESTRUTURAL;001 - SES;9896
+P011;CIDADE ESTRUTURAL;021 - Na Hora;2287
+P011;CIDADE ESTRUTURAL;010 - DETRAN;1720
+P011;CIDADE ESTRUTURAL;040 - CODHAB;498
+P011;CIDADE ESTRUTURAL;034 - Atendimento a Comunidade;301
+P011;CIDADE ESTRUTURAL;004 - SEDES;277
+P011;CIDADE ESTRUTURAL;027 - Ouvidoria Geral;94
+P011;CIDADE ESTRUTURAL;036 - SEL;56
+P011;CIDADE ESTRUTURAL;030 - Juventude;50
+P011;CIDADE ESTRUTURAL;044 - Família;39
+P011;CIDADE ESTRUTURAL;009 - SEMOB;6
