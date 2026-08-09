@@ -87,14 +87,13 @@ ESPECIAL = [
 # "0" — que sugere fracasso ou falta de dado — o painel mostra o motivo.
 # P008 Plano Piloto: a edição entregou obras, não atendimentos em tenda; os
 # números dela estão no Painel de Obras.
-# P011 Cidade Estrutural: edição de 27 a 31/07/2026, com 17 órgãos já entregues
-# no Drive (ver P011_ENTREGAS_CIDADE_ESTRUTURAL.md). Só falta apurar os totais e
-# lançá-los na aba ACOES_SOCIAIS. A nota é inerte enquanto a coluna
-# "P011 CIDADE ESTRUTURAL" não existir na matriz, e some sozinha assim que o
-# primeiro número entrar — some porque o painel só usa NOTA_RA quando o total é 0.
+# P011 Cidade Estrutural: edição de 27 a 31/07/2026. Os números já vêm apurados
+# pelo ACOES_SOCIAIS_extra.csv, então esta nota fica só como rede de segurança —
+# se alguém apagar o CSV antes de a coluna entrar na aba, a RA aparece com o
+# motivo em vez de um "0". NOTA_RA só é usada quando o total da RA é 0.
 NOTA_RA = {
     "P008": "só obras",
-    "P011": "relatórios entregues — apuração em curso",
+    "P011": "aguardando lançamento",
 }
 
 # Rótulo do cartão "Prestadores de serviços".
@@ -112,6 +111,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(HERE, "template_social.html")
 OUT = os.path.join(HERE, "index.html")
 MATRIX_FILE = os.path.join(HERE, "ACOES_SOCIAIS_modelo.xlsx")  # usado se a aba não existir
+EXTRA_FILE  = os.path.join(HERE, "ACOES_SOCIAIS_extra.csv")   # ponte p/ edição sem coluna na aba
 
 _MIN={"de","da","do","das","dos","e"}; _ROM={"ii","iii","iv","v","vi","vii","viii","ix","x","xi"}
 def bonito(nome):
@@ -129,6 +129,34 @@ def num(v):
 def data_br(v):
     s=str(v or ""); m=re.match(r"(\d{4})-(\d{2})-(\d{2})",s)
     return f"{m.group(3)}/{m.group(2)}/{m.group(1)}" if m else s
+
+def carregar_extras():
+    """Ponte temporária para edição já apurada que ainda não tem coluna na aba
+    ACOES_SOCIAIS. Devolve {(cod, ra): {orgao: atendimentos}}.
+
+    A planilha continua sendo a fonte: se o código já existir como coluna na
+    matriz, o extra é ignorado (com aviso). Some sozinho quando a coluna entrar.
+    Qualquer problema de leitura vira aviso — nunca derruba o gerador."""
+    if not os.path.exists(EXTRA_FILE):
+        return {}
+    out = {}
+    try:
+        with open(EXTRA_FILE, encoding="utf-8") as f:
+            for linha in f:
+                linha = linha.strip()
+                if not linha or linha.startswith("#") or linha.lower().startswith("cod;"):
+                    continue
+                p = [x.strip() for x in linha.split(";")]
+                if len(p) < 4:
+                    continue
+                cod, ra, org, v = p[0].upper(), p[1], p[2], num(p[3])
+                if not re.match(r"^P0\d\d$", cod) or v <= 0 or not org:
+                    continue
+                out.setdefault((cod, bonito(ra)), {})[org] = v
+    except Exception as e:
+        print(f"Aviso: nao consegui ler {os.path.basename(EXTRA_FILE)} ({e}). Seguindo so com a aba.")
+        return {}
+    return out
 
 def url_hyperlink(cell):
     v=cell.value
@@ -188,6 +216,23 @@ def main():
                               "url":link.get((cod,org))})
         if itens:
             orgaos_raw.append({"n":org,"total":sum(i["atend"] for i in itens),"itens":itens})
+
+    # edições já apuradas que ainda não viraram coluna na aba (ver carregar_extras)
+    ja_na_aba = {cod for _, cod, _ in ra_cols}
+    for (cod, ra), itens in sorted(carregar_extras().items()):
+        if cod in ja_na_aba:
+            print(f"{cod} ja tem coluna na aba ACOES_SOCIAIS — extra ignorado (pode apagar do CSV).")
+            continue
+        ra_cols.append((None, cod, ra))
+        for org, v in itens.items():
+            alvo = next((o for o in orgaos_raw if o["n"] == org), None)
+            if alvo is None:
+                alvo = {"n": org, "total": 0, "itens": []}
+                orgaos_raw.append(alvo)
+            alvo["itens"].append({"cod": cod, "ra": ra, "ed": int(cod[1:]), "atend": v,
+                                  "url": link.get((cod, org))})
+            alvo["total"] += v
+        print(f"{cod} {ra}: {len(itens)} orgaos vindos do CSV extra (a aba ainda nao tem a coluna).")
 
     orgaos_raw.sort(key=lambda o:-o["total"])
 

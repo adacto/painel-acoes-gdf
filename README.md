@@ -31,9 +31,15 @@ e preencher os números.
 > **Cobertura** e o *link* do relatório de cada órgão, não o total de atendimentos. Uma RA pode
 > aparecer no painel de Ações Sociais mesmo com a varredura desligada para ela.
 
-Caso concreto em aberto: **P011 Cidade Estrutural** (edição de 27 a 31/07/2026) — 17 órgãos já
-entregaram no Drive, mas a RA está oculta na varredura e ainda não tem coluna na matriz. A lista
-das entregas, com links, está em `P011_ENTREGAS_CIDADE_ESTRUTURAL.md`.
+Enquanto a coluna não existe, o **`ACOES_SOCIAIS_extra.csv`** faz a ponte: o gerador lê dele as
+edições já apuradas que ainda não estão na aba, e **ignora sozinho** (com aviso no console) qualquer
+edição que já tenha coluna na planilha — a aba sempre manda. É um arquivo temporário: quando os
+números entrarem na planilha, apague.
+
+Caso concreto em aberto: **P011 Cidade Estrutural** (edição de 27 a 31/07/2026) — 17 órgãos
+entregaram no Drive e os relatórios já foram apurados (**15.224 atendimentos em 11 órgãos**), mas a
+RA segue oculta na varredura e sem coluna na matriz. A apuração órgão a órgão, o método e as
+ressalvas estão em `P011_ENTREGAS_CIDADE_ESTRUTURAL.md`.
 
 ## Arquivos
 
@@ -41,7 +47,8 @@ das entregas, com links, está em `P011_ENTREGAS_CIDADE_ESTRUTURAL.md`.
 - `template_social.html` / `template.html` — moldes dos geradores (não publicar sozinhos).
 - `gerar_painel_social.py` — regrava o `index.html` (Ações Sociais).
 - `gerar_painel_acoes.py` — regrava o `cobertura.html` (Cobertura).
-- `ACOES_SOCIAIS_modelo.xlsx` — matriz de atendimentos (fonte do painel de Ações Sociais).
+- `ACOES_SOCIAIS_modelo.xlsx` — matriz de atendimentos (fallback, se a aba sumir).
+- `ACOES_SOCIAIS_extra.csv` — ponte temporária para edição apurada mas ainda sem coluna na aba.
 - `vercel.json` — configuração de publicação (`cleanUrls`, então `/cobertura` funciona).
 
 ## Como atualizar (snapshot + republicar)
