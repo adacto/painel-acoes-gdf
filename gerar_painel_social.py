@@ -167,8 +167,15 @@ def url_hyperlink(cell):
 
 def main():
     import openpyxl
-    print("Baixando planilha…")
-    data=urllib.request.urlopen(urllib.request.Request(XLSX_URL,headers={"User-Agent":"Mozilla/5.0"}),timeout=60).read()
+    # PLANILHA_LOCAL=caminho.xlsx usa uma copia ja baixada em vez de buscar na rede.
+    # Serve para maquina sem acesso ao docs.google.com. Sem a variavel, baixa normal.
+    local = os.environ.get("PLANILHA_LOCAL")
+    if local:
+        print(f"Usando copia local da planilha: {local}")
+        data = open(local, "rb").read()
+    else:
+        print("Baixando planilha…")
+        data=urllib.request.urlopen(urllib.request.Request(XLSX_URL,headers={"User-Agent":"Mozilla/5.0"}),timeout=60).read()
     wb=openpyxl.load_workbook(io.BytesIO(data),data_only=True)
     wf=openpyxl.load_workbook(io.BytesIO(data),data_only=False)
 

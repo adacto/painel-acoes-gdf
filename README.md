@@ -59,4 +59,10 @@ python3 gerar_painel_social.py  # regrava index.html (Ações Sociais)
 python3 gerar_painel_acoes.py   # regrava cobertura.html (Cobertura)
 ```
 
+Em máquina sem acesso ao `docs.google.com`, baixe a planilha como `.xlsx` e aponte para ela:
+
+```bash
+PLANILHA_LOCAL=/caminho/planilha.xlsx python3 gerar_painel_social.py
+```
+
 Depois `git push` — o Vercel republica sozinho a cada push.
