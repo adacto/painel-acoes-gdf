@@ -3,16 +3,20 @@
 # e este arquivo é ignorado (o gerador avisa no console). Apague-o quando isso acontecer.
 #
 # Apuração de 09/08/2026, feita lendo os relatórios entregues no Drive pelos órgãos.
-# Formato: cod;ra;orgao;atendimentos   (o nome do órgão precisa bater com a coluna Orgao da aba)
-cod;ra;orgao;atendimentos
-P011;CIDADE ESTRUTURAL;001 - SES;9896
-P011;CIDADE ESTRUTURAL;021 - Na Hora;2287
-P011;CIDADE ESTRUTURAL;010 - DETRAN;1720
-P011;CIDADE ESTRUTURAL;040 - CODHAB;498
-P011;CIDADE ESTRUTURAL;034 - Atendimento a Comunidade;301
-P011;CIDADE ESTRUTURAL;004 - SEDES;277
-P011;CIDADE ESTRUTURAL;027 - Ouvidoria Geral;94
-P011;CIDADE ESTRUTURAL;036 - SEL;56
-P011;CIDADE ESTRUTURAL;030 - Juventude;50
-P011;CIDADE ESTRUTURAL;044 - Família;39
-P011;CIDADE ESTRUTURAL;009 - SEMOB;6
+# O link é o relatório que gerou o número — vira o botão "relatório" no painel. Normalmente
+# ele viria da aba Entregues; enquanto a P011 estiver em EDICOES_OCULTAS, a varredura não
+# preenche essa aba e o link sai daqui. Se a aba tiver o link, ela tem preferência.
+#
+# Formato: cod;ra;orgao;atendimentos;link   (o nome do órgão precisa bater com a coluna Orgao)
+cod;ra;orgao;atendimentos;link
+P011;CIDADE ESTRUTURAL;001 - SES;9896;https://docs.google.com/spreadsheets/d/1BngheU7HJoYC0lNZgh0LilHLi2AjKwjcuwZ1MB80u7k/edit
+P011;CIDADE ESTRUTURAL;021 - Na Hora;2287;https://drive.google.com/file/d/1KH7Weoz8Qf2oT38dcPEGWM6rhtxuSKaT/view
+P011;CIDADE ESTRUTURAL;010 - DETRAN;1720;https://drive.google.com/file/d/1co0gqyTNDoc18jlMoi9UZbCp-3Z3Q_dy/view
+P011;CIDADE ESTRUTURAL;040 - CODHAB;498;https://drive.google.com/file/d/1AFD3yKnQvW1Rd_4IhGForIMXkbfXv19g/view
+P011;CIDADE ESTRUTURAL;034 - Atendimento a Comunidade;301;https://drive.google.com/file/d/1UGaKYGMV5264kk8B1LKgJ4_0lxa0m0Yn/view
+P011;CIDADE ESTRUTURAL;004 - SEDES;277;https://docs.google.com/spreadsheets/d/1GxpMyOfM4TRl5uXdTqUAU04aecEY7O6J3N6vJ79EeQM/edit
+P011;CIDADE ESTRUTURAL;027 - Ouvidoria Geral;94;https://drive.google.com/file/d/1w6NH1J5UDkhbmpc9oD1IC5u9RdK77qdf/view
+P011;CIDADE ESTRUTURAL;036 - SEL;56;https://drive.google.com/file/d/1MraW5v2Yp5nlFBhGBaRnRsb58TW4pMq-/view
+P011;CIDADE ESTRUTURAL;030 - Juventude;50;https://drive.google.com/file/d/1ODbIMgMV7pHJBPOYzvbU7t5pxAxkEt7m/view
+P011;CIDADE ESTRUTURAL;044 - Família;39;https://drive.google.com/file/d/1EBJ-nNk8fc0yXOmU7H2oqBzUKLyFpGbm/view
+P011;CIDADE ESTRUTURAL;009 - SEMOB;6;https://drive.google.com/file/d/140QUrNrWOEAGfT9Xr9dfAURjLz4PhfOU/view
