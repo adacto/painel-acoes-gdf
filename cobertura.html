@@ -148,27 +148,38 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
    painel e outro deixa de parecer a mesma barra e volta a parecer três sites
    diferentes — que é o problema que ela existe para resolver. */
 .abas{border-top:1px solid #E6ECF2;border-bottom:1px solid #E6ECF2;background:#F7F9FC}
-.abas-in{max-width:1160px;margin:0 auto;padding:0 24px;display:flex;
+.abas-in{max-width:1160px;margin:0 auto;padding:7px 24px 0;display:flex;gap:7px;
   overflow-x:auto;scrollbar-width:none}
 .abas-in::-webkit-scrollbar{display:none}
-.abas .aba{display:flex;flex-direction:column;gap:1px;padding:9px 18px 8px;
-  text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;
+.abas .aba{display:flex;flex-direction:column;gap:2px;padding:11px 22px 10px;
+  text-decoration:none;white-space:nowrap;border-radius:8px 8px 0 0;
+  border-bottom:4px solid transparent;
   transition:color .15s,background .15s,border-color .15s}
-.abas .aba:first-child{padding-left:0}
-.abas .aba b{font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;font-size:13.5px;
-  font-weight:650;letter-spacing:-.01em;color:#3D4E5C;transition:color .15s}
-.abas .aba span{font-family:ui-monospace,Consolas,monospace;font-size:9.5px;
-  letter-spacing:.1em;text-transform:uppercase;color:#6A7C8A}
-.abas .aba:hover{background:#DBEDF9}
-.abas .aba:hover b{color:#0071bb}
-/* a aba aberta é a única com cor de tinta cheia e régua embaixo */
-.abas .aba[aria-current="page"]{border-bottom-color:#0071bb;background:#fff}
-.abas .aba[aria-current="page"] b{color:#0071bb}
-.abas .aba[aria-current="page"] span{color:#0098d9}
+.abas .aba b{font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;font-size:16.5px;
+  font-weight:700;letter-spacing:-.02em;transition:color .15s}
+.abas .aba span{font-family:ui-monospace,Consolas,monospace;font-size:10px;
+  letter-spacing:.11em;text-transform:uppercase;opacity:.72}
+/* Cada painel tem a sua cor, e ela é a mesma nos três repositórios: azul nas
+   estruturantes, roxo no Sua Porta, ouro nas ações sociais. A cor cheia vale
+   inclusive para a aba fechada — as duas fechadas são as que precisam ser
+   notadas, porque são elas que levam a algum lugar. */
+.abas .aba-estr b,.abas .aba-estr span{color:#0071bb}
+.abas .aba-porta b,.abas .aba-porta span{color:#702281}
+.abas .aba-acoes b,.abas .aba-acoes span{color:#A25C00}
+.abas .aba-estr:hover{background:#DBEDF9}
+.abas .aba-porta:hover{background:#F1E7F5}
+.abas .aba-acoes:hover{background:#FBF3D5}
+/* a aba aberta ganha fundo cheio e régua grossa na própria cor */
+.abas .aba[aria-current="page"]{background:#fff}
+.abas .aba-estr[aria-current="page"]{border-bottom-color:#0071bb}
+.abas .aba-porta[aria-current="page"]{border-bottom-color:#702281}
+.abas .aba-acoes[aria-current="page"]{border-bottom-color:#f4a100}
+.abas .aba[aria-current="page"] span{opacity:1}
 @media(max-width:560px){
-  .abas .aba{padding:8px 13px 7px}
-  .abas .aba:first-child{padding-left:0}
-  .abas .aba b{font-size:12.5px}
+  .abas-in{gap:4px;padding-top:5px}
+  .abas .aba{padding:9px 14px 8px}
+  .abas .aba b{font-size:14.5px}
+  .abas .aba span{font-size:9px;letter-spacing:.08em}
 }
 /* no papel a barra não diz nada: o que foi impresso é uma tela só */
 @media print{.abas{display:none!important}}
@@ -199,9 +210,9 @@ input[type=search]{min-width:230px;background-image:url("data:image/svg+xml,%3Cs
      cabeçalho. -->
 <nav class="abas" aria-label="Painéis de acompanhamento do GDF">
   <div class="abas-in">
-    <a class="aba" href="https://painel-grandes-obras-gdf.vercel.app/"><b>Obras Estruturantes</b><span>Carteira do DF ↗</span></a>
-    <a class="aba" href="https://painel-obras-gdf.vercel.app/"><b>GDF na Sua Porta</b><span>Obras das RAs ↗</span></a>
-    <a class="aba" href="/" aria-current="page"><b>Ações Sociais</b><span>Atendimentos</span></a>
+    <a class="aba aba-estr" href="https://painel-grandes-obras-gdf.vercel.app/"><b>Obras Estruturantes</b><span>Carteira do DF ↗</span></a>
+    <a class="aba aba-porta" href="https://painel-obras-gdf.vercel.app/"><b>GDF na Sua Porta</b><span>Obras das RAs ↗</span></a>
+    <a class="aba aba-acoes" href="/" aria-current="page"><b>Ações Sociais</b><span>Atendimentos</span></a>
   </div>
 </nav>
 <div class="wrap">
