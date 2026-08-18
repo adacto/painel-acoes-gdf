@@ -66,3 +66,22 @@ PLANILHA_LOCAL=/caminho/planilha.xlsx python3 gerar_painel_social.py
 ```
 
 Depois `git push` — o Vercel republica sozinho a cada push.
+
+## Atualização automática
+
+Isto roda sozinho desde 18/08/2026 — o passo manual acima virou exceção, para quando
+você quiser publicar na hora.
+
+```
+Drive  --(Apps Script, gatilho diário 7h)-->  planilha  --(GitHub Action, 7h30)-->  painéis
+```
+
+O workflow `.github/workflows/atualizar-paineis.yml` roda os dois geradores todo dia às
+7h30 de Brasília — meia hora depois do gatilho do Apps Script, para a varredura do Drive
+já ter reescrito as abas — e só commita se algum número mudou. Dá para disparar à mão
+pela aba **Actions → Atualizar painéis → Run workflow**.
+
+> ⚠️ **O workflow depende da planilha continuar acessível por link.** Ele baixa o `.xlsx`
+> pela URL de export, sem autenticação. "Qualquer pessoa com o link: **leitor**" basta e é
+> o recomendado. Se a planilha for para **Restrito**, o workflow quebra — e o sintoma será
+> o painel parar de atualizar em silêncio, com a planilha em dia.

@@ -1,0 +1,51 @@
+# Republica os dois painéis a partir da planilha de monitoramento.
+#
+# Fecha o único trecho manual da cadeia:
+#   Drive --(Apps Script, gatilho diário 7h)--> planilha --(ESTE workflow)--> painéis
+#
+# Antes disso alguém precisava rodar os geradores na mão e dar push; sem isso
+# o painel congelava enquanto a planilha seguia em dia.
+name: Atualizar painéis
+
+on:
+  schedule:
+    # 10:30 UTC = 7h30 de Brasília — meia hora depois do gatilho do Apps Script,
+    # para a varredura do Drive já ter terminado de reescrever as abas.
+    - cron: '30 10 * * *'
+  workflow_dispatch:        # permite rodar à mão pela aba Actions
+
+concurrency:
+  group: atualizar-paineis  # nunca duas execuções escrevendo no repo ao mesmo tempo
+  cancel-in-progress: false
+
+permissions:
+  contents: write           # necessário para commitar o HTML regerado
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install --quiet openpyxl
+
+      - name: Regerar os painéis
+        run: |
+          python3 gerar_painel_social.py
+          python3 gerar_painel_acoes.py
+
+      - name: Publicar se algo mudou
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html cobertura.html
+          if git diff --cached --quiet; then
+            echo "Planilha sem novidade — nada a publicar."
+            exit 0
+          fi
+          git commit -m "Painéis atualizados automaticamente ($(TZ=America/Sao_Paulo date '+%d/%m/%Y %H:%M'))"
+          git push
