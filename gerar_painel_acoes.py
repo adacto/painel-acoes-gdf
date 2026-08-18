@@ -62,9 +62,16 @@ def main():
     except ImportError:
         sys.exit("Instale openpyxl:  pip install openpyxl")
 
-    print("Baixando planilha de monitoramento…")
-    req = urllib.request.Request(XLSX_URL, headers={"User-Agent": "Mozilla/5.0"})
-    data = urllib.request.urlopen(req, timeout=60).read()
+    # PLANILHA_LOCAL=caminho.xlsx usa uma copia ja baixada em vez de buscar na
+    # rede — mesma variavel do gerar_painel_social.py. Sem ela, baixa normal.
+    local = os.environ.get("PLANILHA_LOCAL")
+    if local:
+        print(f"Usando copia local da planilha: {local}")
+        data = open(local, "rb").read()
+    else:
+        print("Baixando planilha de monitoramento…")
+        req = urllib.request.Request(XLSX_URL, headers={"User-Agent": "Mozilla/5.0"})
+        data = urllib.request.urlopen(req, timeout=60).read()
     wb_v = openpyxl.load_workbook(io.BytesIO(data), data_only=True)   # valores
     wb_f = openpyxl.load_workbook(io.BytesIO(data), data_only=False)  # formulas (links)
 
