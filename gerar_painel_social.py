@@ -65,6 +65,29 @@ SLU_RAS = [
     {"ra": "Recanto das Emas", "ed": 10, "servicos": [
         {"s": "Coleta convencional", "v": "229,15 t"}, {"s": "Catação", "v": "720 m²"},
         {"s": "Papa-lixo", "v": "12 operantes"}, {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
+    {"ra": "Cidade Estrutural", "ed": 11, "servicos": [
+        {"s": "Coleta convencional", "v": "193,31 t"}, {"s": "Catação", "v": "600 m²"},
+        {"s": "Varrição manual", "v": "255,28 km (soma dos lançamentos)"},
+        {"s": "Pintura/frisagem de meio-fio", "v": "7,32 km (soma dos lançamentos)"},
+        {"s": "Papa-lixo", "v": "10 operantes / 30 mapeados"},
+        {"s": "Coleta seletiva", "v": "3 circuitos, sem tonelagem no arquivo"}]},
+    {"ra": "Sobradinho", "ed": 12, "servicos": [
+        {"s": "Coleta convencional", "v": "338,41 t"}, {"s": "Catação", "v": "600 m²"},
+        {"s": "Varrição manual", "v": "570,60 km (soma dos lançamentos)"},
+        {"s": "Pintura/frisagem de meio-fio", "v": "20,86 km (soma dos lançamentos)"},
+        {"s": "Papa-lixo", "v": "22 operantes / 8 mapeados"},
+        {"s": "Coleta seletiva", "v": "10 circuitos, sem tonelagem no arquivo"}]},
+    {"ra": "Sobradinho II", "ed": 12, "servicos": [
+        {"s": "Coleta convencional", "v": "340,68 t"}, {"s": "Catação", "v": "600 m²"},
+        {"s": "Varrição manual", "v": "265,28 km (soma dos lançamentos)"},
+        {"s": "Pintura de meio-fio", "v": "18,98 km (soma dos lançamentos)"},
+        {"s": "Papa-lixo", "v": "8 operantes / 11 mapeados"},
+        {"s": "Coleta seletiva", "v": "2 circuitos, sem tonelagem no arquivo"}]},
+    {"ra": "Sol Nascente", "ed": 13, "servicos": [
+        {"s": "Varrição manual", "v": "281,34 km (soma dos lançamentos)"},
+        {"s": "Frisagem e pintura de meio-fio", "v": "63,61 km (soma dos lançamentos)"},
+        {"s": "Papa-lixo", "v": "24 operantes / 48 mapeados"},
+        {"s": "Coleta convencional", "v": "pasta ainda sem arquivo no Drive"}]},
 ]
 
 ESPECIAL = [
