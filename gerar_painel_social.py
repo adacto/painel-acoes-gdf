@@ -117,6 +117,8 @@ ESPECIAL = [
 NOTA_RA = {
     "P008": "só obras",
     "P011": "aguardando lançamento",
+    "P014": "só obras",
+    "P015": "só obras",
 }
 
 # Rótulo do cartão "Prestadores de serviços".
