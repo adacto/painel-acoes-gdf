@@ -19,6 +19,9 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .hdr-meta{text-align:right;color:#fff}
 .hdr-status{display:flex;align-items:center;gap:7px;justify-content:flex-end;font-size:.76rem;color:rgba(255,255,255,.9)}
 .dot{width:8px;height:8px;border-radius:50%;background:#c9b6dd;box-shadow:0 0 0 3px rgba(201,182,221,.25)}
+.dot.stale{background:#ffb020;box-shadow:0 0 0 3px rgba(255,176,32,.32)}
+.hdr-aviso{display:none;margin-top:7px;font-size:.68rem;font-weight:800;color:#3a1500;background:#ffc94d;border:1px solid #e0a800;padding:4px 10px;border-radius:7px}
+.hdr-aviso.on{display:inline-block}
 .hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
 .nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
 .nav-switch:hover{background:rgba(255,255,255,.28)}
@@ -176,8 +179,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
   .big,.rbars,.rank,.esp{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
   .band{position:static}
-  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
   .rk{break-inside:avoid}
   body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
   body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
@@ -194,9 +196,10 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
     <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
     <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
   </div>
-  <div class="hdr-meta">
-    <div class="hdr-status"><span class="dot"></span><span>Atualizado em <span id="hUp">—</span></span></div>
+    <div class="hdr-meta">
+    <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
     <div class="hdr-big"><span id="hAt">—</span> atendimentos&nbsp;·&nbsp;<span id="hRas">—</span> RAs</div>
+    <div class="hdr-aviso" id="hAviso"></div>
   </div>
 </div>
 <div class="stripe"></div>
@@ -225,7 +228,8 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 
   <div class="footer">
     <b>Fonte:</b> aba ACOES_SOCIAIS da planilha oficial (totais de atendimento informados pelos órgãos). Os relatórios originais de cada órgão permanecem no Drive.<br>
-    Números conforme informado pelos órgãos, sem auditoria. Dados de <b id="snapDate">—</b>, publicado em <b id="snapPub">—</b>. Técnico: Adacto Artur Dornas de Oliveira · SEGOV · Assessoria de Acompanhamento de Projetos Estratégicos.  </div>
+    Números conforme informado pelos órgãos, sem auditoria. Retrato de <b id="snapDate">—</b>. Técnico: Adacto Artur Dornas de Oliveira · SEGOV · Assessoria de Acompanhamento de Projetos Estratégicos.
+  </div>
 </div>
 
 <div class="overlay" id="ov"><div class="modal" id="modal"></div></div>
@@ -233,6 +237,9 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 <script>
 const SNAP = {
  "atualizado": "21/10/2026 16:29",
+ "publicado_em": "22/10/2026 13:29",
+ "idade_dados_dias": 0,
+ "dados_defasados": false,
  "kpis": {
   "atendimentos": 378884,
   "ras": 20,
@@ -356,13 +363,15 @@ const SNAP = {
    "cod": "P019",
    "ed": 19,
    "ra": "Arniqueira",
-   "atend": 0
+   "atend": 0,
+   "nota": "em apuração"
   },
   {
    "cod": "P020",
    "ed": 20,
    "ra": "Núcleo Bandeirante",
-   "atend": 0
+   "atend": 0,
+   "nota": "em apuração"
   }
  ],
  "orgaos": [
@@ -2529,8 +2538,17 @@ function renderBigs(){
     `<div class="big"><div class="bl">Prestadores de serviços</div><div class="bv">${k.participacao_rotulo||k.participantes||k.orgaos}</div><div class="bs">presentes nos eventos sociais de atendimento à população</div></div>`;
   document.getElementById('hAt').textContent=nf(k.atendimentos);
   document.getElementById('hRas').textContent=k.ras;
-  document.getElementById('hUp').textContent=SNAP.atualizado;
+    document.getElementById('hUp').textContent=SNAP.atualizado;
+  document.getElementById('hPub').textContent=SNAP.publicado_em||'—';
   document.getElementById('snapDate').textContent=SNAP.atualizado;
+  document.getElementById('snapPub').textContent=SNAP.publicado_em||'—';
+  if(SNAP.dados_defasados){
+    const d=SNAP.idade_dados_dias;
+    const av=document.getElementById('hAviso');
+    av.textContent='⚠ Dados parados há '+d+' dia'+(d===1?'':'s')+' — a varredura não atualizou';
+    av.classList.add('on');
+    document.getElementById('hDot').classList.add('stale');
+  }
 }
 
 function renderRegionBars(){
