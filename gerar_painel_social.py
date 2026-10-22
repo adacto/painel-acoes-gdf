@@ -233,9 +233,9 @@ def main():
         if org: participantes.add(org)
 
     # matriz ACOES_SOCIAIS: da aba (se houver) ou do arquivo modelo
-       if "ACOES_SOCIAIS" in wb.sheetnames:
-             ws=wb["ACOES_SOCIAIS"]; print("Lendo aba ACOES_SOCIAIS da planilha.")
-     elif os.environ.get("USAR_MODELO") == "sim":
+    if "ACOES_SOCIAIS" in wb.sheetnames:
+        ws=wb["ACOES_SOCIAIS"]; print("Lendo aba ACOES_SOCIAIS da planilha.")
+    elif os.environ.get("USAR_MODELO") == "sim":
         ws=openpyxl.load_workbook(MATRIX_FILE,data_only=True)["ACOES_SOCIAIS"]
         print(f"ATENCAO: gerando com o MODELO local {os.path.basename(MATRIX_FILE)}, "
               "a pedido de USAR_MODELO=sim. Isto NAO e dado real.")
@@ -323,7 +323,7 @@ def main():
     tpl=open(TEMPLATE,encoding="utf-8").read()
     open(OUT,"w",encoding="utf-8").write(tpl.replace("__SNAP_JSON__",json.dumps(snap,ensure_ascii=False,indent=1)))
     print(f"OK -> {OUT}")
-        print(f"   dados de: {atualizado} | publicado em: {publicado_em} | "
+    print(f"   dados de: {atualizado} | publicado em: {publicado_em} | "
           f"idade: {idade_dados} dia(s) | defasado: {snap['dados_defasados']}")
     for o in orgaos_raw[:5]: print(f"   {o['n']}: {o['total']:,}".replace(",","."))
 
