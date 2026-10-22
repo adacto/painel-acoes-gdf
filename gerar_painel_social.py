@@ -234,8 +234,8 @@ def main():
 
     # matriz ACOES_SOCIAIS: da aba (se houver) ou do arquivo modelo
        if "ACOES_SOCIAIS" in wb.sheetnames:
-        ws=wb["ACOES_SOCIAIS"]; print("Lendo aba ACOES_SOCIAIS da planilha.")
-    elif os.environ.get("USAR_MODELO") == "sim":
+             ws=wb["ACOES_SOCIAIS"]; print("Lendo aba ACOES_SOCIAIS da planilha.")
+     elif os.environ.get("USAR_MODELO") == "sim":
         ws=openpyxl.load_workbook(MATRIX_FILE,data_only=True)["ACOES_SOCIAIS"]
         print(f"ATENCAO: gerando com o MODELO local {os.path.basename(MATRIX_FILE)}, "
               "a pedido de USAR_MODELO=sim. Isto NAO e dado real.")
