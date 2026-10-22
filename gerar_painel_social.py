@@ -9,7 +9,7 @@ Fonte da matriz: aba ACOES_SOCIAIS da planilha (se existir); senão, o arquivo
 local passado em MATRIX_FILE (modelo). Links dos relatórios: aba Entregues.
 Autoria: Adacto Artur Dornas de Oliveira — SEGOV
 """
-import io, json, os, re, sys, urllib.request
+import datetime, io, json, os, re, sys, urllib.request
 
 # PARTICIPAÇÃO ESPECIAL — órgãos que estiveram nas ações com entregas de outra
 # natureza (não somadas ao total de atendimentos a pessoas). CEB foi para o ranking
@@ -108,17 +108,20 @@ ESPECIAL = [
 
 # RAs com edição realizada mas sem atendimentos lançados. Em vez de exibir um
 # "0" — que sugere fracasso ou falta de dado — o painel mostra o motivo.
-# P008 Plano Piloto: a edição entregou obras, não atendimentos em tenda; os
-# números dela estão no Painel de Obras.
-# P011 Cidade Estrutural: edição de 27 a 31/07/2026. Os números já vêm apurados
-# pelo ACOES_SOCIAIS_extra.csv, então esta nota fica só como rede de segurança —
-# se alguém apagar o CSV antes de a coluna entrar na aba, a RA aparece com o
-# motivo em vez de um "0". NOTA_RA só é usada quando o total da RA é 0.
+# NOTA_RA só é usada quando o total da RA é 0; quando a RA passa a ter número,
+# a nota some sozinha e pode ser removida daqui.
+# P008 Plano Piloto, P014 Taguatinga e P015 Guará: edições de obras, sem
+# atendimento em tenda; os números estão no Painel de Obras.
+# P019 Arniqueira e P020 Núcleo Bandeirante: edições realizadas, com relatório
+# no Drive, ainda sem lançamento em ATENDIMENTOS.
+# P011 saiu desta lista em 22/10/2026: tem 35.878 atendimentos, a condição
+# tot == 0 nunca disparava e a nota só confundia quem lesse o código.
 NOTA_RA = {
     "P008": "só obras",
-    "P011": "aguardando lançamento",
     "P014": "só obras",
     "P015": "só obras",
+    "P019": "em apuração",
+    "P020": "em apuração",
 }
 
 # Rótulo do cartão "Prestadores de serviços".
@@ -130,6 +133,12 @@ NOTA_RA = {
 # Enquanto a aba PRESENCA não existir, este rótulo é fixo e revisado à mão.
 PARTICIPACAO_ROTULO = "+ de 60"
 
+# Fuso de Brasília, UTC-3 o ano todo (sem horário de verão desde 2019). Fixo de
+# propósito: a Action roda em UTC e o zoneinfo depende de tzdata instalado.
+FUSO_BR = datetime.timezone(datetime.timedelta(hours=-3))
+
+# Acima disto o painel passa a se declarar defasado.
+MAX_IDADE_DADOS_DIAS = 2
 SHEET_ID = "1kYjCiFh8R9EOgnwBMEFR7YtZpO9MvUwDSXRuqH5Lvc4"
 XLSX_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx"
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -224,12 +233,17 @@ def main():
         if org: participantes.add(org)
 
     # matriz ACOES_SOCIAIS: da aba (se houver) ou do arquivo modelo
-    if "ACOES_SOCIAIS" in wb.sheetnames:
+       if "ACOES_SOCIAIS" in wb.sheetnames:
         ws=wb["ACOES_SOCIAIS"]; print("Lendo aba ACOES_SOCIAIS da planilha.")
-    else:
+    elif os.environ.get("USAR_MODELO") == "sim":
         ws=openpyxl.load_workbook(MATRIX_FILE,data_only=True)["ACOES_SOCIAIS"]
-        print(f"Aba não encontrada — usando modelo local {os.path.basename(MATRIX_FILE)}.")
-
+        print(f"ATENCAO: gerando com o MODELO local {os.path.basename(MATRIX_FILE)}, "
+              "a pedido de USAR_MODELO=sim. Isto NAO e dado real.")
+    else:
+        sys.exit("ERRO: a aba ACOES_SOCIAIS nao existe na planilha baixada. Nada foi "
+                 "gerado, e o painel publicado continua sendo o anterior. Confira o "
+                 "nome da aba e o compartilhamento. Para gerar de proposito com o "
+                 "modelo local, rode com USAR_MODELO=sim.")
     hdr=[str(c.value or "").strip() for c in ws[1]]
     ra_cols=[]  # (colIdx0, cod, ra)
     for j,h in enumerate(hdr):
@@ -288,13 +302,29 @@ def main():
     def _cod(e):
         m=re.match(r"(\d+)",e["orgao"]); return int(m.group(1)) if m else 999
     especial_ord=sorted(ESPECIAL,key=lambda e:(0 if e.get("slu") else 1,_cod(e)))
-    snap={"atualizado":atualizado,"kpis":kpis,"ras":ras,"orgaos":orgaos_raw,
-          "especial":especial_ord,"slu_ras":SLU_RAS}
+       # "atualizado" diz de quando sao os DADOS; "publicado_em", quando o painel foi
+    # ao ar. Os dois se descolam, e e esse descolamento que faz um painel velho
+    # parecer novo. Por isso vao em campos distintos.
+    agora = datetime.datetime.now(FUSO_BR)
+    publicado_em = agora.strftime("%d/%m/%Y %H:%M")
+    idade_dados = None
+    try:
+        quando = datetime.datetime.strptime(atualizado, "%d/%m/%Y %H:%M")
+        idade_dados = (agora.replace(tzinfo=None) - quando).days
+    except ValueError:
+        pass
 
+    snap={"atualizado":atualizado,
+          "publicado_em":publicado_em,
+          "idade_dados_dias":idade_dados,
+          "dados_defasados":bool(idade_dados is not None and idade_dados > MAX_IDADE_DADOS_DIAS),
+          "kpis":kpis,"ras":ras,"orgaos":orgaos_raw,
+          "especial":especial_ord,"slu_ras":SLU_RAS}
     tpl=open(TEMPLATE,encoding="utf-8").read()
     open(OUT,"w",encoding="utf-8").write(tpl.replace("__SNAP_JSON__",json.dumps(snap,ensure_ascii=False,indent=1)))
     print(f"OK -> {OUT}")
-    print(f"   total atendimentos: {kpis['atendimentos']:,} | RAs: {kpis['ras']} | órgãos: {kpis['orgaos']}".replace(",","."))
+        print(f"   dados de: {atualizado} | publicado em: {publicado_em} | "
+          f"idade: {idade_dados} dia(s) | defasado: {snap['dados_defasados']}")
     for o in orgaos_raw[:5]: print(f"   {o['n']}: {o['total']:,}".replace(",","."))
 
 if __name__=="__main__":
