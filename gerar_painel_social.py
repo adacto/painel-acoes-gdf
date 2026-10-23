@@ -15,80 +15,6 @@ import datetime, io, json, os, re, sys, urllib.request
 # natureza (não somadas ao total de atendimentos a pessoas). CEB foi para o ranking
 # (decisão: quantidade de atendimentos). NOVACAP fica fora (é assunto do painel de obras).
 # Só a SLU tem quadro especial clicável (detalhe por região).
-SLU_RAS = [
-    {"ra": "Itapoã", "ed": 1, "servicos": [
-        {"s": "Coleta convencional", "v": "256,4 t"}, {"s": "Remoção de entulho", "v": "95 t"},
-        {"s": "Varrição manual", "v": "293,58 km"}, {"s": "Pintura/frisagem de meio-fio", "v": "359,59 km"},
-        {"s": "Catação", "v": "480 m²"}, {"s": "Coleta de animais mortos", "v": "35"},
-        {"s": "Papa-lixo", "v": "2 instalados"}]},
-    {"ra": "Paranoá", "ed": 2, "servicos": [
-        {"s": "Coleta convencional", "v": "166,07 t"}, {"s": "Remoção de entulho", "v": "150 t"},
-        {"s": "Varrição manual", "v": "295,78 km"}, {"s": "Pintura/frisagem de meio-fio", "v": "59,25 km"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "20"},
-        {"s": "Papa-lixo", "v": "42 operantes"}]},
-    {"ra": "Riacho Fundo II", "ed": 3, "servicos": [
-        {"s": "Coleta convencional", "v": "183,22 t"}, {"s": "Remoção de entulho", "v": "55 t"},
-        {"s": "Varrição manual", "v": "177,45 km"}, {"s": "Pintura/frisagem de meio-fio", "v": "35,11 km"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "8"},
-        {"s": "Papa-lixo", "v": "9 operantes"}, {"s": "Construção do Papa-Entulho", "v": "50%"}]},
-    {"ra": "Samambaia", "ed": 4, "servicos": [
-        {"s": "Coleta convencional", "v": "898,82 t"}, {"s": "Remoção de entulho", "v": "350 t"},
-        {"s": "Varrição manual", "v": "998,45 km"}, {"s": "Pintura/frisagem de meio-fio", "v": "94,25 km"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "25"},
-        {"s": "Papa-lixo", "v": "25 operantes"}]},
-    {"ra": "26 de Setembro", "ed": 5, "servicos": [
-        {"s": "Coleta convencional", "v": "29,5 t"}, {"s": "Remoção de entulho", "v": "45 t"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "8"},
-        {"s": "Papa-lixo", "v": "5 operantes / 11 mapeados"},
-        {"s": "Varrição e pintura de meio-fio", "v": "sem relatório no Drive"}]},
-    {"ra": "Ceilândia", "ed": 6, "servicos": [
-        {"s": "Coleta convencional", "v": "2.245,9 t"}, {"s": "Remoção de entulho", "v": "5.383,69 t"},
-        {"s": "Varrição manual", "v": "5.429,23 km (soma dos lançamentos)"},
-        {"s": "Pintura/frisagem de meio-fio", "v": "585,69 km"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "sem arquivo legível"},
-        {"s": "Papa-lixo", "v": "25 operantes / 24 mapeados"},
-        {"s": "GDF de cara nova", "v": "25% do planejado"}]},
-    {"ra": "Planaltina", "ed": 7, "servicos": [
-        {"s": "Coleta convencional", "v": "666,1 t"}, {"s": "Remoção de entulho", "v": "703,53 t"},
-        {"s": "Catação", "v": "600 m²"}, {"s": "Coleta de animais mortos", "v": "22"},
-        {"s": "Papa-lixo", "v": "25 operantes"}, {"s": "Construção do Papa-Entulho", "v": "15%"},
-        {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
-    {"ra": "Plano Piloto", "ed": 8, "servicos": [
-        {"s": "Coleta convencional", "v": "1.158,93 t"}, {"s": "Remoção de entulho", "v": "105 t"},
-        {"s": "Coleta seletiva", "v": "40,74 t"}, {"s": "Catação", "v": "600 m²"},
-        {"s": "Coleta de animais mortos", "v": "25"}, {"s": "Papa-lixo", "v": "93 operantes"},
-        {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
-    {"ra": "São Sebastião", "ed": 9, "servicos": [
-        {"s": "Coleta convencional", "v": "331,06 t"}, {"s": "Remoção de entulho", "v": "90 t"},
-        {"s": "Catação", "v": "480 m²"}, {"s": "Coleta de animais mortos", "v": "22"},
-        {"s": "Papa-lixo", "v": "33 operantes"}, {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
-    {"ra": "Recanto das Emas", "ed": 10, "servicos": [
-        {"s": "Coleta convencional", "v": "229,15 t"}, {"s": "Catação", "v": "720 m²"},
-        {"s": "Papa-lixo", "v": "12 operantes"}, {"s": "Varrição / Pintura", "v": "total indisponível no arquivo"}]},
-    {"ra": "Cidade Estrutural", "ed": 11, "servicos": [
-        {"s": "Coleta convencional", "v": "193,31 t"}, {"s": "Catação", "v": "600 m²"},
-        {"s": "Varrição manual", "v": "255,28 km (soma dos lançamentos)"},
-        {"s": "Pintura/frisagem de meio-fio", "v": "7,32 km (soma dos lançamentos)"},
-        {"s": "Papa-lixo", "v": "10 operantes / 30 mapeados"},
-        {"s": "Coleta seletiva", "v": "3 circuitos, sem tonelagem no arquivo"}]},
-    {"ra": "Sobradinho", "ed": 12, "servicos": [
-        {"s": "Coleta convencional", "v": "338,41 t"}, {"s": "Catação", "v": "600 m²"},
-        {"s": "Varrição manual", "v": "570,60 km (soma dos lançamentos)"},
-        {"s": "Pintura/frisagem de meio-fio", "v": "20,86 km (soma dos lançamentos)"},
-        {"s": "Papa-lixo", "v": "22 operantes / 8 mapeados"},
-        {"s": "Coleta seletiva", "v": "10 circuitos, sem tonelagem no arquivo"}]},
-    {"ra": "Sobradinho II", "ed": 12, "servicos": [
-        {"s": "Coleta convencional", "v": "340,68 t"}, {"s": "Catação", "v": "600 m²"},
-        {"s": "Varrição manual", "v": "265,28 km (soma dos lançamentos)"},
-        {"s": "Pintura de meio-fio", "v": "18,98 km (soma dos lançamentos)"},
-        {"s": "Papa-lixo", "v": "8 operantes / 11 mapeados"},
-        {"s": "Coleta seletiva", "v": "2 circuitos, sem tonelagem no arquivo"}]},
-    {"ra": "Sol Nascente", "ed": 13, "servicos": [
-        {"s": "Varrição manual", "v": "281,34 km (soma dos lançamentos)"},
-        {"s": "Frisagem e pintura de meio-fio", "v": "63,61 km (soma dos lançamentos)"},
-        {"s": "Papa-lixo", "v": "24 operantes / 48 mapeados"},
-        {"s": "Coleta convencional", "v": "pasta ainda sem arquivo no Drive"}]},
-]
 
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
@@ -146,6 +72,7 @@ TEMPLATE = os.path.join(HERE, "template_social.html")
 OUT = os.path.join(HERE, "index.html")
 MATRIX_FILE = os.path.join(HERE, "ACOES_SOCIAIS_modelo.xlsx")  # usado se a aba não existir
 EXTRA_FILE  = os.path.join(HERE, "ACOES_SOCIAIS_extra.csv")   # ponte p/ edição sem coluna na aba
+ABA_SLU = "SLU"   # aba que alimenta o quadro da SLU
 
 _MIN={"de","da","do","das","dos","e"}; _ROM={"ii","iii","iv","v","vi","vii","viii","ix","x","xi"}
 def bonito(nome):
@@ -192,6 +119,63 @@ def carregar_extras():
         print(f"Aviso: nao consegui ler {os.path.basename(EXTRA_FILE)} ({e}). Seguindo so com a aba.")
         return {}
     return out
+
+def ler_slu(wb):
+    """Le o quadro da SLU da aba SLU da planilha.
+
+    Cada linha e um servico de uma regiao; linhas com o mesmo par (COD_RA, RA)
+    formam um bloco. A ordem dos blocos e dos servicos e a ordem da aba.
+
+    Isto era uma lista fixa aqui no codigo. O resultado foi o quadro ficar dois
+    meses parado nas edicoes 16 a 19, com relatorio no Drive o tempo todo:
+    edicao nova so entrava se alguem lembrasse de editar o repositorio.
+    """
+    if ABA_SLU not in wb.sheetnames:
+        if os.environ.get("SLU_SEM_ABA") == "ok":
+            print("AVISO: aba SLU ausente; o quadro da SLU sai vazio, "
+                  "a pedido de SLU_SEM_ABA=ok.")
+            return []
+        sys.exit("ERRO: a aba SLU nao existe na planilha. O quadro da SLU sairia "
+                 "vazio do painel e ninguem perceberia. Crie a aba antes de "
+                 "publicar, ou rode com SLU_SEM_ABA=ok para publicar sem o "
+                 "quadro de proposito.")
+
+    ws = wb[ABA_SLU]
+    hdr = [str(c.value or "").strip().upper() for c in ws[1]]
+    faltam = [x for x in ("COD_RA", "RA", "EDICAO", "SERVICO", "VALOR", "VIGENTE")
+              if x not in hdr]
+    if faltam:
+        sys.exit(f"ERRO: aba SLU sem as colunas {', '.join(faltam)}. Nada foi gerado.")
+
+    i_cod, i_ra, i_ed = hdr.index("COD_RA"), hdr.index("RA"), hdr.index("EDICAO")
+    i_srv, i_val, i_vig = hdr.index("SERVICO"), hdr.index("VALOR"), hdr.index("VIGENTE")
+
+    blocos, ordem = {}, []
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if not row or not row[i_cod]:
+            continue
+        if str(row[i_vig] or "").strip().upper() != "SIM":
+            continue
+        cod = str(row[i_cod]).strip().upper()
+        ra = bonito(str(row[i_ra] or "").strip())
+        srv = str(row[i_srv] or "").strip()
+        val = str(row[i_val] or "").strip()
+        if not srv or not val:
+            continue
+        # a chave e (codigo, RA), nao so o codigo: a 12a edicao tem dois blocos,
+        # Sobradinho e Sobradinho II, no mesmo P012.
+        chave = (cod, ra)
+        if chave not in blocos:
+            try:
+                ed = int(row[i_ed])
+            except (TypeError, ValueError):
+                ed = int(cod[1:])
+            blocos[chave] = {"ra": ra, "ed": ed, "servicos": []}
+            ordem.append(chave)
+        blocos[chave]["servicos"].append({"s": srv, "v": val})
+
+    return [blocos[c] for c in ordem]
+
 
 def url_hyperlink(cell):
     v=cell.value
@@ -319,7 +303,7 @@ def main():
           "idade_dados_dias":idade_dados,
           "dados_defasados":bool(idade_dados is not None and idade_dados > MAX_IDADE_DADOS_DIAS),
           "kpis":kpis,"ras":ras,"orgaos":orgaos_raw,
-          "especial":especial_ord,"slu_ras":SLU_RAS}
+          "especial":especial_ord,"slu_ras":ler_slu(wb)}
     tpl=open(TEMPLATE,encoding="utf-8").read()
     open(OUT,"w",encoding="utf-8").write(tpl.replace("__SNAP_JSON__",json.dumps(snap,ensure_ascii=False,indent=1)))
     print(f"OK -> {OUT}")
