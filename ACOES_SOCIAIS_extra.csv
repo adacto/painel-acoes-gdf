@@ -1,15 +1,15 @@
 # PONTE TEMPORÁRIA — edições que ainda não têm coluna na aba ACOES_SOCIAIS da planilha.
-# Assim que a coluna "P021 RIACHO FUNDO" existir na aba, a planilha passa a mandar
-# e este arquivo é ignorado (o gerador avisa no console). Apague-o quando isso acontecer.
+# Hoje está vazia de propósito: toda edição apurada tem coluna na aba, e a planilha
+# é a única fonte. Só volte a usar este arquivo quando houver número apurado para uma
+# edição que ainda não virou coluna — e apague a linha assim que a coluna existir, senão
+# o gerador passa a avisar que o extra está sendo ignorado.
 #
-# O bloco da P011 saiu daqui em 27/10/2026: a coluna "P011 CIDADE ESTRUTURAL" já existe
-# na aba e o gerador vinha avisando que o extra estava sendo ignorado.
+# O bloco da P011 saiu daqui em 27/10/2026, quando a coluna "P011 CIDADE ESTRUTURAL"
+# passou a existir na aba.
 #
-# P021 RIACHO FUNDO — edição de 19/10 a 23/10/2026. Apuração parcial: na varredura
-# de 27/10/2026 07:54 só a CAESB havia entregue (participação especial, fora do total)
-# e 54 dos 55 órgãos seguiam pendentes. O número abaixo foi lido direto do relatório
-# no Drive. Os demais entram à medida que os relatórios chegarem.
+# O bloco da P021 RIACHO FUNDO (010 - DETRAN, 1.215) saiu daqui em 27/10/2026: a coluna
+# "P021 RIACHO FUNDO" foi criada na aba e a linha do DETRAN foi lançada em ATENDIMENTOS,
+# junto com a da SEC Mulher (70). A aba passou a somar 1.285 na P021.
 #
 # Formato: cod;ra;orgao;atendimentos;link   (o nome do órgão precisa bater com a coluna Orgao)
 cod;ra;orgao;atendimentos;link
-P021;RIACHO FUNDO;010 - DETRAN;1215;https://drive.google.com/file/d/1eY2GMSQe0N4gZzvC4gHo-ctJMuDECvXm/view
