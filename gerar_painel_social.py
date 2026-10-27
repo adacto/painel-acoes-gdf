@@ -15,13 +15,19 @@ import datetime, io, json, os, re, sys, urllib.request
 # natureza (não somadas ao total de atendimentos a pessoas). CEB foi para o ranking
 # (decisão: quantidade de atendimentos). NOVACAP fica fora (é assunto do painel de obras).
 # Só a SLU tem quadro especial clicável (detalhe por região).
+#
+# SERINTER saiu desta lista em 27/10/2026. Ela entrou aqui porque o destaque era
+# "19 embaixadas" — contagem de embaixadas, não de pessoas. Desde a P012 o relatório
+# passou a trazer "aproximadamente N atendimentos à população" por RA, que é métrica
+# de pessoa e vai para o total como a de qualquer outro órgão. Um órgão não pode
+# estar nesta lista e ter número na aba ao mesmo tempo: apareceria duas vezes no
+# painel, uma no total e outra aqui.
 
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
      "destaque": "coleta, entulho, varrição, catação e mais", "slu": True,
      "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."},
     {"orgao": "013 - DFLEGAL", "area": "Fiscalização (DF Legal)", "destaque": "386 ações fiscais · 6 RAs"},
-    {"orgao": "048 - SERINTER", "area": "Relações internacionais", "destaque": "19 embaixadas"},
     {"orgao": "039 - SEAGRI", "area": "Agricultura", "destaque": "estradas rurais e roçagem (km/m²)"},
     {"orgao": "003 - SSP", "area": "Segurança pública", "destaque": "videomonitoramento · 28 veículos"},
     {"orgao": "011 - CAESB", "area": "Saneamento — água", "destaque": "unidade móvel e chamados"},
