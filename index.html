@@ -26,6 +26,14 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
 /* marca GDF 2026 — horizontal monocromatica branca sobre o cabecalho escuro */
 .hdr-id{display:flex;align-items:center;gap:18px;min-width:0}
+/* assinatura conjunta do cabecalho — Manual da Marca GDF 2026, p. 21-23, aplicacao
+   monocromatica (p. 22): nome alinhado a direita, encostado no bico que aponta para a
+   marca; Unbounded SemiBold, entreletra 0, entrelinha = corpo da letra. */
+.hdr-assin{display:flex;align-items:center;flex:none}
+.hdr-assin .nome{font-family:'Unbounded','Segoe UI',sans-serif;font-weight:600;font-size:.74rem;
+  line-height:1em;letter-spacing:0;color:#fff;text-align:right;padding-right:9px}
+.hdr-assin .bico{width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;
+  border-right:8px solid #fff;flex:none}
 .hdr-marca{height:54px;width:auto;flex:none}
 /* logo do programa GDF na sua Porta — arte azul/roxa, por isso vai sobre pilula branca */
 .hdr-prog{background:#fff;border-radius:11px;padding:9px 13px;display:flex;align-items:center;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.22)}
@@ -153,6 +161,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   .hdr p{font-size:.72rem}
   .hdr-id{gap:12px}
   .hdr-marca{height:40px}
+  .hdr-assin .nome{font-size:.64rem}
   .hdr-prog{padding:7px 10px}
   .hdr-prog img{height:26px}
   .assin img{height:44px}
@@ -196,7 +205,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
   .big,.rbars,.rank,.esp{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
   .band{position:static}
-  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso,.hdr-marca,.hdr-prog,.hdr-prog img,.assin-bico,.assin img{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso,.hdr-marca,.hdr-prog,.hdr-prog img,.hdr-assin .bico,.assin-bico,.assin img{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
   .rk{break-inside:avoid}
   body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
   body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
@@ -210,12 +219,13 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 <body>
 <div class="hdr">
   <div class="hdr-id">
-    <img class="hdr-marca" src="assets/gdf-horizontal-branca.png" width="760" height="444" alt="Governo do Distrito Federal">
+    <span class="hdr-assin">
+      <span class="nome">Secretaria de Estado<br>de Governo</span>
+      <span class="bico" aria-hidden="true"></span>
+      <img class="hdr-marca" src="assets/gdf-horizontal-branca.png" width="760" height="444" alt="Governo do Distrito Federal">
+    </span>
     <span class="hdr-prog"><img src="assets/gdf-na-sua-porta.png" width="270" height="65" alt="GDF na sua Porta"></span>
-    <div>
-      <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
-      <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
-    </div>
+    <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
   </div>
     <div class="hdr-meta">
     <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
@@ -263,7 +273,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 <script>
 const SNAP = {
  "atualizado": "29/10/2026 08:00",
- "publicado_em": "29/10/2026 17:33",
+ "publicado_em": "29/10/2026 18:05",
  "idade_dados_dias": 0,
  "dados_defasados": false,
  "kpis": {
