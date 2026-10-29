@@ -22,6 +22,12 @@ import datetime, io, json, os, re, sys, urllib.request
 # de pessoa e vai para o total como a de qualquer outro órgão. Um órgão não pode
 # estar nesta lista e ter número na aba ao mesmo tempo: apareceria duas vezes no
 # painel, uma no total e outra aqui.
+#
+# A CAESB saiu desta lista em 29/10/2026, pelo mesmo motivo. O destaque era
+# "unidade móvel e chamados" — entrega, não pessoa. O quadro "Atendimentos
+# realizados pela Ouvidoria", entregue em 28/10/2026 com as 18 localidades, conta
+# protocolos de ouvidoria, ordens de serviço abertas e orientações: atendimento a
+# pessoa, que vai para o total como o de qualquer outro órgão (1.175 no programa).
 
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
@@ -30,7 +36,6 @@ ESPECIAL = [
     {"orgao": "013 - DFLEGAL", "area": "Fiscalização (DF Legal)", "destaque": "386 ações fiscais · 6 RAs"},
     {"orgao": "039 - SEAGRI", "area": "Agricultura", "destaque": "estradas rurais e roçagem (km/m²)"},
     {"orgao": "003 - SSP", "area": "Segurança pública", "destaque": "videomonitoramento · 28 veículos"},
-    {"orgao": "011 - CAESB", "area": "Saneamento — água", "destaque": "unidade móvel e chamados"},
     {"orgao": "042 - POLO RURAL", "area": "Polo Rural", "destaque": "estradas rurais (km)"},
     {"orgao": "045 - SEPE", "area": "Projetos Especiais", "destaque": "Adote uma Praça"},
     {"orgao": "031 - SEMA", "area": "Meio ambiente", "destaque": "orientação e educação ambiental"},

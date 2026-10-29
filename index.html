@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GDF na Sua Porta — Painel de Ações Sociais</title>
+<link rel="icon" href="assets/gdf-horizontal-cor.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,6 +24,17 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .hdr-aviso{display:none;margin-top:7px;font-size:.68rem;font-weight:800;color:#3a1500;background:#ffc94d;border:1px solid #e0a800;padding:4px 10px;border-radius:7px}
 .hdr-aviso.on{display:inline-block}
 .hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
+/* marca GDF 2026 — horizontal monocromatica branca sobre o cabecalho escuro */
+.hdr-id{display:flex;align-items:center;gap:18px;min-width:0}
+.hdr-marca{height:54px;width:auto;flex:none}
+/* logo do programa GDF na sua Porta — arte azul/roxa, por isso vai sobre pilula branca */
+.hdr-prog{background:#fff;border-radius:11px;padding:9px 13px;display:flex;align-items:center;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.22)}
+.hdr-prog img{height:34px;width:auto;display:block}
+/* assinatura conjunta GDF + secretaria — Manual da Marca GDF 2026, p. 21-23 */
+.assin{display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.assin-nome{font-family:'Unbounded','Segoe UI',sans-serif;font-weight:600;font-size:.72rem;line-height:1em;letter-spacing:0;color:var(--pd);text-align:right;padding-right:10px}
+.assin-bico{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:9px solid #0098d9;flex:none}
+.assin img{height:52px;width:auto;display:block;flex:none}
 .nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
 .nav-switch:hover{background:rgba(255,255,255,.28)}
 .stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
@@ -139,6 +151,11 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   h1{font-size:1.15rem}
   .hdr{flex-direction:column;align-items:flex-start;gap:8px;padding:15px 16px}
   .hdr p{font-size:.72rem}
+  .hdr-id{gap:12px}
+  .hdr-marca{height:40px}
+  .hdr-prog{padding:7px 10px}
+  .hdr-prog img{height:26px}
+  .assin img{height:44px}
   .hdr-meta{text-align:left}
   .hdr-status{justify-content:flex-start}
   .hdr-big{font-size:.92rem}
@@ -179,7 +196,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
   .big,.rbars,.rank,.esp{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
   .band{position:static}
-  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso,.hdr-marca,.hdr-prog,.hdr-prog img,.assin-bico,.assin img{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
   .rk{break-inside:avoid}
   body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
   body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
@@ -192,9 +209,13 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 </head>
 <body>
 <div class="hdr">
-  <div>
-    <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
-    <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+  <div class="hdr-id">
+    <img class="hdr-marca" src="assets/gdf-horizontal-branca.png" width="760" height="444" alt="Governo do Distrito Federal">
+    <span class="hdr-prog"><img src="assets/gdf-na-sua-porta.png" width="270" height="65" alt="GDF na sua Porta"></span>
+    <div>
+      <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
+      <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+    </div>
   </div>
     <div class="hdr-meta">
     <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
@@ -227,6 +248,11 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="esp" id="esp"></div>
 
   <div class="footer">
+    <div class="assin">
+      <span class="assin-nome">Secretaria de Estado<br>de Governo</span>
+      <span class="assin-bico" aria-hidden="true"></span>
+      <img src="assets/gdf-horizontal-cor.png" width="720" height="425" alt="Governo do Distrito Federal">
+    </div>
     <b>Fonte:</b> aba ACOES_SOCIAIS da planilha oficial (totais de atendimento informados pelos órgãos). Os relatórios originais de cada órgão permanecem no Drive.<br>
     Números conforme informado pelos órgãos, sem auditoria. Dados de <b id="snapDate">—</b>, publicado em <b id="snapPub">—</b>. Técnico: Adacto Artur Dornas de Oliveira · SEGOV · Assessoria de Acompanhamento de Projetos Estratégicos.
   </div>
@@ -237,13 +263,13 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 <script>
 const SNAP = {
  "atualizado": "29/10/2026 08:00",
- "publicado_em": "29/10/2026 14:01",
+ "publicado_em": "29/10/2026 17:26",
  "idade_dados_dias": 0,
  "dados_defasados": false,
  "kpis": {
-  "atendimentos": 411643,
+  "atendimentos": 412818,
   "ras": 21,
-  "orgaos": 29,
+  "orgaos": 30,
   "participantes": 43,
   "participacao_rotulo": "+ de 60"
  },
@@ -252,43 +278,43 @@ const SNAP = {
    "cod": "P001",
    "ed": 1,
    "ra": "Itapoã",
-   "atend": 10167
+   "atend": 10209
   },
   {
    "cod": "P002",
    "ed": 2,
    "ra": "Paranoá",
-   "atend": 34711
+   "atend": 34752
   },
   {
    "cod": "P003",
    "ed": 3,
    "ra": "Riacho Fundo II",
-   "atend": 15317
+   "atend": 15359
   },
   {
    "cod": "P004",
    "ed": 4,
    "ra": "Samambaia",
-   "atend": 38521
+   "atend": 38662
   },
   {
    "cod": "P005",
    "ed": 5,
    "ra": "26 de Setembro",
-   "atend": 11232
+   "atend": 11260
   },
   {
    "cod": "P006",
    "ed": 6,
    "ra": "Ceilândia",
-   "atend": 54803
+   "atend": 54987
   },
   {
    "cod": "P007",
    "ed": 7,
    "ra": "Planaltina",
-   "atend": 31047
+   "atend": 31111
   },
   {
    "cod": "P008",
@@ -301,31 +327,31 @@ const SNAP = {
    "cod": "P009",
    "ed": 9,
    "ra": "São Sebastião",
-   "atend": 36114
+   "atend": 36177
   },
   {
    "cod": "P010",
    "ed": 10,
    "ra": "Recanto das Emas",
-   "atend": 21419
+   "atend": 21493
   },
   {
    "cod": "P011",
    "ed": 11,
    "ra": "Cidade Estrutural",
-   "atend": 36768
+   "atend": 36825
   },
   {
    "cod": "P012",
    "ed": 12,
    "ra": "Sobradinho e Sobradinho II",
-   "atend": 37332
+   "atend": 37416
   },
   {
    "cod": "P013",
    "ed": 13,
    "ra": "Sol Nascente e Pôr do Sol",
-   "atend": 22899
+   "atend": 22963
   },
   {
    "cod": "P014",
@@ -345,37 +371,37 @@ const SNAP = {
    "cod": "P016",
    "ed": 16,
    "ra": "Santa Maria",
-   "atend": 19230
+   "atend": 19305
   },
   {
    "cod": "P017",
    "ed": 17,
    "ra": "Brazlândia",
-   "atend": 14968
+   "atend": 15004
   },
   {
    "cod": "P018",
    "ed": 18,
    "ra": "Gama",
-   "atend": 13027
+   "atend": 13089
   },
   {
    "cod": "P019",
    "ed": 19,
    "ra": "Arniqueira",
-   "atend": 7245
+   "atend": 7293
   },
   {
    "cod": "P020",
    "ed": 20,
    "ra": "Núcleo Bandeirante",
-   "atend": 5506
+   "atend": 5538
   },
   {
    "cod": "P021",
    "ed": 21,
    "ra": "Riacho Fundo",
-   "atend": 1337
+   "atend": 1375
   }
  ],
  "orgaos": [
@@ -1966,6 +1992,138 @@ const SNAP = {
    ]
   },
   {
+   "n": "011 - CAESB",
+   "total": 1175,
+   "itens": [
+    {
+     "cod": "P001",
+     "ra": "Itapoã",
+     "ed": 1,
+     "atend": 42,
+     "url": "https://drive.google.com/file/d/1nPz2Nswd4UlaQKAOfdvhd8_eNFDE1o6v/view"
+    },
+    {
+     "cod": "P002",
+     "ra": "Paranoá",
+     "ed": 2,
+     "atend": 41,
+     "url": "https://drive.google.com/file/d/1s6yph9GsIlPVkdjvj0jBa_QiFl0xfenW/view"
+    },
+    {
+     "cod": "P003",
+     "ra": "Riacho Fundo II",
+     "ed": 3,
+     "atend": 42,
+     "url": "https://drive.google.com/file/d/1k2hw1STCqSrnJYPQA3gDsQI1Hf6G6WbM/view"
+    },
+    {
+     "cod": "P004",
+     "ra": "Samambaia",
+     "ed": 4,
+     "atend": 141,
+     "url": "https://drive.google.com/file/d/17erUUqorzK8n4hto4IXI8_SpJ4GJs8d8/view"
+    },
+    {
+     "cod": "P005",
+     "ra": "26 de Setembro",
+     "ed": 5,
+     "atend": 28,
+     "url": "https://drive.google.com/file/d/12ZWsYGuqcw5YBhJhFBxzIV7egj47PZp4/view"
+    },
+    {
+     "cod": "P006",
+     "ra": "Ceilândia",
+     "ed": 6,
+     "atend": 184,
+     "url": "https://drive.google.com/file/d/1wrcItrMFOJJXNEnrbv6u5vQEMgNk9IHT/view"
+    },
+    {
+     "cod": "P007",
+     "ra": "Planaltina",
+     "ed": 7,
+     "atend": 64,
+     "url": "https://drive.google.com/file/d/10B6NppLFzvWTJ-qZqdy_6I8lhulzx-1Q/view"
+    },
+    {
+     "cod": "P009",
+     "ra": "São Sebastião",
+     "ed": 9,
+     "atend": 63,
+     "url": "https://drive.google.com/file/d/1FrUDwvgUZXjj55WkOHfaEazEF3A6inbJ/view"
+    },
+    {
+     "cod": "P010",
+     "ra": "Recanto das Emas",
+     "ed": 10,
+     "atend": 74,
+     "url": "https://drive.google.com/file/d/1aXmx2tXFQAUGlAwfRf5eIA7t4n6AGCqB/view"
+    },
+    {
+     "cod": "P011",
+     "ra": "Cidade Estrutural",
+     "ed": 11,
+     "atend": 57,
+     "url": "https://drive.google.com/file/d/1RfvOkL1g1tOvU7APyjICUCcmRRTSwrm4/view"
+    },
+    {
+     "cod": "P012",
+     "ra": "Sobradinho e Sobradinho II",
+     "ed": 12,
+     "atend": 84,
+     "url": "https://drive.google.com/file/d/1j1J-RO5APP2lFTYDyBwG2wfm4ReR_gdB/view"
+    },
+    {
+     "cod": "P013",
+     "ra": "Sol Nascente e Pôr do Sol",
+     "ed": 13,
+     "atend": 64,
+     "url": "https://drive.google.com/file/d/1kNmtyOnfecFbjdew1r6OY7okkRF5ITc9/view"
+    },
+    {
+     "cod": "P016",
+     "ra": "Santa Maria",
+     "ed": 16,
+     "atend": 75,
+     "url": "https://drive.google.com/file/d/1F4WP4K6Pl524EoC0tN4-V16a35bJFUcA/view"
+    },
+    {
+     "cod": "P017",
+     "ra": "Brazlândia",
+     "ed": 17,
+     "atend": 36,
+     "url": "https://drive.google.com/file/d/1NBIBB4wav5q0gBP4iRcbi1qCUah54-ic/view"
+    },
+    {
+     "cod": "P018",
+     "ra": "Gama",
+     "ed": 18,
+     "atend": 62,
+     "url": "https://drive.google.com/file/d/1o3514cn9RmUx7KOz3y7BJwA4fKFNFgDm/view"
+    },
+    {
+     "cod": "P019",
+     "ra": "Arniqueira",
+     "ed": 19,
+     "atend": 48,
+     "url": "https://drive.google.com/file/d/1YUEFuMYlM1GnEzYGArjILbKoIRcAD8Q6/view"
+    },
+    {
+     "cod": "P020",
+     "ra": "Núcleo Bandeirante",
+     "ed": 20,
+     "atend": 32,
+     "url": "https://drive.google.com/file/d/17jNHDx3wkC1t3BC12AO3kFTwE91NRSS9/view"
+    },
+    {
+     "cod": "P021",
+     "ra": "Riacho Fundo",
+     "ed": 21,
+     "atend": 38,
+     "url": "https://drive.google.com/file/d/1GDR0q_W83iV_6jFz1BzlO66Fs4v6apCi/view"
+    }
+   ]
+  },
+  {
    "n": "027 - Ouvidoria Geral",
    "total": 1162,
    "itens": [
@@ -2687,11 +2845,6 @@ const SNAP = {
    "orgao": "003 - SSP",
    "area": "Segurança pública",
    "destaque": "videomonitoramento · 28 veículos"
-  },
-  {
-   "orgao": "011 - CAESB",
-   "area": "Saneamento — água",
-   "destaque": "unidade móvel e chamados"
   },
   {
    "orgao": "013 - DFLEGAL",

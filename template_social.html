@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GDF na Sua Porta — Painel de Ações Sociais</title>
+<link rel="icon" href="assets/gdf-horizontal-cor.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,6 +24,17 @@ h1{font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-heigh
 .hdr-aviso{display:none;margin-top:7px;font-size:.68rem;font-weight:800;color:#3a1500;background:#ffc94d;border:1px solid #e0a800;padding:4px 10px;border-radius:7px}
 .hdr-aviso.on{display:inline-block}
 .hdr-big{font-size:1.02rem;font-weight:800;margin-top:2px}
+/* marca GDF 2026 — horizontal monocromatica branca sobre o cabecalho escuro */
+.hdr-id{display:flex;align-items:center;gap:18px;min-width:0}
+.hdr-marca{height:54px;width:auto;flex:none}
+/* logo do programa GDF na sua Porta — arte azul/roxa, por isso vai sobre pilula branca */
+.hdr-prog{background:#fff;border-radius:11px;padding:9px 13px;display:flex;align-items:center;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.22)}
+.hdr-prog img{height:34px;width:auto;display:block}
+/* assinatura conjunta GDF + secretaria — Manual da Marca GDF 2026, p. 21-23 */
+.assin{display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.assin-nome{font-family:'Unbounded','Segoe UI',sans-serif;font-weight:600;font-size:.72rem;line-height:1em;letter-spacing:0;color:var(--pd);text-align:right;padding-right:10px}
+.assin-bico{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:9px solid #0098d9;flex:none}
+.assin img{height:52px;width:auto;display:block;flex:none}
 .nav-switch{display:inline-block;margin-top:8px;font-size:.66rem;font-weight:800;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:8px}
 .nav-switch:hover{background:rgba(255,255,255,.28)}
 .stripe{height:5px;background:linear-gradient(90deg,var(--gold) 0%,#f4a100 35%,var(--bl) 100%)}
@@ -139,6 +151,11 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   h1{font-size:1.15rem}
   .hdr{flex-direction:column;align-items:flex-start;gap:8px;padding:15px 16px}
   .hdr p{font-size:.72rem}
+  .hdr-id{gap:12px}
+  .hdr-marca{height:40px}
+  .hdr-prog{padding:7px 10px}
+  .hdr-prog img{height:26px}
+  .assin img{height:44px}
   .hdr-meta{text-align:left}
   .hdr-status{justify-content:flex-start}
   .hdr-big{font-size:.92rem}
@@ -179,7 +196,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   body{background:#fff}.toolbar{display:none!important}.overlay{display:none!important}
   .big,.rbars,.rank,.esp{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
   .band{position:static}
-  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
+  .hdr,.stripe,.band,.rb-fill,.rk-bar,.champ,.big.hero,.hdr-aviso,.hdr-marca,.hdr-prog,.hdr-prog img,.assin-bico,.assin img{-webkit-print-color-adjust:exact;print-color-adjust:exact}  .print-ctx{display:block;font-size:.82rem;font-weight:800;color:var(--pd);margin:6px 0 2px}
   .rk{break-inside:avoid}
   body.print-one > .hdr,body.print-one > .stripe,body.print-one > .band,body.print-one > .wrap{display:none!important}
   body.print-one .overlay{display:block!important;position:static;background:none;padding:0;overflow:visible}
@@ -192,9 +209,13 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 </head>
 <body>
 <div class="hdr">
-  <div>
-    <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
-    <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+  <div class="hdr-id">
+    <img class="hdr-marca" src="assets/gdf-horizontal-branca.png" width="760" height="444" alt="Governo do Distrito Federal">
+    <span class="hdr-prog"><img src="assets/gdf-na-sua-porta.png" width="270" height="65" alt="GDF na sua Porta"></span>
+    <div>
+      <h1>GDF na Sua Porta — Painel de Ações Sociais</h1>
+      <p>Governo do Distrito Federal&nbsp;·&nbsp;Secretaria de Estado de Governo — SEGOV</p>
+    </div>
   </div>
     <div class="hdr-meta">
     <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
@@ -227,6 +248,11 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   <div class="esp" id="esp"></div>
 
   <div class="footer">
+    <div class="assin">
+      <span class="assin-nome">Secretaria de Estado<br>de Governo</span>
+      <span class="assin-bico" aria-hidden="true"></span>
+      <img src="assets/gdf-horizontal-cor.png" width="720" height="425" alt="Governo do Distrito Federal">
+    </div>
     <b>Fonte:</b> aba ACOES_SOCIAIS da planilha oficial (totais de atendimento informados pelos órgãos). Os relatórios originais de cada órgão permanecem no Drive.<br>
     Números conforme informado pelos órgãos, sem auditoria. Dados de <b id="snapDate">—</b>, publicado em <b id="snapPub">—</b>. Técnico: Adacto Artur Dornas de Oliveira · SEGOV · Assessoria de Acompanhamento de Projetos Estratégicos.
   </div>
