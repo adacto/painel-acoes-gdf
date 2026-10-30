@@ -30,10 +30,20 @@
 body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 h1,.big .bv,.rk-val,.rb-val,.modal-h h2,.rr-total .t-v,.champ .cnum{font-family:'Unbounded','Segoe UI',sans-serif}
 .big .bv,.rk-val,.rb-val,.rr-total .t-v,.champ .cnum,.rr .rr-val,.hdr-big{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
-/* 28px. O titulo cresceu JUNTO com as duas logos (30/10/2026): com elas maiores e
-   ele parado, ele encolhe em relacao a elas e perde o destaque que era o pedido. */
-h1{font-size:1.75rem;font-weight:800;color:var(--az);letter-spacing:-.02em;line-height:1.15}
-.hdr{background:#fff;padding:18px 36px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px 26px;flex-wrap:wrap}
+/* 🎯 HIERARQUIA DO CABECALHO (30/10/2026) — quatro niveis, nesta ordem, e os corpos
+   saem dai, nao do gosto: (1) o ASSUNTO, que e o nome do painel; (2) a MARCA do
+   programa; (3) a ASSINATURA institucional, que e rodape de oficio e nao manchete;
+   (4) a PROCEDENCIA, que precisa existir e nao precisa ser lida de longe.
+   Escala de ~1,25 entre os corpos: 36px / 12,5px / 11px / 9,3px. */
+h1{font-size:2.25rem;font-weight:800;color:var(--az);letter-spacing:-.02em;line-height:1.1;text-align:center}
+/* 🚨 TRES ZONAS, nao flex com space-between — e a diferenca entre centralizar o
+   titulo NA PAGINA e centraliza-lo "no que sobrou". Com 1fr auto 1fr as duas
+   laterais tem a MESMA largura, entao o eixo do titulo cai no meio da folha
+   independentemente de quanto cada lado ocupa. Mexeu numa lateral? O titulo nao sai
+   do lugar — e esse o ponto. */
+.hdr{background:#fff;padding:20px 40px 18px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+/* coluna da direita: assinatura em cima, procedencia embaixo, uma borda direita so */
+.hdr-right{justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:0}
 .hdr-meta{text-align:right;color:var(--az)}
 /* O bloco da direita ENCOLHEU em 30/10/2026, a pedido do dono. Ele e procedencia:
    diz de quando sao os dados e quando o painel foi ao ar. Tem de estar sempre la e
@@ -41,32 +51,39 @@ h1{font-size:1.75rem;font-weight:800;color:var(--az);letter-spacing:-.02em;line-
    programa, que sao o assunto. ⚠️ Nao o apague para "limpar" o cabecalho: sem ele um
    painel velho passa por novo, que e o defeito que esses dois campos existem para
    impedir. */
-.hdr-status{display:flex;align-items:center;gap:7px;justify-content:flex-end;font-size:.68rem;color:var(--mut)}
+/* ⚠️ nowrap: na IMPRESSAO (A4 deitado, ~1050px) a coluna da direita aperta e a
+   linha quebrava com o "08:33" sozinho embaixo, afastando o ponto do texto. Em
+   9,3px ela mede ~230px e cabe inteira em toda largura que o painel atende. */
+.hdr-status{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-size:.58rem;color:var(--mut);white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--az-md);box-shadow:0 0 0 3px rgba(0,152,217,.22)}
 .dot.stale{background:#ffb020;box-shadow:0 0 0 3px rgba(255,176,32,.32)}
 .hdr-aviso{display:none;margin-top:7px;font-size:.68rem;font-weight:800;color:#3a1500;background:#ffc94d;border:1px solid #e0a800;padding:4px 10px;border-radius:7px}
 .hdr-aviso.on{display:inline-block}
-.hdr-big{font-size:.86rem;font-weight:800;margin-top:2px}
+.hdr-big{font-size:.78rem;font-weight:800;margin-top:1px}
 /* Assinatura conjunta colorida no cabecalho — Manual da Marca GDF 2026, p. 21 e 23:
    versao HORIZONTAL 1, nome em Unbounded SemiBold, entreletra 0, entrelinha = corpo da
    letra, alinhado a direita e encostado no bico que aponta para a marca (como nos
    diagramas). E a arte COLORIDA, com a caixa azul #0097d8 — por isso o cabecalho ficou
    branco: marca colorida nao se aplica sobre fundo escuro. */
-.hdr-id{display:flex;align-items:center;gap:22px;min-width:0;flex-wrap:wrap}
-/* 🚨 A ORDEM DAS DUAS LOGOS MUDOU EM 30/10/2026, por decisao do dono: a logo do
-   PROGRAMA passou a ser a primeira e a ASSINATURA institucional ficou colada a
-   esquerda do titulo. Com isso o filete divisorio mudou de bloco — ele separa as
-   duas, entao mora sempre na SEGUNDA, que hoje e esta. Trocando a ordem de volta,
-   mova o filete junto, ou ele fica na ponta esquerda do cabecalho, cortando o nada. */
-.hdr-assin{display:flex;align-items:center;flex:none;padding-left:22px;border-left:1px solid var(--line)}
-.hdr-assin .nome{font-family:'Unbounded','Segoe UI',sans-serif;font-weight:600;font-size:.76rem;
-  line-height:1em;letter-spacing:0;color:#0071bb;text-align:right;padding-right:10px}
-.hdr-assin .bico{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;
-  border-right:9px solid #0097d8;flex:none}
-.hdr-marca{height:68px;width:auto;flex:none}
+/* ⛔ O FILETE DIVISORIO SAIU em 30/10/2026, e nao foi esquecimento: ele separava as
+   duas logos quando elas eram vizinhas. Com o programa na ponta esquerda e a
+   assinatura na direita, ele nao tem mais o que separar — ficaria um risco no meio
+   do nada. Repondo-o, pergunte primeiro o que ele estaria separando. */
+.hdr-assin{display:flex;align-items:center;flex:none}
+.hdr-assin .nome{font-family:'Unbounded','Segoe UI',sans-serif;font-weight:600;font-size:.69rem;
+  line-height:1em;letter-spacing:0;color:#0071bb;text-align:right;padding-right:9px}
+.hdr-assin .bico{width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;
+  border-right:8px solid #0097d8;flex:none}
+/* 🚨 AS DUAS MARCAS NAO TEM A MESMA ALTURA, DE PROPOSITO — igualar a altura faria o
+   programa DOMINAR, porque ele e uma lockup horizontal (270x65, quase 4,2:1) e a
+   marca GDF e uma caixa quase quadrada. O que se equilibra aqui e a LARGURA das duas
+   zonas: programa 64px de altura da ~266px de largura; a assinatura, com a marca a
+   50px mais as duas linhas do nome, da ~245px. Dai o titulo cair opticamente no
+   centro. 📌 Mexeu numa altura? Meca a LARGURA das duas zonas, nao a altura. */
+.hdr-marca{height:50px;width:auto;flex:none}
 /* logo do programa: sem pilula, a arte azul/roxa agora cai direto no branco */
-.hdr-prog{display:flex;align-items:center;flex:none}
-.hdr-prog img{height:56px;width:auto;display:block}
+.hdr-prog{display:flex;align-items:center;flex:none;justify-self:start}
+.hdr-prog img{height:64px;width:auto;display:block}
 /* tira de cor da marca: azul, ciano, magenta e amarelo, nessa ordem */
 .stripe{height:4px;background:linear-gradient(90deg,var(--az) 0%,var(--az-cl) 30%,var(--mg) 66%,var(--am) 100%)}
 .wrap{padding:26px 36px 64px;max-width:1400px;margin:0 auto}
@@ -171,17 +188,25 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 .footer b{color:var(--az)}
 .print-ctx{display:none}
 @media(max-width:900px){.big-row{grid-template-columns:1fr 1fr}.rk-name{width:150px}}
+/* 🚨 AS TRES ZONAS SO CABEM EM TELA LARGA, e o aperto aparece ANTES do celular: as
+   duas laterais somam ~510px e o titulo pede ~330px. Abaixo disto o grid de tres
+   colunas espremeria o titulo ate ele quebrar em duas linhas no meio do nome. Entao
+   ele vira UMA coluna: marca, titulo e procedencia empilhados a esquerda — a mesma
+   leitura, em ordem vertical. ⚠️ Centralizar o titulo aqui seria pior: com tudo
+   alinhado a esquerda, um titulo centrado fica visivelmente torto. */
+@media(max-width:1060px){
+  .hdr{grid-template-columns:1fr;justify-items:start;gap:10px;padding:16px 20px 14px}
+  h1{text-align:left}
+  .hdr-right{justify-self:start;align-items:flex-start}
+  .hdr-meta{text-align:left}
+  .hdr-status{justify-content:flex-start}
+}
 @media(max-width:640px){
-  h1{font-size:1.3rem}
-  .hdr{flex-direction:column;align-items:flex-start;gap:8px;padding:15px 16px}
-  .hdr-id{gap:12px}
-  .hdr-marca{height:50px}
-  .hdr-assin .nome{font-size:.64rem}
-  /* ⚠️ O filete some no celular, e e a ASSINATURA que o carrega desde 30/10/2026.
-     Deixando esta linha no .hdr-prog, como era, o filete continua desenhado no
-     celular — e ali as logos empilham, entao ele apareceria atravessado no meio. */
-  .hdr-assin{padding-left:0;border-left:0}
-  .hdr-prog img{height:40px}
+  h1{font-size:1.45rem}
+  .hdr{gap:8px;padding:15px 16px}
+  .hdr-marca{height:42px}
+  .hdr-assin .nome{font-size:.62rem}
+  .hdr-prog img{height:46px}
   .hdr-meta{text-align:left}
   .hdr-status{justify-content:flex-start}
   .hdr-big{font-size:.80rem}
@@ -231,19 +256,19 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
 </head>
 <body>
 <div class="hdr">
-  <div class="hdr-id">
-    <span class="hdr-prog"><img src="assets/gdf-na-sua-porta.png" width="270" height="65" alt="GDF na sua Porta"></span>
+  <span class="hdr-prog"><img src="assets/gdf-na-sua-porta.png" width="270" height="65" alt="GDF na sua Porta"></span>
+  <h1>Painel de Ações Sociais</h1>
+  <div class="hdr-right">
     <span class="hdr-assin">
       <span class="nome">Secretaria de Estado<br>de Governo</span>
       <span class="bico" aria-hidden="true"></span>
       <img class="hdr-marca" src="assets/gdf-horizontal-cor.png" width="720" height="425" alt="Governo do Distrito Federal">
     </span>
-    <h1>Painel de Ações Sociais</h1>
-  </div>
     <div class="hdr-meta">
-    <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
-    <div class="hdr-big"><span id="hAt">—</span> atendimentos&nbsp;·&nbsp;<span id="hRas">—</span> RAs</div>
-    <div class="hdr-aviso" id="hAviso"></div>
+      <div class="hdr-status"><span class="dot" id="hDot"></span><span>Dados de <span id="hUp">—</span>&nbsp;·&nbsp;publicado em <span id="hPub">—</span></span></div>
+      <div class="hdr-big"><span id="hAt">—</span> atendimentos&nbsp;·&nbsp;<span id="hRas">—</span> RAs</div>
+      <div class="hdr-aviso" id="hAviso"></div>
+    </div>
   </div>
 </div>
 <div class="stripe"></div>
