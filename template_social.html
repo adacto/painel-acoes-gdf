@@ -54,12 +54,19 @@ h1{font-size:2.25rem;font-weight:800;color:var(--az);letter-spacing:-.02em;line-
 /* ⚠️ nowrap: na IMPRESSAO (A4 deitado, ~1050px) a coluna da direita aperta e a
    linha quebrava com o "08:33" sozinho embaixo, afastando o ponto do texto. Em
    9,3px ela mede ~230px e cabe inteira em toda largura que o painel atende. */
-.hdr-status{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-size:.58rem;color:var(--mut);white-space:nowrap}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--az-md);box-shadow:0 0 0 3px rgba(0,152,217,.22)}
-.dot.stale{background:#ffb020;box-shadow:0 0 0 3px rgba(255,176,32,.32)}
+/* 🚨 8,3px E O PISO, e ele nao e gosto: abaixo disto a linha deixa de ser LIDA e vira
+   enfeite — e ela existe justamente para alguem CONFERIR de quando sao os dados. Uma
+   procedencia ilegivel nao e discreta, e inutil, e aceita-la seria o mesmo que
+   apaga-la. Se um dia ela ainda incomodar, o caminho e tirar peso (cor mais clara,
+   uma linha so), nunca corpo. */
+.hdr-status{display:flex;align-items:center;gap:5px;justify-content:flex-end;font-size:.52rem;color:var(--mut);white-space:nowrap}
+/* o ponto encolheu junto: a 8px ele ficava maior que a letra ao lado e virava o
+   elemento mais forte da linha mais fraca do cabecalho */
+.dot{width:6px;height:6px;border-radius:50%;background:var(--az-md);box-shadow:0 0 0 2.5px rgba(0,152,217,.22)}
+.dot.stale{background:#ffb020;box-shadow:0 0 0 2.5px rgba(255,176,32,.32)}
 .hdr-aviso{display:none;margin-top:7px;font-size:.68rem;font-weight:800;color:#3a1500;background:#ffc94d;border:1px solid #e0a800;padding:4px 10px;border-radius:7px}
 .hdr-aviso.on{display:inline-block}
-.hdr-big{font-size:.78rem;font-weight:800;margin-top:1px}
+.hdr-big{font-size:.72rem;font-weight:800;margin-top:1px}
 /* Assinatura conjunta colorida no cabecalho — Manual da Marca GDF 2026, p. 21 e 23:
    versao HORIZONTAL 1, nome em Unbounded SemiBold, entreletra 0, entrelinha = corpo da
    letra, alinhado a direita e encostado no bico que aponta para a marca (como nos
@@ -209,7 +216,7 @@ input[type=search]{min-width:220px;background-image:url("data:image/svg+xml,%3Cs
   .hdr-prog img{height:46px}
   .hdr-meta{text-align:left}
   .hdr-status{justify-content:flex-start}
-  .hdr-big{font-size:.80rem}
+  .hdr-big{font-size:.74rem}
   .wrap{padding:16px 14px 44px}
   .sec-label{margin:20px 0 8px}
   .big-row{grid-template-columns:1fr;gap:11px}
