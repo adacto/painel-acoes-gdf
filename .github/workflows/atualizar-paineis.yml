@@ -8,23 +8,27 @@
 name: Atualizar painéis
 
 on:
+  # GATILHO PRINCIPAL — o Apps Script chama este workflow assim que termina de
+  # reescrever as abas (função dispararPainel, ao fim de rotinaDiaria).
+  #
+  # Por que não pelo horário: o agendamento do GitHub é uma fila compartilhada e
+  # atrasa qualquer horário que se peça. Medido neste repositório:
+  #   - '30 10 * * *' (7h30): as sete execuções de 23 a 29/10/2026 saíram com
+  #     3h33 a 6h30 de atraso, sempre depois das 11h.
+  #   - três tentativas em minuto quebrado (7h23, 9h47, 11h11), de 1 a 3/11/2026:
+  #     6h a 10h de atraso. A de 02/11 pedida para as 7h23 rodou às 17h25.
+  # Pedir outro horário não resolve. Quem é pontual na cadeia é o Apps Script:
+  # vem cumprindo 7h55 todo dia. Então é ele que avisa, em vez de o GitHub
+  # tentar adivinhar quando a planilha ficou pronta.
+  repository_dispatch:
+    types: [planilha-pronta]
+
   schedule:
-    # TRÊS tentativas, não uma. O agendamento do GitHub é uma fila compartilhada:
-    # a execução pode atrasar horas ou ser descartada quando o horário pedido está
-    # congestionado — e hora cheia e meia hora são os piores. Com '30 10 * * *'
-    # (7h30 de Brasília) as sete execuções de 23 a 29/10/2026 saíram com 3h33 a
-    # 6h30 de atraso, sempre depois das 11h; o painel passava a manhã inteira com
-    # o número da véspera, mesmo com a planilha pronta desde as 7h.
-    #
-    # Agora o minuto é quebrado (menos disputado) e há duas repescagens. Rodar de
-    # novo é inofensivo: o passo "Publicar se algo mudou" só commita quando o HTML
-    # muda, e a trava de concurrency impede duas execuções ao mesmo tempo.
-    #
-    # Nunca antes de 10:20 UTC: o Apps Script varre o Drive às 7h de Brasília e
-    # precisa ter terminado de reescrever as abas.
-    - cron: '23 10 * * *'   # 7h23 de Brasília — tentativa principal
-    - cron: '47 12 * * *'   # 9h47 — repescagem se a primeira não saiu
-    - cron: '11 14 * * *'   # 11h11 — última rede de segurança da manhã
+    # Rede de segurança, não o caminho normal: cobre o dia em que o Apps Script
+    # não conseguir disparar (token vencido, falha na varredura, cota). Uma só,
+    # e tarde — se o disparo funcionou, o painel já saiu de manhã.
+    - cron: '11 14 * * *'   # 11h11 de Brasília
+
   workflow_dispatch:        # permite rodar à mão pela aba Actions
 
 concurrency:
@@ -52,6 +56,11 @@ jobs:
           python3 gerar_painel_acoes.py
 
       - name: Publicar se algo mudou
+        # ATENÇÃO: na prática este atalho nunca segura nada. O gerador grava
+        # "publicado_em" com a hora da execução dentro do próprio HTML, então o
+        # arquivo muda a cada rodada mesmo sem número novo, e sempre há commit.
+        # Por isso a ausência de commit num dia significa que NENHUMA execução
+        # terminou — não que a planilha estava sem novidade.
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
