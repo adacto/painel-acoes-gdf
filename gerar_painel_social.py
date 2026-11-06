@@ -29,12 +29,20 @@ import datetime, io, json, os, re, sys, urllib.request
 # protocolos de ouvidoria, ordens de serviço abertas e orientações: atendimento a
 # pessoa, que vai para o total como o de qualquer outro órgão (1.175 no programa).
 
+#
+# A SEAGRI saiu desta lista em 06/11/2026, pelo mesmo motivo das duas acima. O
+# destaque era "estradas rurais e rocagem (km/m2)" — unidade fisica. Mas todo
+# relatorio dela traz "Total de Atendimentos N" impresso, entre 102 e 255 por
+# edicao, somando 3.560 nas 18 edicoes: orientacao ao cidadao, regularizacao
+# fundiaria, defesa agropecuaria e o programa Reflorestar. E metrica de pessoa e
+# vai para o total. A recuperacao de estradas continua acontecendo (o relatorio
+# de Sobradinho II so traz km), mas ela e a parte menor do que o orgao reporta.
+
 ESPECIAL = [
     {"orgao": "018 - SLU", "area": "Zeladoria e limpeza urbana",
      "destaque": "coleta, entulho, varrição, catação e mais", "slu": True,
      "nota": "Vários serviços por região (toneladas, m², km). Clique para ver o detalhe por região."},
     {"orgao": "013 - DFLEGAL", "area": "Fiscalização (DF Legal)", "destaque": "386 ações fiscais · 6 RAs"},
-    {"orgao": "039 - SEAGRI", "area": "Agricultura", "destaque": "estradas rurais e roçagem (km/m²)"},
     {"orgao": "003 - SSP", "area": "Segurança pública", "destaque": "videomonitoramento · 28 veículos"},
     {"orgao": "042 - POLO RURAL", "area": "Polo Rural", "destaque": "estradas rurais (km)"},
     {"orgao": "045 - SEPE", "area": "Projetos Especiais", "destaque": "Adote uma Praça"},
